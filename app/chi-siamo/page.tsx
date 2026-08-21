@@ -37,7 +37,7 @@ export default function ChiSiamoPage() {
             <Avatar src="/giorgio.jpg" initials="GM" alt="Giorgio Menicagli Pirina" />
             <div>
               <h2 className="text-lg font-bold text-sea-900">Giorgio Menicagli Pirina</h2>
-              <p className="text-sm text-sea-500">Ideatore e sviluppatore</p>
+              <p className="text-sm font-semibold text-sea-500">Founder</p>
             </div>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-sea-700">
@@ -56,13 +56,19 @@ export default function ChiSiamoPage() {
             <Avatar src="/francesco.jpg" initials="FM" alt="Francesco Mancuso" />
             <div>
               <h2 className="text-lg font-bold text-sea-900">Francesco Mancuso</h2>
-              <p className="text-sm text-sea-500">Co-autore</p>
+              <p className="text-sm font-semibold text-sea-500">Co-founder</p>
             </div>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-sea-700">
-            Dottorando in Politica Comparata e Teoria Politica Analitica. Studia il capitale sociale
-            locale e le risposte alle politiche neoliberali nel processo di integrazione europea,
-            entro un progetto su lavoro, tempo libero e omogeneizzazione culturale.
+            Dottorando (secondo anno) in Politica Comparata e Teoria Politica Analitica. Si occupa
+            della direttiva Bolkestein e collabora a una ricerca con i Comuni di Livorno e Rosignano
+            Marittimo. Indaga gli effetti del capitale sociale locale e le strategie di
+            resistenza/adattamento alle politiche economiche neoliberali imposte dall'esterno nel
+            processo di integrazione europea — uno studio empirico inserito in un più ampio progetto
+            normativo, orientato al futuro, sul rapporto tra lavoro, tempo libero e il fenomeno
+            dell'omogeneizzazione culturale. Nato a Pisa, parla quattro lingue (italiano, inglese,
+            spagnolo e francese). Ha conseguito un MA in Legal and Political Theory allo University
+            College London (UCL) e un BA in Economia e Finanza all'Università di Pisa.
           </p>
         </article>
       </section>

@@ -80,10 +80,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <div>
               <p className="text-sm font-semibold text-sea-800">Crediti</p>
               <p className="mt-2 text-sm text-sea-500">
-                Ideato e sviluppato da <strong className="text-sea-700">Giorgio Menicagli Pirina</strong>.
+                <strong className="text-sea-700">Giorgio Menicagli Pirina</strong> — Founder.
               </p>
               <p className="mt-2 text-sm text-sea-500">
-                Co-autore <strong className="text-sea-700">Francesco Mancuso</strong>, dottorando in
+                <strong className="text-sea-700">Francesco Mancuso</strong> — Co-founder, dottorando in
                 Politica Comparata e Teoria Politica Analitica.
               </p>
             </div>
