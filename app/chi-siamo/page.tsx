@@ -46,8 +46,8 @@ export default function ChiSiamoPage() {
             in Intelligenza Artificiale (con lode) alla Northeastern University di Londra, e ha
             collaborato con i ricercatori del DESY su reti neurali convoluzionali quantistiche. I suoi
             interessi vanno oltre l'ingegneria, toccando le implicazioni sociali dell'IA — economia,
-            filosofia politica, storia del cambiamento tecnologico. <em>AMAKOM</em> è il suo primo
-            libro.
+            filosofia politica, storia del cambiamento tecnologico. È autore del libro{" "}
+            <em>AMAKOM: Una pace perpetua per l'età dei robot</em>.
           </p>
         </article>
 
@@ -60,12 +60,9 @@ export default function ChiSiamoPage() {
             </div>
           </div>
           <p className="mt-4 text-sm leading-relaxed text-sea-700">
-            Dottorando (secondo anno) in Politica Comparata e Teoria Politica Analitica. Studia gli
-            effetti del capitale sociale locale e le strategie di resistenza/adattamento alle
-            politiche economiche neoliberali imposte dall'esterno nel contesto dell'integrazione
-            europea. Una ricerca empirica inserita in un progetto normativo più ampio, orientato al
-            futuro, sul rapporto tra lavoro, tempo libero e il fenomeno dell'omogeneizzazione
-            culturale.
+            Dottorando in Politica Comparata e Teoria Politica Analitica. Studia il capitale sociale
+            locale e le risposte alle politiche neoliberali nel processo di integrazione europea,
+            entro un progetto su lavoro, tempo libero e omogeneizzazione culturale.
           </p>
         </article>
       </section>

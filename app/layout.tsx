@@ -84,9 +84,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </p>
               <p className="mt-2 text-sm text-sea-500">
                 Co-autore <strong className="text-sea-700">Francesco Mancuso</strong>, dottorando in
-                Politica Comparata e Teoria Politica Analitica: capitale sociale locale e strategie di
-                resistenza/adattamento alle politiche neoliberali nel processo di integrazione europea,
-                entro un progetto normativo su lavoro, tempo libero e omogeneizzazione culturale.
+                Politica Comparata e Teoria Politica Analitica.
               </p>
             </div>
           </div>
