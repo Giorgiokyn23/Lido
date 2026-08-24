@@ -1,5 +1,11 @@
 {
-  "nav": { "rankings": "Classifiche", "about": "Chi siamo", "login": "Accedi", "logout": "Esci", "tagline": "Il Trustpilot dei bagni" },
+  "nav": {
+    "rankings": "Classifiche",
+    "about": "Chi siamo",
+    "login": "Accedi",
+    "logout": "Esci",
+    "tagline": "Il Trustpilot dei bagni"
+  },
   "home": {
     "badge": "8.700+ lidi · 9 criteri verticali · tutta Italia",
     "titleA": "Trova il lido giusto.",
@@ -16,7 +22,10 @@
     "empty": "Nessun lido trovato con questi criteri. Prova ad azzerare i filtri.",
     "error": "Errore nel caricamento dei lidi:"
   },
-  "card": { "reviews": "{count} recensioni", "umbrellas": "{m} m tra ombrelloni" },
+  "card": {
+    "reviews": "{count} recensioni",
+    "umbrellas": "{m} m tra ombrelloni"
+  },
   "metrics": {
     "space_privacy": "Spazio & Privacy",
     "family_services": "Servizi Famiglie",
@@ -37,6 +46,24 @@
   },
   "countries": {
     "all": "Tutti i paesi",
-    "IT": "Italia", "ES": "Spagna", "FR": "Francia", "PT": "Portogallo", "MT": "Malta", "MC": "Monaco"
+    "IT": "Italia",
+    "ES": "Spagna",
+    "FR": "Francia",
+    "PT": "Portogallo",
+    "MT": "Malta",
+    "MC": "Monaco"
+  },
+  "about": {
+    "title": "Chi siamo",
+    "heroText": "LidoRank è un progetto civico indipendente: portare trasparenza sulle spiagge italiane ed europee con recensioni strutturate e dati verificabili, utili ai cittadini e agli enti che vigilano sul demanio marittimo.",
+    "founderRole": "Founder",
+    "cofounderRole": "Co-founder",
+    "giorgioBio": "Ingegnere italiano specializzato in sistemi avanzati di intelligenza artificiale per il settore aerospaziale e della difesa. Ha conseguito una laurea in Informatica e un master in Intelligenza Artificiale (con lode) alla Northeastern University di Londra, e ha collaborato con i ricercatori del DESY su reti neurali convoluzionali quantistiche. I suoi interessi vanno oltre l'ingegneria, toccando le implicazioni sociali dell'IA — economia, filosofia politica, storia del cambiamento tecnologico. È autore del libro AMAKOM: Una pace perpetua per l'età dei robot.",
+    "francescoBio": "Dottorando (secondo anno) in Politica Comparata e Teoria Politica Analitica. Si occupa della direttiva Bolkestein e collabora a una ricerca con i Comuni di Livorno e Rosignano Marittimo. Indaga gli effetti del capitale sociale locale e le strategie di resistenza/adattamento alle politiche economiche neoliberali imposte dall'esterno nel processo di integrazione europea. Nato a Pisa, parla quattro lingue (italiano, inglese, spagnolo e francese). Ha conseguito un MA in Legal and Political Theory allo University College London (UCL) e un BA in Economia e Finanza all'Università di Pisa.",
+    "howTitle": "Come nasce LidoRank",
+    "p1": "LidoRank nasce da una domanda semplice: perché scegliere uno stabilimento balneare è ancora così poco trasparente? Prezzi non sempre esposti, accesso al mare che dovrebbe essere libero per legge, servizi per famiglie e accessibilità difficili da confrontare. Nel pieno del dibattito sulle concessioni (direttiva Bolkestein), mancava uno strumento neutrale.",
+    "p2": "L'idea è unire due mondi: il rigore dei dati pubblici (le concessioni del demanio marittimo) e l'esperienza reale delle persone (recensioni verticali su nove criteri). Una base informativa utile ai cittadini per scegliere e agli enti per vigilare.",
+    "p3": "Progetto ideato e sviluppato da Giorgio Menicagli Pirina, con la collaborazione di Francesco Mancuso sul versante dell'analisi politica e normativa. Realizzato anche con l'ausilio di strumenti di intelligenza artificiale, sotto supervisione umana.",
+    "back": "← Torna alla home"
   }
 }

@@ -1,5 +1,11 @@
 {
-  "nav": { "rankings": "Rankings", "about": "About", "login": "Sign in", "logout": "Sign out", "tagline": "The Trustpilot of beach clubs" },
+  "nav": {
+    "rankings": "Rankings",
+    "about": "About",
+    "login": "Sign in",
+    "logout": "Sign out",
+    "tagline": "The Trustpilot of beach clubs"
+  },
   "home": {
     "badge": "8,700+ beach clubs · 9 vertical criteria · all of Italy",
     "titleA": "Find the right beach club.",
@@ -16,7 +22,10 @@
     "empty": "No beach club found with these criteria. Try resetting the filters.",
     "error": "Error loading beach clubs:"
   },
-  "card": { "reviews": "{count} reviews", "umbrellas": "{m} m between umbrellas" },
+  "card": {
+    "reviews": "{count} reviews",
+    "umbrellas": "{m} m between umbrellas"
+  },
   "metrics": {
     "space_privacy": "Space & Privacy",
     "family_services": "Family Services",
@@ -37,6 +46,24 @@
   },
   "countries": {
     "all": "All countries",
-    "IT": "Italy", "ES": "Spain", "FR": "France", "PT": "Portugal", "MT": "Malta", "MC": "Monaco"
+    "IT": "Italy",
+    "ES": "Spain",
+    "FR": "France",
+    "PT": "Portugal",
+    "MT": "Malta",
+    "MC": "Monaco"
+  },
+  "about": {
+    "title": "About us",
+    "heroText": "LidoRank is an independent civic project: bringing transparency to Italian and European beaches with structured reviews and verifiable data, useful to citizens and to the authorities overseeing the maritime public domain.",
+    "founderRole": "Founder",
+    "cofounderRole": "Co-founder",
+    "giorgioBio": "Italian engineer specialized in advanced artificial-intelligence systems for the aerospace and defense sector. He holds a BSc in Computer Science and an MSc in Artificial Intelligence (with honors) from Northeastern University London, and has collaborated with DESY researchers on quantum convolutional neural networks. His interests go beyond engineering, touching the social implications of AI — economics, political philosophy, the history of technological change. He is the author of the book AMAKOM: A Perpetual Peace for the Age of Robots.",
+    "francescoBio": "Second-year Ph.D. student in Comparative Politics and Analytical Political Theory. He works on the Bolkestein Directive and collaborates on research with the municipalities of Livorno and Rosignano Marittimo. He investigates the effects of local social capital and the resistance/adaptation strategies to externally imposed neoliberal economic policies within European integration. Born in Pisa, he speaks four languages (Italian, English, Spanish and French). He holds an MA in Legal and Political Theory from University College London (UCL) and a BA in Economics and Finance from the University of Pisa.",
+    "howTitle": "How LidoRank was born",
+    "p1": "LidoRank started from a simple question: why is choosing a beach club still so opaque? Prices not always posted, sea access that should be free by law, family services and accessibility hard to compare. In the middle of the debate on concessions (the Bolkestein Directive), a neutral tool was missing.",
+    "p2": "The idea is to combine two worlds: the rigor of public data (maritime-domain concessions) and the real experience of people (vertical reviews across nine criteria). An information base useful to citizens for choosing and to authorities for oversight.",
+    "p3": "Project conceived and developed by Giorgio Menicagli Pirina, with the collaboration of Francesco Mancuso on the political and regulatory analysis side. Built also with the help of artificial-intelligence tools, under human supervision.",
+    "back": "← Back to home"
   }
 }
