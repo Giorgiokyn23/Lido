@@ -114,11 +114,13 @@ export default async function BeachPage({ params }: { params: { id: string } }) 
             </p>
             {rank && (
               <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
-                <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-800">
-                  #{rank.rank_comune} a {b.localita}
-                </span>
+                {b.localita && b.localita !== b.regione && (
+                  <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-800">
+                    #{rank.rank_comune} a {b.localita}
+                  </span>
+                )}
                 <span className="rounded-full bg-sea-100 px-3 py-1 text-sea-800">
-                  #{rank.rank_regione} in {b.regione}
+                  #{rank.rank_regione} · {b.regione}
                 </span>
                 <span className="rounded-full bg-sea-600 px-3 py-1 text-white">
                   #{rank.rank_nazionale} · {tcy(b.paese ?? "IT")}

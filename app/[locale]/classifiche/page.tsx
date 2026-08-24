@@ -22,14 +22,19 @@ export default async function ClassifichePage({
 }) {
   const tc = await getTranslations("countries");
 
-  const scope: Scope =
-    searchParams.scope === "regione" || searchParams.scope === "comune"
-      ? searchParams.scope
-      : "nazionale";
   const paese = (searchParams.paese || "IT").toUpperCase();
+  const isIT = paese === "IT";
+  const flag = COUNTRIES.find((c) => c.code === paese)?.flag ?? "";
+
+  // Solo l'Italia ha comunale/regionale (regioni + comuni curati).
+  // Le altre nazioni mostrano la sola classifica nazionale.
+  const scope: Scope = isIT
+    ? searchParams.scope === "regione" || searchParams.scope === "comune"
+      ? (searchParams.scope as Scope)
+      : "nazionale"
+    : "nazionale";
   const regione = searchParams.regione || "Toscana";
   const comune = searchParams.comune || "Livorno";
-  const flag = COUNTRIES.find((c) => c.code === paese)?.flag ?? "";
 
   const supabase = createClient();
   let query = supabase.from("beach_rankings").select("*").eq("paese", paese);
@@ -47,78 +52,72 @@ export default async function ClassifichePage({
   const rankKey =
     scope === "regione" ? "rank_regione" : scope === "comune" ? "rank_comune" : "rank_nazionale";
 
-  const withParams = (over: Record<string, string>) => {
-    const sp = new URLSearchParams({ scope, paese, regione, comune, ...over });
+  // link tab (solo Italia): mantiene paese=IT + ambito
+  const tabHref = (s: Scope) => {
+    const sp = new URLSearchParams({ paese, scope: s });
+    if (s === "regione") sp.set("regione", regione);
+    if (s === "comune") sp.set("comune", comune);
     return `/classifiche?${sp.toString()}`;
   };
+  // link Paese: reset pulito alla nazionale di quel Paese
+  const countryHref = (code: string) => `/classifiche?paese=${code}`;
 
-  const tab = (s: Scope, label: string) => (
-    <Link
-      href={withParams({ scope: s })}
-      className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-        scope === s ? "bg-sea-600 text-white" : "bg-sea-50 text-sea-700 hover:bg-sea-100"
-      }`}
-    >
-      {label}
-    </Link>
-  );
+  const chip = (active: boolean) =>
+    `rounded-full px-3 py-1.5 text-sm font-medium transition ${
+      active ? "bg-sea-600 text-white" : "bg-sea-50 text-sea-700 hover:bg-sea-100"
+    }`;
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-sea-900">🏆 Classifiche</h1>
         <p className="mt-1 text-sea-600">
-          Punteggio pesato: i bagni salgono in classifica solo con recensioni vere e verificate, non con
-          una sola stella isolata. Ogni Paese ha la sua graduatoria.
+          Punteggio pesato: i bagni salgono solo con recensioni vere e verificate. Ogni Paese ha la
+          sua graduatoria.
         </p>
       </div>
 
       {/* selettore Paese */}
       <div className="flex flex-wrap gap-2">
         {COUNTRIES.map((c) => (
-          <Link
-            key={c.code}
-            href={withParams({ paese: c.code })}
-            className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
-              paese === c.code ? "bg-sea-600 text-white" : "bg-sea-50 text-sea-700 hover:bg-sea-100"
-            }`}
-          >
+          <Link key={c.code} href={countryHref(c.code)} className={chip(paese === c.code)}>
             {c.flag} {tc(c.code)}
           </Link>
         ))}
       </div>
 
-      {/* ambito */}
-      <div className="flex flex-wrap gap-2">
-        {tab("comune", "Comunale")}
-        {tab("regione", "Regionale")}
-        {tab("nazionale", "Nazionale")}
-      </div>
+      {/* ambito: comunale/regionale solo per l'Italia */}
+      {isIT ? (
+        <div className="flex flex-wrap gap-2">
+          <Link href={tabHref("comune")} className={chip(scope === "comune")}>Comunale</Link>
+          <Link href={tabHref("regione")} className={chip(scope === "regione")}>Regionale</Link>
+          <Link href={tabHref("nazionale")} className={chip(scope === "nazionale")}>Nazionale</Link>
+        </div>
+      ) : (
+        <p className="text-sm text-sea-500">
+          {flag} Classifica nazionale — {tc(paese)}. Le graduatorie comunali e regionali per questo
+          Paese arriveranno con la mappatura di dettaglio.
+        </p>
+      )}
 
-      {scope === "comune" && (
+      {isIT && scope === "comune" && (
         <form method="get" className="flex flex-wrap items-center gap-2">
           <input type="hidden" name="scope" value="comune" />
-          <input type="hidden" name="paese" value={paese} />
+          <input type="hidden" name="paese" value="IT" />
           <label className="text-sm text-sea-600">Comune:</label>
-          <input
-            name="comune"
-            defaultValue={comune}
-            placeholder="es. Livorno"
-            className="rounded-lg border border-sea-200 px-3 py-2 text-sm"
-          />
+          <input name="comune" defaultValue={comune} placeholder="es. Livorno"
+            className="rounded-lg border border-sea-200 px-3 py-2 text-sm" />
           <button className="rounded-lg bg-sea-600 px-4 py-2 text-sm font-medium text-white">Mostra</button>
         </form>
       )}
 
-      {scope === "regione" && paese === "IT" && (
+      {isIT && scope === "regione" && (
         <form method="get" className="flex flex-wrap items-center gap-2">
           <input type="hidden" name="scope" value="regione" />
-          <input type="hidden" name="paese" value={paese} />
+          <input type="hidden" name="paese" value="IT" />
           <label className="text-sm text-sea-600">Regione:</label>
           <select name="regione" defaultValue={regione} className="rounded-lg border border-sea-200 px-3 py-2 text-sm">
-            {REGIONI.map((r) => (
-              <option key={r} value={r}>{r}</option>
-            ))}
+            {REGIONI.map((r) => <option key={r} value={r}>{r}</option>)}
           </select>
           <button className="rounded-lg bg-sea-600 px-4 py-2 text-sm font-medium text-white">Mostra</button>
         </form>
@@ -151,13 +150,9 @@ export default async function ClassifichePage({
             const pos = b[rankKey as keyof BeachRanking] as number;
             return (
               <li key={b.id}>
-                <Link
-                  href={`/lido/${b.id}`}
-                  className="flex items-center gap-4 rounded-xl border border-sea-100 bg-white p-4 shadow-sm transition hover:border-sea-300"
-                >
-                  <span className="w-10 shrink-0 text-center text-lg font-bold text-sea-700">
-                    {medal(pos)}
-                  </span>
+                <Link href={`/lido/${b.id}`}
+                  className="flex items-center gap-4 rounded-xl border border-sea-100 bg-white p-4 shadow-sm transition hover:border-sea-300">
+                  <span className="w-10 shrink-0 text-center text-lg font-bold text-sea-700">{medal(pos)}</span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-semibold text-sea-900">{b.nome}</span>
                     <span className="block truncate text-sm text-sea-500">
@@ -165,9 +160,7 @@ export default async function ClassifichePage({
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
-                    <span className="block text-lg font-bold text-sea-700">
-                      {b.weighted_score.toFixed(2)}
-                    </span>
+                    <span className="block text-lg font-bold text-sea-700">{b.weighted_score.toFixed(2)}</span>
                     <span className="block text-xs text-sea-400">punteggio pesato</span>
                   </span>
                 </Link>
