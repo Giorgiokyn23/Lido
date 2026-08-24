@@ -1,5 +1,16 @@
 // Tipi condivisi (allineati allo schema SQL)
 
+// Paesi disponibili nel filtro (si estende man mano che si aggiungono cluster)
+export const COUNTRIES = [
+  { code: "IT", flag: "🇮🇹" },
+  { code: "ES", flag: "🇪🇸" },
+  { code: "FR", flag: "🇫🇷" },
+  { code: "PT", flag: "🇵🇹" },
+  { code: "MT", flag: "🇲🇹" },
+  { code: "MC", flag: "🇲🇨" },
+] as const;
+
+
 export const METRICS = [
   { key: "space_privacy",      label: "Spazio & Privacy",      hint: "Distanza tra ombrelloni e privacy" },
   { key: "family_services",    label: "Servizi Famiglie",      hint: "Nursery, giochi, area bimbi" },
@@ -82,6 +93,7 @@ export interface Beach {
 export interface BeachScore extends Beach {
   id_concessione: string | null;
   tipo: string | null;
+  paese: string | null;
   reviews_count: number;
   avg_space_privacy: number | null;
   avg_family_services: number | null;

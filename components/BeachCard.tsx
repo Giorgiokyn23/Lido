@@ -1,7 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { BeachScore } from "@/lib/types";
-import { METRICS } from "@/lib/types";
+import { METRICS, COUNTRIES } from "@/lib/types";
+
+const flagFor = (code: string | null) =>
+  COUNTRIES.find((c) => c.code === code)?.flag ?? "";
 
 const metricValue = (b: BeachScore, key: string) =>
   (b as unknown as Record<string, number | null>)[`avg_${key}`] ?? null;
@@ -22,7 +25,7 @@ export async function BeachCard({ beach }: { beach: BeachScore }) {
             {beach.nome}
           </h3>
           <p className="text-sm text-sea-500">
-            {beach.localita} · {beach.regione}
+            {flagFor(beach.paese)} {beach.localita} · {beach.regione}
           </p>
         </div>
         <div className="shrink-0 rounded-xl bg-sea-500 px-2.5 py-1.5 text-center text-white">

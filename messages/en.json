@@ -34,5 +34,9 @@
     "usefulText": "For beachgoers to choose, for operators to get known, and for municipalities and maritime-domain authorities as a dataset on rule compliance. LidoRank is an independent project: no affiliation with public bodies unless explicitly stated.",
     "creditsTitle": "Credits",
     "rights": "All rights reserved. Content, code, trademark and data structure are protected; reproduction forbidden without written authorization."
+  },
+  "countries": {
+    "all": "All countries",
+    "IT": "Italy", "ES": "Spain", "FR": "France", "PT": "Portugal", "MT": "Malta", "MC": "Monaco"
   }
 }

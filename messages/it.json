@@ -34,5 +34,9 @@
     "usefulText": "Ai bagnanti per scegliere, ai gestori per farsi conoscere, e a Comuni ed enti di controllo del demanio marittimo come base dati sul rispetto delle regole. LidoRank è un progetto indipendente: nessuna affiliazione con enti pubblici salvo accordi dichiarati.",
     "creditsTitle": "Crediti",
     "rights": "Tutti i diritti riservati. Contenuti, codice, marchio e struttura dati sono protetti; riproduzione vietata senza autorizzazione scritta."
+  },
+  "countries": {
+    "all": "Tutti i paesi",
+    "IT": "Italia", "ES": "Spagna", "FR": "Francia", "PT": "Portogallo", "MT": "Malta", "MC": "Monaco"
   }
 }

@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { SearchFilters } from "@/components/SearchFilters";
 import { BeachCard } from "@/components/BeachCard";
-import { METRICS, type BeachScore } from "@/lib/types";
+import { METRICS, COUNTRIES, type BeachScore } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -16,9 +16,11 @@ export default async function HomePage({
   searchParams: SearchParams;
 }) {
   const t = await getTranslations("home");
+  const tc = await getTranslations("countries");
   const supabase = createClient();
 
   const q = (searchParams.q as string | undefined)?.trim() ?? "";
+  const paese = (searchParams.paese as string | undefined)?.trim().toUpperCase() ?? "";
 
   const PAGE_SIZE = 24;
   const pageRaw = parseInt((searchParams.page as string) ?? "1", 10);
@@ -36,6 +38,7 @@ export default async function HomePage({
   if (q) {
     query = query.or(`nome.ilike.%${q}%,localita.ilike.%${q}%,regione.ilike.%${q}%`);
   }
+  if (paese) query = query.eq("paese", paese);
 
   for (const m of METRICS) {
     const raw = searchParams[m.key];
@@ -57,6 +60,21 @@ export default async function HomePage({
     sp.set("page", String(p));
     return `?${sp.toString()}`;
   };
+
+  // link per il filtro Paese (azzera pagina, mantiene ricerca/filtri)
+  const hrefForCountry = (code: string | null) => {
+    const sp = new URLSearchParams();
+    for (const [k, v] of Object.entries(searchParams)) {
+      if (typeof v === "string" && k !== "page" && k !== "paese") sp.set(k, v);
+    }
+    if (code) sp.set("paese", code);
+    const s = sp.toString();
+    return s ? `?${s}` : "?";
+  };
+  const chip = (active: boolean) =>
+    `rounded-full px-3 py-1.5 text-sm font-medium transition ${
+      active ? "bg-sea-600 text-white" : "bg-sea-50 text-sea-700 hover:bg-sea-100"
+    }`;
 
   return (
     <div className="space-y-8">
@@ -81,6 +99,15 @@ export default async function HomePage({
           <path fill="#f7f3ea" d="M0,104 C240,80 480,120 720,104 C960,88 1200,112 1440,100 L1440,120 L0,120 Z" />
         </svg>
       </section>
+
+      <div className="flex flex-wrap gap-2">
+        <a href={hrefForCountry(null)} className={chip(!paese)}>🌍 {tc("all")}</a>
+        {COUNTRIES.map((c) => (
+          <a key={c.code} href={hrefForCountry(c.code)} className={chip(paese === c.code)}>
+            {c.flag} {tc(c.code)}
+          </a>
+        ))}
+      </div>
 
       <SearchFilters />
 
