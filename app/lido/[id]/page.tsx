@@ -23,10 +23,10 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     .select("nome, localita, regione, avg_overall, reviews_count")
     .eq("id", params.id)
     .maybeSingle();
-  if (!data) return { title: "Lido — Lidò" };
+  if (!data) return { title: "Lido — LidoRank" };
   const voto = data.avg_overall != null ? `${data.avg_overall}/5 · ` : "";
   return {
-    title: `${data.nome} (${data.localita}) — Recensioni e voti | Lidò`,
+    title: `${data.nome} (${data.localita}) — Recensioni e voti | LidoRank`,
     description: `${voto}${data.reviews_count} recensioni su ${data.nome}, stabilimento balneare a ${data.localita} (${data.regione}): privacy, servizi famiglie, accessibilità, fondale, prezzi. Scrivi la tua.`,
     alternates: { canonical: `/lido/${params.id}` },
   };

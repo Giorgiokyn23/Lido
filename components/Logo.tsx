@@ -1,0 +1,21 @@
+// Marchio LidoRank: onda da surf che si arriccia + sole.
+export function Logo({ className = "h-8 w-8" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 64" className={className} role="img" aria-label="LidoRank">
+      <defs>
+        <linearGradient id="lrg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#3fa0c8" />
+          <stop offset="1" stopColor="#155676" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="15" fill="url(#lrg)" />
+      <circle cx="47" cy="17" r="5" fill="#ffd27a" />
+      <path
+        fill="#fff"
+        d="M8 46 C 10 30, 24 19, 40 22 C 51 24, 55 33, 49 40 C 45 45, 37 45, 34 39 C 33 46, 26 49, 20 46 C 27 47, 31 42, 30 36 C 34 41, 42 41, 44 36 C 46 31, 41 27, 34 27 C 22 27, 14 36, 13 47 Z"
+      />
+      <circle cx="17" cy="49" r="2.2" fill="#fff" />
+      <circle cx="24" cy="51" r="1.6" fill="#fff" opacity="0.85" />
+    </svg>
+  );
+}

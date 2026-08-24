@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Chi siamo — Lidò",
+  title: "Chi siamo — LidoRank",
   description:
-    "Chi ha ideato e sviluppato Lidò, la piattaforma indipendente di recensioni verticali degli stabilimenti balneari italiani.",
+    "Chi ha ideato e sviluppato LidoRank, la piattaforma indipendente di recensioni verticali degli stabilimenti balneari italiani.",
 };
 
 function Avatar({ src, initials, alt }: { src: string; initials: string; alt: string }) {
@@ -24,7 +24,7 @@ export default function ChiSiamoPage() {
       <section className="rounded-3xl bg-gradient-to-br from-sea-500 to-sea-700 p-8 text-white shadow-lg">
         <h1 className="text-3xl font-bold">Chi siamo</h1>
         <p className="mt-2 max-w-2xl text-sea-50/90">
-          Lidò è un progetto civico indipendente: portare trasparenza sulle spiagge italiane con
+          LidoRank è un progetto civico indipendente: portare trasparenza sulle spiagge italiane con
           recensioni strutturate e dati verificabili, utili ai cittadini e agli enti che vigilano
           sul demanio marittimo.
         </p>
@@ -75,10 +75,10 @@ export default function ChiSiamoPage() {
 
       {/* Come nasce / Ideato da */}
       <section className="rounded-2xl border border-sea-100 bg-white p-8 shadow-sm">
-        <h2 className="text-xl font-bold text-sea-900">Come nasce Lidò</h2>
+        <h2 className="text-xl font-bold text-sea-900">Come nasce LidoRank</h2>
         <div className="mt-3 space-y-3 text-sm leading-relaxed text-sea-700">
           <p>
-            Lidò nasce da una domanda semplice: perché scegliere uno stabilimento balneare in Italia
+            LidoRank nasce da una domanda semplice: perché scegliere uno stabilimento balneare in Italia
             è ancora così poco trasparente? Prezzi non sempre esposti, accesso al mare che dovrebbe
             essere libero per legge, servizi per famiglie e accessibilità difficili da confrontare.
             Nel pieno del dibattito sulle concessioni (direttiva Bolkestein), mancava uno strumento

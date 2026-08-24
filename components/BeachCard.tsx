@@ -53,6 +53,11 @@ export function BeachCard({ beach }: { beach: BeachScore }) {
           <span>{beach.distanza_ombrelloni_metri} m tra ombrelloni</span>
         )}
       </div>
+      {beach.id_concessione && (
+        <div className="mt-1 font-mono text-[10px] text-sea-300" title="Numero concessione demaniale (SID/MIT)">
+          conc. {beach.id_concessione}
+        </div>
+      )}
     </Link>
   );
 }

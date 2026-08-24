@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
 
-const base = process.env.NEXT_PUBLIC_SITE_URL || "https://lido-self.vercel.app";
+const base = process.env.NEXT_PUBLIC_SITE_URL || "https://lidorank.com";
 
 export const revalidate = 86400; // rigenera la sitemap una volta al giorno
 

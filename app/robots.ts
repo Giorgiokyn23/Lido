@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const base = process.env.NEXT_PUBLIC_SITE_URL || "https://lido-self.vercel.app";
+const base = process.env.NEXT_PUBLIC_SITE_URL || "https://lidorank.com";
 
 export default function robots(): MetadataRoute.Robots {
   return {

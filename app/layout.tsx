@@ -3,10 +3,11 @@ import Link from "next/link";
 import "./globals.css";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/actions";
+import { Logo } from "@/components/Logo";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://lido-self.vercel.app"),
-  title: "Lidò — Le recensioni verticali degli stabilimenti balneari italiani",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://lidorank.com"),
+  title: "LidoRank — Le recensioni verticali degli stabilimenti balneari italiani",
   description:
     "Recensioni strutturate, trasparenti e conformi ai criteri Bolkestein per i lidi e le spiagge d'Italia.",
 };
@@ -23,8 +24,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <header className="sticky top-0 z-20 border-b border-sea-100 bg-white/80 backdrop-blur">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
             <Link href="/" className="flex items-center gap-2 font-bold text-sea-700">
-              <span className="grid h-8 w-8 place-items-center rounded-full bg-sea-500 text-white">L</span>
-              <span className="text-xl tracking-tight">Lidò</span>
+              <Logo className="h-8 w-8" />
+              <span className="text-xl tracking-tight">LidoRank</span>
             </Link>
             <nav className="flex items-center gap-4 text-sm">
               <Link href="/classifiche" className="font-medium text-sea-700 hover:underline">
@@ -58,8 +59,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-3">
             <div>
               <div className="flex items-center gap-2 font-bold text-sea-700">
-                <span className="grid h-7 w-7 place-items-center rounded-full bg-sea-500 text-white">L</span>
-                Lidò
+                <Logo className="h-7 w-7" />
+                LidoRank
               </div>
               <p className="mt-2 text-sm text-sea-500">
                 Le recensioni verticali degli stabilimenti balneari italiani. Dati strutturati e
@@ -71,7 +72,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <p className="text-sm font-semibold text-sea-800">A chi è utile</p>
               <p className="mt-2 text-sm text-sea-500">
                 Ai bagnanti per scegliere, ai gestori per farsi conoscere, e a Comuni ed enti di
-                controllo del demanio marittimo come base dati sul rispetto delle regole. Lidò è un
+                controllo del demanio marittimo come base dati sul rispetto delle regole. LidoRank è un
                 progetto indipendente: nessuna affiliazione con enti pubblici salvo accordi
                 dichiarati.
               </p>
@@ -89,7 +90,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </div>
           </div>
           <div className="border-t border-sea-100 px-4 py-5 text-center text-xs text-sea-500">
-            © {new Date().getFullYear()} Lidò — Giorgio Menicagli Pirina. Tutti i diritti riservati.
+            © {new Date().getFullYear()} LidoRank — Giorgio Menicagli Pirina. Tutti i diritti riservati.
             Contenuti, codice, marchio e struttura dati sono protetti; riproduzione vietata senza
             autorizzazione scritta.
           </div>

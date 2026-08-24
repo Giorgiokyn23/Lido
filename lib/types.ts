@@ -80,6 +80,8 @@ export interface Beach {
 
 // riga della view public.beach_scores
 export interface BeachScore extends Beach {
+  id_concessione: string | null;
+  tipo: string | null;
   reviews_count: number;
   avg_space_privacy: number | null;
   avg_family_services: number | null;

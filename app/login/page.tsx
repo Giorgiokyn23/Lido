@@ -28,7 +28,7 @@ export default function LoginPage() {
     <div className="mx-auto max-w-md">
       <Link href="/" className="text-sm text-sea-500 hover:underline">← Home</Link>
       <div className="mt-4 rounded-2xl border border-sea-100 bg-white p-8 shadow-sm">
-        <h1 className="text-2xl font-bold text-sea-900">Accedi a Lidò</h1>
+        <h1 className="text-2xl font-bold text-sea-900">Accedi a LidoRank</h1>
         <p className="mt-1 text-sm text-sea-500">
           Con un account le tue recensioni risultano <strong>verificate</strong> e pesano di più.
           Ti inviamo un link magico via email: nessuna password da ricordare.
