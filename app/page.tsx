@@ -16,11 +16,18 @@ export default async function HomePage({
 
   const q = (searchParams.q as string | undefined)?.trim() ?? "";
 
+  const PAGE_SIZE = 24;
+  const pageRaw = parseInt((searchParams.page as string) ?? "1", 10);
+  const page = Number.isFinite(pageRaw) && pageRaw > 0 ? pageRaw : 1;
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
   let query = supabase
     .from("beach_scores")
-    .select("*")
+    .select("*", { count: "exact" })
     .order("avg_overall", { ascending: false, nullsFirst: false })
-    .limit(60);
+    .order("reviews_count", { ascending: false })
+    .range(from, to);
 
   if (q) {
     // ricerca su nome / località / regione
@@ -34,8 +41,20 @@ export default async function HomePage({
     if (!Number.isNaN(min)) query = query.gte(`avg_${m.key}`, min);
   }
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
   const beaches = (data ?? []) as BeachScore[];
+  const total = count ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  // costruisce un link mantenendo ricerca e filtri, cambiando solo la pagina
+  const hrefForPage = (p: number) => {
+    const sp = new URLSearchParams();
+    for (const [k, v] of Object.entries(searchParams)) {
+      if (typeof v === "string" && k !== "page") sp.set(k, v);
+    }
+    sp.set("page", String(p));
+    return `/?${sp.toString()}`;
+  };
 
   return (
     <div className="space-y-8">
@@ -83,12 +102,46 @@ export default async function HomePage({
         </p>
       ) : (
         <section>
-          <p className="mb-3 text-sm text-sea-500">{beaches.length} lidi trovati</p>
+          <p className="mb-3 text-sm text-sea-500">
+            {total.toLocaleString("it-IT")} lidi trovati · pagina {page} di {totalPages}
+          </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {beaches.map((b) => (
               <BeachCard key={b.id} beach={b} />
             ))}
           </div>
+
+          {totalPages > 1 && (
+            <nav className="mt-8 flex items-center justify-center gap-3">
+              {page > 1 ? (
+                <a
+                  href={hrefForPage(page - 1)}
+                  className="rounded-lg border border-sea-200 bg-white px-4 py-2 text-sm font-medium text-sea-700 hover:bg-sea-50"
+                >
+                  ← Precedente
+                </a>
+              ) : (
+                <span className="rounded-lg border border-sea-100 px-4 py-2 text-sm text-sea-300">
+                  ← Precedente
+                </span>
+              )}
+              <span className="text-sm text-sea-500">
+                {page} / {totalPages}
+              </span>
+              {page < totalPages ? (
+                <a
+                  href={hrefForPage(page + 1)}
+                  className="rounded-lg border border-sea-200 bg-white px-4 py-2 text-sm font-medium text-sea-700 hover:bg-sea-50"
+                >
+                  Successiva →
+                </a>
+              ) : (
+                <span className="rounded-lg border border-sea-100 px-4 py-2 text-sm text-sea-300">
+                  Successiva →
+                </span>
+              )}
+            </nav>
+          )}
         </section>
       )}
     </div>

@@ -56,7 +56,11 @@ export default async function BeachPage({ params }: { params: { id: string } }) 
         .order("created_at", { ascending: false })
         .limit(50),
       supabase.from("beach_rankings").select("*").eq("id", params.id).maybeSingle(),
-      supabase.from("beaches").select("segnalazioni_aperte").eq("id", params.id).maybeSingle(),
+      supabase
+        .from("beaches")
+        .select("segnalazioni_aperte, id_concessione, categoria")
+        .eq("id", params.id)
+        .maybeSingle(),
     ]);
 
   const {
@@ -68,6 +72,8 @@ export default async function BeachPage({ params }: { params: { id: string } }) 
   const reviews = (reviewsData ?? []) as Review[];
   const rank = (rankData ?? null) as BeachRanking | null;
   const segnalazioni = (beachRow?.segnalazioni_aperte as number | undefined) ?? 0;
+  const idConcessione = (beachRow?.id_concessione as string | undefined) ?? null;
+  const categoria = (beachRow?.categoria as string | undefined) ?? null;
 
   // aggregati fatti oggettivi (dalle recensioni caricate)
   const factSummary = FACTS.map((f) => {
@@ -124,6 +130,17 @@ export default async function BeachPage({ params }: { params: { id: string } }) 
               {b.distanza_ombrelloni_metri != null && (
                 <span className="rounded-full bg-sea-50 px-3 py-1">
                   {b.distanza_ombrelloni_metri} m tra ombrelloni
+                </span>
+              )}
+              {categoria && (
+                <span className="rounded-full bg-sea-50 px-3 py-1">{categoria}</span>
+              )}
+              {idConcessione && (
+                <span
+                  className="rounded-full bg-sea-50 px-3 py-1 font-mono text-[11px]"
+                  title="Numero della concessione demaniale (fonte SID/MIT)"
+                >
+                  Concessione n. {idConcessione}
                 </span>
               )}
               {segnalazioni > 0 && (
