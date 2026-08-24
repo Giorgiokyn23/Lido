@@ -140,6 +140,7 @@ export interface BeachRanking {
   localita: string;
   regione: string;
   tipo: string | null;
+  paese: string | null;
   reviews_count: number;
   avg_overall: number | null;
   weighted_score: number;

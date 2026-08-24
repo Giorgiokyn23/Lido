@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { ScoreBar } from "@/components/ScoreBar";
 import { ReviewForm } from "@/components/ReviewForm";
@@ -66,6 +67,7 @@ export default async function BeachPage({ params }: { params: { id: string } }) 
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const tcy = await getTranslations("countries");
 
   if (!beach) notFound();
   const b = beach as BeachScore;
@@ -119,7 +121,7 @@ export default async function BeachPage({ params }: { params: { id: string } }) 
                   #{rank.rank_regione} in {b.regione}
                 </span>
                 <span className="rounded-full bg-sea-600 px-3 py-1 text-white">
-                  #{rank.rank_nazionale} in Italia
+                  #{rank.rank_nazionale} · {tcy(b.paese ?? "IT")}
                 </span>
               </div>
             )}

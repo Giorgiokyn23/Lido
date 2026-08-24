@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import type { BeachRanking } from "@/lib/types";
+import { COUNTRIES, type BeachRanking } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -17,17 +18,21 @@ const medal = (n: number) => (n === 1 ? "🥇" : n === 2 ? "🥈" : n === 3 ? "�
 export default async function ClassifichePage({
   searchParams,
 }: {
-  searchParams: { scope?: string; regione?: string; comune?: string };
+  searchParams: { scope?: string; regione?: string; comune?: string; paese?: string };
 }) {
+  const tc = await getTranslations("countries");
+
   const scope: Scope =
     searchParams.scope === "regione" || searchParams.scope === "comune"
       ? searchParams.scope
       : "nazionale";
+  const paese = (searchParams.paese || "IT").toUpperCase();
   const regione = searchParams.regione || "Toscana";
   const comune = searchParams.comune || "Livorno";
+  const flag = COUNTRIES.find((c) => c.code === paese)?.flag ?? "";
 
   const supabase = createClient();
-  let query = supabase.from("beach_rankings").select("*");
+  let query = supabase.from("beach_rankings").select("*").eq("paese", paese);
 
   if (scope === "regione") {
     query = query.eq("regione", regione).order("rank_regione").limit(50);
@@ -42,25 +47,21 @@ export default async function ClassifichePage({
   const rankKey =
     scope === "regione" ? "rank_regione" : scope === "comune" ? "rank_comune" : "rank_nazionale";
 
-  const tab = (s: Scope, label: string) => {
-    const active = scope === s;
-    const href =
-      s === "regione"
-        ? `/classifiche?scope=regione&regione=${encodeURIComponent(regione)}`
-        : s === "comune"
-        ? `/classifiche?scope=comune&comune=${encodeURIComponent(comune)}`
-        : `/classifiche?scope=nazionale`;
-    return (
-      <Link
-        href={href}
-        className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-          active ? "bg-sea-600 text-white" : "bg-sea-50 text-sea-700 hover:bg-sea-100"
-        }`}
-      >
-        {label}
-      </Link>
-    );
+  const withParams = (over: Record<string, string>) => {
+    const sp = new URLSearchParams({ scope, paese, regione, comune, ...over });
+    return `/classifiche?${sp.toString()}`;
   };
+
+  const tab = (s: Scope, label: string) => (
+    <Link
+      href={withParams({ scope: s })}
+      className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+        scope === s ? "bg-sea-600 text-white" : "bg-sea-50 text-sea-700 hover:bg-sea-100"
+      }`}
+    >
+      {label}
+    </Link>
+  );
 
   return (
     <div className="space-y-6">
@@ -68,10 +69,26 @@ export default async function ClassifichePage({
         <h1 className="text-3xl font-bold text-sea-900">🏆 Classifiche</h1>
         <p className="mt-1 text-sea-600">
           Punteggio pesato: i bagni salgono in classifica solo con recensioni vere e verificate, non con
-          una sola stella isolata.
+          una sola stella isolata. Ogni Paese ha la sua graduatoria.
         </p>
       </div>
 
+      {/* selettore Paese */}
+      <div className="flex flex-wrap gap-2">
+        {COUNTRIES.map((c) => (
+          <Link
+            key={c.code}
+            href={withParams({ paese: c.code })}
+            className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
+              paese === c.code ? "bg-sea-600 text-white" : "bg-sea-50 text-sea-700 hover:bg-sea-100"
+            }`}
+          >
+            {c.flag} {tc(c.code)}
+          </Link>
+        ))}
+      </div>
+
+      {/* ambito */}
       <div className="flex flex-wrap gap-2">
         {tab("comune", "Comunale")}
         {tab("regione", "Regionale")}
@@ -81,6 +98,7 @@ export default async function ClassifichePage({
       {scope === "comune" && (
         <form method="get" className="flex flex-wrap items-center gap-2">
           <input type="hidden" name="scope" value="comune" />
+          <input type="hidden" name="paese" value={paese} />
           <label className="text-sm text-sea-600">Comune:</label>
           <input
             name="comune"
@@ -88,36 +106,27 @@ export default async function ClassifichePage({
             placeholder="es. Livorno"
             className="rounded-lg border border-sea-200 px-3 py-2 text-sm"
           />
-          <button className="rounded-lg bg-sea-600 px-4 py-2 text-sm font-medium text-white">
-            Mostra
-          </button>
+          <button className="rounded-lg bg-sea-600 px-4 py-2 text-sm font-medium text-white">Mostra</button>
         </form>
       )}
 
-      {scope === "regione" && (
+      {scope === "regione" && paese === "IT" && (
         <form method="get" className="flex flex-wrap items-center gap-2">
           <input type="hidden" name="scope" value="regione" />
+          <input type="hidden" name="paese" value={paese} />
           <label className="text-sm text-sea-600">Regione:</label>
-          <select
-            name="regione"
-            defaultValue={regione}
-            className="rounded-lg border border-sea-200 px-3 py-2 text-sm"
-          >
+          <select name="regione" defaultValue={regione} className="rounded-lg border border-sea-200 px-3 py-2 text-sm">
             {REGIONI.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
+              <option key={r} value={r}>{r}</option>
             ))}
           </select>
-          <button className="rounded-lg bg-sea-600 px-4 py-2 text-sm font-medium text-white">
-            Mostra
-          </button>
+          <button className="rounded-lg bg-sea-600 px-4 py-2 text-sm font-medium text-white">Mostra</button>
         </form>
       )}
 
       <p className="text-sm text-sea-500">
         {scope === "nazionale"
-          ? "I migliori bagni d'Italia"
+          ? `${flag} I migliori bagni — ${tc(paese)}`
           : scope === "regione"
           ? `I migliori bagni della ${regione}`
           : `I migliori bagni di ${comune}`}
