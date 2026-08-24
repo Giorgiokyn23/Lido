@@ -1,12 +1,16 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import type { BeachScore } from "@/lib/types";
 import { METRICS } from "@/lib/types";
 
 const metricValue = (b: BeachScore, key: string) =>
   (b as unknown as Record<string, number | null>)[`avg_${key}`] ?? null;
 
-export function BeachCard({ beach }: { beach: BeachScore }) {
+export async function BeachCard({ beach }: { beach: BeachScore }) {
+  const tm = await getTranslations("metrics");
+  const tc = await getTranslations("card");
   const overall = beach.avg_overall;
+
   return (
     <Link
       href={`/lido/${beach.id}`}
@@ -36,7 +40,7 @@ export function BeachCard({ beach }: { beach: BeachScore }) {
           return (
             <div key={m.key}>
               <div className="flex justify-between text-[11px] text-sea-600">
-                <span className="truncate">{m.label}</span>
+                <span className="truncate">{tm(m.key)}</span>
                 <span className="tabular-nums">{val == null ? "—" : val.toFixed(1)}</span>
               </div>
               <div className="mt-0.5 h-1.5 w-full overflow-hidden rounded-full bg-sea-100">
@@ -48,9 +52,9 @@ export function BeachCard({ beach }: { beach: BeachScore }) {
       </div>
 
       <div className="mt-4 flex items-center justify-between text-xs text-sea-400">
-        <span>{beach.reviews_count} recensioni</span>
+        <span>{tc("reviews", { count: beach.reviews_count })}</span>
         {beach.distanza_ombrelloni_metri != null && (
-          <span>{beach.distanza_ombrelloni_metri} m tra ombrelloni</span>
+          <span>{tc("umbrellas", { m: beach.distanza_ombrelloni_metri })}</span>
         )}
       </div>
       {beach.id_concessione && (

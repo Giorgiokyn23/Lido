@@ -1,0 +1,67 @@
+QUERY OVERPASS PER PAESE — LidoRank
+Uso: vai su https://overpass-turbo.eu , incolla UNA query, premi Run,
+poi Export -> download as GeoJSON, e carica il file in chat (nome del Paese nel messaggio).
+Paesi grandi (ES/FR/GR/GB): se va in timeout, alza [timeout:900] o esporta a pezzi.
+======================================================================
+
+CLUSTER 1 — Mediterraneo Ovest (priorità massima: mercati enormi)
+  # Spagna (ES)
+  [out:json][timeout:900];area["ISO3166-1"="ES"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Francia (FR)
+  [out:json][timeout:900];area["ISO3166-1"="FR"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Portogallo (PT)
+  [out:json][timeout:900];area["ISO3166-1"="PT"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Malta (MT)
+  [out:json][timeout:900];area["ISO3166-1"="MT"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Monaco (MC)
+  [out:json][timeout:900];area["ISO3166-1"="MC"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+CLUSTER 2 — Adriatico / Med centrale
+  # Croazia (HR)
+  [out:json][timeout:900];area["ISO3166-1"="HR"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Grecia (GR)
+  [out:json][timeout:900];area["ISO3166-1"="GR"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Slovenia (SI)
+  [out:json][timeout:900];area["ISO3166-1"="SI"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Montenegro (ME)
+  [out:json][timeout:900];area["ISO3166-1"="ME"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Albania (AL)
+  [out:json][timeout:900];area["ISO3166-1"="AL"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+CLUSTER 3 — Mediterraneo Est (Israele + Cipro, come richiesto)
+  # Cipro (CY)
+  [out:json][timeout:900];area["ISO3166-1"="CY"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Israele (IL)
+  [out:json][timeout:900];area["ISO3166-1"="IL"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Turchia (TR)
+  [out:json][timeout:900];area["ISO3166-1"="TR"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+CLUSTER 4 — Atlantico / Mare del Nord
+  # Regno Unito (GB)
+  [out:json][timeout:900];area["ISO3166-1"="GB"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Irlanda (IE)
+  [out:json][timeout:900];area["ISO3166-1"="IE"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Paesi Bassi (NL)
+  [out:json][timeout:900];area["ISO3166-1"="NL"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Belgio (BE)
+  [out:json][timeout:900];area["ISO3166-1"="BE"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Germania (DE)
+  [out:json][timeout:900];area["ISO3166-1"="DE"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+CLUSTER 5 — Baltico / Nordico
+  # Danimarca (DK)
+  [out:json][timeout:900];area["ISO3166-1"="DK"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Svezia (SE)
+  [out:json][timeout:900];area["ISO3166-1"="SE"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Polonia (PL)
+  [out:json][timeout:900];area["ISO3166-1"="PL"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Finlandia (FI)
+  [out:json][timeout:900];area["ISO3166-1"="FI"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Norvegia (NO)
+  [out:json][timeout:900];area["ISO3166-1"="NO"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+CLUSTER 6 — Mar Nero
+  # Romania (RO)
+  [out:json][timeout:900];area["ISO3166-1"="RO"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Bulgaria (BG)
+  [out:json][timeout:900];area["ISO3166-1"="BG"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;

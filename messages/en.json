@@ -1,0 +1,38 @@
+{
+  "nav": { "rankings": "Rankings", "about": "About", "login": "Sign in", "logout": "Sign out", "tagline": "The Trustpilot of beach clubs" },
+  "home": {
+    "badge": "8,700+ beach clubs · 9 vertical criteria · all of Italy",
+    "titleA": "Find the right beach club.",
+    "titleB": "Reviews that truly matter.",
+    "subtitle": "Privacy, families, accessibility, seabed, pets, prices, safety, rule compliance and atmosphere: nine vertical metrics to choose the perfect beach club — and report violations to the authorities.",
+    "searchPlaceholder": "Search by town, beach club or region…  (e.g. Riccione)",
+    "searchButton": "Search",
+    "filtersHeading": "Vertical filters — minimum rating",
+    "optAll": "All",
+    "reset": "Reset filters",
+    "found": "{count} beach clubs found · page {page} of {pages}",
+    "prev": "← Previous",
+    "next": "Next →",
+    "empty": "No beach club found with these criteria. Try resetting the filters.",
+    "error": "Error loading beach clubs:"
+  },
+  "card": { "reviews": "{count} reviews", "umbrellas": "{m} m between umbrellas" },
+  "metrics": {
+    "space_privacy": "Space & Privacy",
+    "family_services": "Family Services",
+    "accessibility": "Accessibility",
+    "seabed_quality": "Seabed & Water",
+    "pet_friendly": "Pet Friendly",
+    "price_transparency": "Price Transparency",
+    "sicurezza": "Safety",
+    "rispetto_regole": "Rule Compliance",
+    "atmosfera": "Atmosphere"
+  },
+  "footer": {
+    "desc": "Vertical reviews of Italian beach clubs. Structured, transparent data, designed also for the criteria of the Bolkestein tenders.",
+    "usefulTitle": "Who it's for",
+    "usefulText": "For beachgoers to choose, for operators to get known, and for municipalities and maritime-domain authorities as a dataset on rule compliance. LidoRank is an independent project: no affiliation with public bodies unless explicitly stated.",
+    "creditsTitle": "Credits",
+    "rights": "All rights reserved. Content, code, trademark and data structure are protected; reproduction forbidden without written authorization."
+  }
+}

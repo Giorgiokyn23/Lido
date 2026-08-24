@@ -1,0 +1,38 @@
+{
+  "nav": { "rankings": "Classifiche", "about": "Chi siamo", "login": "Accedi", "logout": "Esci", "tagline": "Il Trustpilot dei bagni" },
+  "home": {
+    "badge": "8.700+ lidi · 9 criteri verticali · tutta Italia",
+    "titleA": "Trova il lido giusto.",
+    "titleB": "Recensioni che contano davvero.",
+    "subtitle": "Privacy, famiglie, accessibilità, fondale, animali, prezzi, sicurezza, rispetto delle regole e atmosfera: nove metriche verticali per scegliere lo stabilimento balneare perfetto — e segnalare gli illeciti agli enti.",
+    "searchPlaceholder": "Cerca per località, lido o regione…  (es. Riccione)",
+    "searchButton": "Cerca",
+    "filtersHeading": "Filtri verticali — voto minimo",
+    "optAll": "Tutti",
+    "reset": "Azzera filtri",
+    "found": "{count} lidi trovati · pagina {page} di {pages}",
+    "prev": "← Precedente",
+    "next": "Successiva →",
+    "empty": "Nessun lido trovato con questi criteri. Prova ad azzerare i filtri.",
+    "error": "Errore nel caricamento dei lidi:"
+  },
+  "card": { "reviews": "{count} recensioni", "umbrellas": "{m} m tra ombrelloni" },
+  "metrics": {
+    "space_privacy": "Spazio & Privacy",
+    "family_services": "Servizi Famiglie",
+    "accessibility": "Accessibilità",
+    "seabed_quality": "Fondale & Acqua",
+    "pet_friendly": "Pet Friendly",
+    "price_transparency": "Trasparenza Prezzi",
+    "sicurezza": "Sicurezza",
+    "rispetto_regole": "Rispetto Regole",
+    "atmosfera": "Atmosfera"
+  },
+  "footer": {
+    "desc": "Le recensioni verticali degli stabilimenti balneari italiani. Dati strutturati e trasparenti, pensati anche per i criteri dei bandi Bolkestein.",
+    "usefulTitle": "A chi è utile",
+    "usefulText": "Ai bagnanti per scegliere, ai gestori per farsi conoscere, e a Comuni ed enti di controllo del demanio marittimo come base dati sul rispetto delle regole. LidoRank è un progetto indipendente: nessuna affiliazione con enti pubblici salvo accordi dichiarati.",
+    "creditsTitle": "Crediti",
+    "rights": "Tutti i diritti riservati. Contenuti, codice, marchio e struttura dati sono protetti; riproduzione vietata senza autorizzazione scritta."
+  }
+}
