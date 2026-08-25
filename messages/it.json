@@ -61,7 +61,10 @@
     "GR": "Grecia",
     "SI": "Slovenia",
     "ME": "Montenegro",
-    "AL": "Albania"
+    "AL": "Albania",
+    "CY": "Cipro",
+    "IL": "Israele",
+    "TR": "Turchia"
   },
   "about": {
     "title": "Chi siamo",

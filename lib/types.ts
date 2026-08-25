@@ -13,6 +13,9 @@ export const COUNTRIES = [
   { code: "SI", flag: "🇸🇮" },
   { code: "ME", flag: "🇲🇪" },
   { code: "AL", flag: "🇦🇱" },
+  { code: "CY", flag: "🇨🇾" },
+  { code: "IL", flag: "🇮🇱" },
+  { code: "TR", flag: "🇹🇷" },
 ] as const;
 
 
