@@ -74,7 +74,9 @@
     "SE": "Svezia",
     "PL": "Polonia",
     "FI": "Finlandia",
-    "NO": "Norvegia"
+    "NO": "Norvegia",
+    "RO": "Romania",
+    "BG": "Bulgaria"
   },
   "about": {
     "title": "Chi siamo",
