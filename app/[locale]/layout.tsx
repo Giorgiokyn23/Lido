@@ -22,6 +22,11 @@ export async function generateMetadata({
   const en = locale === "en";
   return {
     metadataBase: new URL(base),
+    icons: {
+      icon: "/icon.png",
+      shortcut: "/icon.png",
+      apple: "/icon.png",
+    },
     title: en
       ? "LidoRank — Vertical reviews of Italian beach clubs"
       : "LidoRank — Le recensioni verticali degli stabilimenti balneari italiani",

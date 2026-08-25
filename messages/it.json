@@ -20,7 +20,12 @@
     "prev": "← Precedente",
     "next": "Successiva →",
     "empty": "Nessun lido trovato con questi criteri. Prova ad azzerare i filtri.",
-    "error": "Errore nel caricamento dei lidi:"
+    "error": "Errore nel caricamento dei lidi:",
+    "filters": "Filtri",
+    "hideFilters": "Nascondi filtri",
+    "loading": "Carico…",
+    "activeFilters": "{n} attivi",
+    "suggestionsHint": "Suggerimenti"
   },
   "card": {
     "reviews": "{count} recensioni",

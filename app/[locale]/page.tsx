@@ -1,80 +1,10 @@
 import { getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
-import { SearchFilters } from "@/components/SearchFilters";
-import { BeachCard } from "@/components/BeachCard";
-import { METRICS, COUNTRIES, type BeachScore } from "@/lib/types";
+import { SearchExperience } from "@/components/SearchExperience";
 
 export const dynamic = "force-dynamic";
 
-type SearchParams = { [key: string]: string | string[] | undefined };
-
-export default async function HomePage({
-  params: { locale },
-  searchParams,
-}: {
-  params: { locale: string };
-  searchParams: SearchParams;
-}) {
+export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   const t = await getTranslations("home");
-  const tc = await getTranslations("countries");
-  const supabase = createClient();
-
-  const q = (searchParams.q as string | undefined)?.trim() ?? "";
-  const paese = (searchParams.paese as string | undefined)?.trim().toUpperCase() ?? "";
-
-  const PAGE_SIZE = 24;
-  const pageRaw = parseInt((searchParams.page as string) ?? "1", 10);
-  const page = Number.isFinite(pageRaw) && pageRaw > 0 ? pageRaw : 1;
-  const from = (page - 1) * PAGE_SIZE;
-  const to = from + PAGE_SIZE - 1;
-
-  let query = supabase
-    .from("beach_scores")
-    .select("*", { count: "exact" })
-    .order("avg_overall", { ascending: false, nullsFirst: false })
-    .order("reviews_count", { ascending: false })
-    .range(from, to);
-
-  if (q) {
-    query = query.or(`nome.ilike.%${q}%,localita.ilike.%${q}%,regione.ilike.%${q}%`);
-  }
-  if (paese) query = query.eq("paese", paese);
-
-  for (const m of METRICS) {
-    const raw = searchParams[m.key];
-    const min = typeof raw === "string" ? parseFloat(raw) : NaN;
-    if (!Number.isNaN(min)) query = query.gte(`avg_${m.key}`, min);
-  }
-
-  const { data, error, count } = await query;
-  const beaches = (data ?? []) as BeachScore[];
-  const total = count ?? 0;
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-
-  // link relativo: preserva la lingua corrente (/ o /en) e cambia solo la pagina
-  const hrefForPage = (p: number) => {
-    const sp = new URLSearchParams();
-    for (const [k, v] of Object.entries(searchParams)) {
-      if (typeof v === "string" && k !== "page") sp.set(k, v);
-    }
-    sp.set("page", String(p));
-    return `?${sp.toString()}`;
-  };
-
-  // link per il filtro Paese (azzera pagina, mantiene ricerca/filtri)
-  const hrefForCountry = (code: string | null) => {
-    const sp = new URLSearchParams();
-    for (const [k, v] of Object.entries(searchParams)) {
-      if (typeof v === "string" && k !== "page" && k !== "paese") sp.set(k, v);
-    }
-    if (code) sp.set("paese", code);
-    const s = sp.toString();
-    return s ? `?${s}` : "?";
-  };
-  const chip = (active: boolean) =>
-    `rounded-full px-3 py-1.5 text-sm font-medium transition ${
-      active ? "bg-sea-600 text-white" : "bg-sea-50 text-sea-700 hover:bg-sea-100"
-    }`;
 
   return (
     <div className="space-y-8">
@@ -100,55 +30,7 @@ export default async function HomePage({
         </svg>
       </section>
 
-      <div className="flex flex-wrap gap-2">
-        <a href={hrefForCountry(null)} className={chip(!paese)}>🌍 {tc("all")}</a>
-        {COUNTRIES.map((c) => (
-          <a key={c.code} href={hrefForCountry(c.code)} className={chip(paese === c.code)}>
-            {c.flag} {tc(c.code)}
-          </a>
-        ))}
-      </div>
-
-      <SearchFilters />
-
-      {error ? (
-        <p className="rounded-xl bg-red-50 p-4 text-sm text-red-700">
-          {t("error")} {error.message}
-        </p>
-      ) : beaches.length === 0 ? (
-        <p className="rounded-xl bg-white p-8 text-center text-sea-500 shadow-sm">{t("empty")}</p>
-      ) : (
-        <section>
-          <p className="mb-3 text-sm text-sea-500">
-            {t("found", { count: total.toLocaleString(locale), page, pages: totalPages })}
-          </p>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {beaches.map((b) => (
-              <BeachCard key={b.id} beach={b} />
-            ))}
-          </div>
-
-          {totalPages > 1 && (
-            <nav className="mt-8 flex items-center justify-center gap-3">
-              {page > 1 ? (
-                <a href={hrefForPage(page - 1)} className="rounded-lg border border-sea-200 bg-white px-4 py-2 text-sm font-medium text-sea-700 hover:bg-sea-50">
-                  {t("prev")}
-                </a>
-              ) : (
-                <span className="rounded-lg border border-sea-100 px-4 py-2 text-sm text-sea-300">{t("prev")}</span>
-              )}
-              <span className="text-sm text-sea-500">{page} / {totalPages}</span>
-              {page < totalPages ? (
-                <a href={hrefForPage(page + 1)} className="rounded-lg border border-sea-200 bg-white px-4 py-2 text-sm font-medium text-sea-700 hover:bg-sea-50">
-                  {t("next")}
-                </a>
-              ) : (
-                <span className="rounded-lg border border-sea-100 px-4 py-2 text-sm text-sea-300">{t("next")}</span>
-              )}
-            </nav>
-          )}
-        </section>
-      )}
+      <SearchExperience locale={locale} />
     </div>
   );
 }

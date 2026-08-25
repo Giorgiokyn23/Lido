@@ -20,7 +20,12 @@
     "prev": "← Previous",
     "next": "Next →",
     "empty": "No beach club found with these criteria. Try resetting the filters.",
-    "error": "Error loading beach clubs:"
+    "error": "Error loading beach clubs:",
+    "filters": "Filters",
+    "hideFilters": "Hide filters",
+    "loading": "Loading…",
+    "activeFilters": "{n} on",
+    "suggestionsHint": "Suggestions"
   },
   "card": {
     "reviews": "{count} reviews",
