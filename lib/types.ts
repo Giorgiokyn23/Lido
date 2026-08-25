@@ -16,6 +16,16 @@ export const COUNTRIES = [
   { code: "CY", flag: "🇨🇾" },
   { code: "IL", flag: "🇮🇱" },
   { code: "TR", flag: "🇹🇷" },
+  { code: "GB", flag: "🇬🇧" },
+  { code: "IE", flag: "🇮🇪" },
+  { code: "NL", flag: "🇳🇱" },
+  { code: "BE", flag: "🇧🇪" },
+  { code: "DE", flag: "🇩🇪" },
+  { code: "DK", flag: "🇩🇰" },
+  { code: "SE", flag: "🇸🇪" },
+  { code: "PL", flag: "🇵🇱" },
+  { code: "FI", flag: "🇫🇮" },
+  { code: "NO", flag: "🇳🇴" },
 ] as const;
 
 

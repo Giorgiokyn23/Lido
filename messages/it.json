@@ -64,7 +64,17 @@
     "AL": "Albania",
     "CY": "Cipro",
     "IL": "Israele",
-    "TR": "Turchia"
+    "TR": "Turchia",
+    "GB": "Regno Unito",
+    "IE": "Irlanda",
+    "NL": "Paesi Bassi",
+    "BE": "Belgio",
+    "DE": "Germania",
+    "DK": "Danimarca",
+    "SE": "Svezia",
+    "PL": "Polonia",
+    "FI": "Finlandia",
+    "NO": "Norvegia"
   },
   "about": {
     "title": "Chi siamo",
