@@ -19,6 +19,29 @@ function clientIpHash(): string {
   return createHash("sha256").update(ip + salt).digest("hex");
 }
 
+// Verifica il token Turnstile (Cloudflare) lato server.
+// Se TURNSTILE_SECRET non è configurato, la verifica è disattivata (non blocca) —
+// così il sito resta funzionante finché non colleghi le chiavi in produzione.
+async function verifyTurnstile(token: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET;
+  if (!secret) return true; // non ancora configurato → non bloccare
+  if (!token) return false;
+  try {
+    const res = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ secret, response: token }),
+      }
+    );
+    const data = (await res.json()) as { success?: boolean };
+    return !!data.success;
+  } catch {
+    return false; // in caso di errore rete, meglio negare
+  }
+}
+
 // helper: valore enum ammesso o null
 function pickEnum(v: FormDataEntryValue | null, allowed: readonly string[]): string | null {
   const s = String(v ?? "");
@@ -42,6 +65,10 @@ export async function submitReview(
   if (String(formData.get("website") ?? "").trim() !== "") {
     return { ok: true }; // fingiamo successo, non inseriamo nulla
   }
+
+  // verifica anti-bot Turnstile (se configurato)
+  const okTs = await verifyTurnstile(String(formData.get("cf-turnstile-response") ?? ""));
+  if (!okTs) return { ok: false, error: "Verifica anti-bot non superata. Riprova." };
 
   const scores: Record<string, number> = {};
   for (const m of METRICS) {
@@ -70,32 +97,24 @@ export async function submitReview(
 
   const ip_hash = clientIpHash();
 
-  // rate-limit: max 6 recensioni/ora dallo stesso IP
-  const sinceIso = new Date(Date.now() - 3600_000).toISOString();
-  const { count } = await supabase
-    .from("reviews")
-    .select("id", { count: "exact", head: true })
-    .eq("ip_hash", ip_hash)
-    .gte("created_at", sinceIso);
-  if ((count ?? 0) >= 6) {
-    return { ok: false, error: "Troppe recensioni in poco tempo. Riprova più tardi." };
-  }
-
-  const { error } = await supabase.from("reviews").insert({
-    beach_id,
-    user_id: user?.id ?? null,
-    verified: !!user,
-    ip_hash,
-    commento,
-    ...scores,
-    ...facts,
+  // Inserimento ATOMICO via RPC: rate-limit + anti-brigading + damper anti-ondata
+  // avvengono tutti nella stessa transazione (niente race condition).
+  const { error } = await supabase.rpc("submit_review", {
+    _beach: beach_id,
+    _uid: user?.id ?? null,
+    _ip: ip_hash,
+    _p: { ...scores, ...facts, commento },
   });
 
   if (error) {
-    if (error.code === "23505") {
+    const msg = error.message || "";
+    if (msg.includes("rate_limit_ip"))
+      return { ok: false, error: "Troppe recensioni in poco tempo. Riprova più tardi." };
+    if (msg.includes("rate_limit_beach"))
+      return { ok: false, error: "Hai già recensito questo lido di recente." };
+    if (error.code === "23505")
       return { ok: false, error: "Hai già recensito questo bagno con il tuo account." };
-    }
-    return { ok: false, error: error.message };
+    return { ok: false, error: msg || "Errore nell'invio." };
   }
 
   revalidatePath(`/lido/${beach_id}`);
@@ -117,6 +136,9 @@ export async function submitSegnalazione(
 ): Promise<SubmitState> {
   const beach_id = String(formData.get("beach_id") ?? "");
   if (!beach_id) return { ok: false, error: "Lido non valido." };
+
+  const okTs = await verifyTurnstile(String(formData.get("cf-turnstile-response") ?? ""));
+  if (!okTs) return { ok: false, error: "Verifica anti-bot non superata. Riprova." };
 
   const tipo = pickEnum(
     formData.get("tipo"),

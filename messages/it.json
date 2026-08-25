@@ -76,7 +76,12 @@
     "FI": "Finlandia",
     "NO": "Norvegia",
     "RO": "Romania",
-    "BG": "Bulgaria"
+    "BG": "Bulgaria",
+    "MA": "Marocco",
+    "DZ": "Algeria",
+    "TN": "Tunisia",
+    "LY": "Libia",
+    "EG": "Egitto"
   },
   "about": {
     "title": "Chi siamo",

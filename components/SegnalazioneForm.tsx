@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { submitSegnalazione, type SubmitState } from "@/app/actions";
 import { SEGNALAZIONE_TIPI } from "@/lib/types";
+import { Turnstile } from "@/components/Turnstile";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -95,6 +96,8 @@ export function SegnalazioneForm({ beachId }: { beachId: string }) {
       {state.error ? (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
       ) : null}
+
+      <Turnstile />
 
       <div className="flex gap-2">
         <button

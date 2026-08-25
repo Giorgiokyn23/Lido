@@ -148,6 +148,9 @@ export interface Review {
   chip_richiesto: boolean | null;
   verified: boolean;
   segnalata: number;
+  peso: number;                 // 0..1 — peso della review nel punteggio (anti-frode)
+  stato: "pubblicata" | "ridotta" | "shadow" | "rifiutata";
+  flags_count: number;
   created_at: string;
 }
 

@@ -1,0 +1,54 @@
+QUERY OVERPASS — AFRICA (LidoRank va globale)
+Uso: vai su https://overpass-turbo.eu , incolla UNA query, premi Run,
+poi Export -> download as GeoJSON. Salva ogni file come exportXX.geojson
+(XX = ISO del Paese, es. exportMA.geojson) e mettilo nella cartella di lavoro.
+Paesi grandi (DZ/EG/ZA): se va in timeout, alza [timeout:1200] o esporta a pezzi.
+======================================================================
+
+>>> INIZIA DA QUI — CLUSTER 7: Nord Africa (chiude il bacino del Mediterraneo)
+    Priorità massima: turismo europeo in uscita, stagione lunga, francese già coperto.
+
+  # Marocco (MA)
+  [out:json][timeout:1200];area["ISO3166-1"="MA"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Algeria (DZ)
+  [out:json][timeout:1200];area["ISO3166-1"="DZ"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Tunisia (TN)
+  [out:json][timeout:1200];area["ISO3166-1"="TN"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Libia (LY)
+  [out:json][timeout:1200];area["ISO3166-1"="LY"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Egitto (EG)  — Mar Rosso + Mediterraneo, mercato enorme
+  [out:json][timeout:1200];area["ISO3166-1"="EG"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+----------------------------------------------------------------------
+CLUSTER 8: Africa Orientale (Oceano Indiano + isole, altissimo valore balneare)
+  # Kenya (KE)
+  [out:json][timeout:1200];area["ISO3166-1"="KE"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Tanzania (TZ) — Zanzibar
+  [out:json][timeout:1200];area["ISO3166-1"="TZ"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Mozambico (MZ)
+  [out:json][timeout:1200];area["ISO3166-1"="MZ"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Mauritius (MU)
+  [out:json][timeout:1200];area["ISO3166-1"="MU"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Seychelles (SC)
+  [out:json][timeout:1200];area["ISO3166-1"="SC"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Madagascar (MG)
+  [out:json][timeout:1200];area["ISO3166-1"="MG"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+----------------------------------------------------------------------
+CLUSTER 9: Africa Australe + Atlantica
+  # Sudafrica (ZA)
+  [out:json][timeout:1200];area["ISO3166-1"="ZA"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Namibia (NA)
+  [out:json][timeout:1200];area["ISO3166-1"="NA"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Angola (AO)
+  [out:json][timeout:1200];area["ISO3166-1"="AO"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Ghana (GH)
+  [out:json][timeout:1200];area["ISO3166-1"="GH"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Senegal (SN)
+  [out:json][timeout:1200];area["ISO3166-1"="SN"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Capo Verde (CV)
+  [out:json][timeout:1200];area["ISO3166-1"="CV"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+======================================================================
+POI: python scripts/gen_country.py --iso MA,DZ,TN,LY,EG --label cluster7_nordafrica --migration 0025 --uploads . --ne ne_admin1.geojson
+     (vedi ATTIVA_CLUSTER.md per i passaggi completi)

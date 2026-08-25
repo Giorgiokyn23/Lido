@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import { useFormState } from "react-dom";
 import { submitReview, type SubmitState } from "@/app/actions";
 import { METRICS, FACTS, BOOL_FACTS } from "@/lib/types";
+import { Turnstile } from "@/components/Turnstile";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -150,6 +151,7 @@ export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; i
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
       ) : null}
 
+      <Turnstile />
       <SubmitButton />
     </form>
   );
