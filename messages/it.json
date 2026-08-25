@@ -56,7 +56,12 @@
     "FR": "Francia",
     "PT": "Portogallo",
     "MT": "Malta",
-    "MC": "Monaco"
+    "MC": "Monaco",
+    "HR": "Croazia",
+    "GR": "Grecia",
+    "SI": "Slovenia",
+    "ME": "Montenegro",
+    "AL": "Albania"
   },
   "about": {
     "title": "Chi siamo",

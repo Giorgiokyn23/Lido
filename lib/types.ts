@@ -8,6 +8,11 @@ export const COUNTRIES = [
   { code: "PT", flag: "🇵🇹" },
   { code: "MT", flag: "🇲🇹" },
   { code: "MC", flag: "🇲🇨" },
+  { code: "HR", flag: "🇭🇷" },
+  { code: "GR", flag: "🇬🇷" },
+  { code: "SI", flag: "🇸🇮" },
+  { code: "ME", flag: "🇲🇪" },
+  { code: "AL", flag: "🇦🇱" },
 ] as const;
 
 
