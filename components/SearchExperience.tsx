@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
-import { METRICS, COUNTRIES, type BeachScore } from "@/lib/types";
+import { METRICS, CONTINENTS, CONTINENT_OF, FLAG_OF, type BeachScore } from "@/lib/types";
 import { BeachCardClient } from "@/components/BeachCardClient";
 
 const PAGE_SIZE = 24;
@@ -14,11 +14,13 @@ export function SearchExperience({ locale }: { locale: string }) {
   const t = useTranslations("home");
   const tm = useTranslations("metrics");
   const tc = useTranslations("countries");
+  const tcont = useTranslations("continents");
   const supabase = useMemo(() => createClient(), []);
 
   const [q, setQ] = useState("");
   const [committedQ, setCommittedQ] = useState("");
   const [paese, setPaese] = useState("");
+  const [openContinent, setOpenContinent] = useState<string | null>(null);
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [page, setPage] = useState(1);
 
@@ -108,6 +110,14 @@ export function SearchExperience({ locale }: { locale: string }) {
     setPaese(code);
     setPage(1);
   };
+  const resetGeo = () => {
+    setPaese("");
+    setOpenContinent(null);
+    setPage(1);
+  };
+  const toggleContinent = (key: string) => {
+    setOpenContinent((cur) => (cur === key ? null : key));
+  };
   const setFilter = (key: string, val: string) => {
     setFilters((f) => ({ ...f, [key]: val }));
     setPage(1);
@@ -124,14 +134,58 @@ export function SearchExperience({ locale }: { locale: string }) {
 
   return (
     <div className="space-y-6">
-      {/* paesi */}
-      <div className="flex flex-wrap gap-2">
-        <button onClick={() => setCountry("")} className={chip(!paese)}>🌍 {tc("all")}</button>
-        {COUNTRIES.map((c) => (
-          <button key={c.code} onClick={() => setCountry(c.code)} className={chip(paese === c.code)}>
-            {c.flag} {tc(c.code)}
+      {/* geografia: continenti → bandiere */}
+      <div className="space-y-3">
+        <div className="flex flex-wrap gap-2">
+          <button onClick={resetGeo} className={chip(!paese && !openContinent)}>
+            🌍 {tc("all")}
           </button>
-        ))}
+          {CONTINENTS.map((cont) => {
+            const isOpen = openContinent === cont.key;
+            const hasActive = paese !== "" && CONTINENT_OF[paese] === cont.key;
+            return (
+              <button
+                key={cont.key}
+                onClick={() => toggleContinent(cont.key)}
+                aria-expanded={isOpen}
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition ${
+                  hasActive
+                    ? "bg-sea-600 text-white"
+                    : isOpen
+                    ? "bg-sea-100 text-sea-800 ring-1 ring-sea-300"
+                    : "bg-sea-50 text-sea-700 hover:bg-sea-100"
+                }`}
+              >
+                <span>{cont.emoji}</span>
+                <span>{tcont(cont.key)}</span>
+                <span className="text-xs opacity-60">{cont.codes.length}</span>
+                <svg
+                  viewBox="0 0 20 20"
+                  className={`h-3.5 w-3.5 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <path d="M5 8l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            );
+          })}
+        </div>
+
+        {openContinent && (
+          <div className="flex flex-wrap gap-2 rounded-2xl border border-sea-100 bg-sea-50/50 p-3">
+            {CONTINENTS.find((c) => c.key === openContinent)!.codes.map((code) => (
+              <button
+                key={code}
+                onClick={() => setCountry(paese === code ? "" : code)}
+                className={chip(paese === code)}
+              >
+                {FLAG_OF[code]} {tc(code)}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* ricerca + filtri */}

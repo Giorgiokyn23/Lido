@@ -95,5 +95,10 @@
     "p2": "The idea is to combine two worlds: the rigor of public data (maritime-domain concessions) and the real experience of people (vertical reviews across nine criteria). An information base useful to citizens for choosing and to authorities for oversight.",
     "p3": "Project conceived and developed by Giorgio Menicagli Pirina, with the collaboration of Francesco Mancuso on the political and regulatory analysis side. Built also with the help of artificial-intelligence tools, under human supervision.",
     "back": "← Back to home"
+  },
+  "continents": {
+    "europa": "Europe",
+    "asia": "Middle East",
+    "africa": "Africa"
   }
 }

@@ -95,5 +95,10 @@
     "p2": "L'idea è unire due mondi: il rigore dei dati pubblici (le concessioni del demanio marittimo) e l'esperienza reale delle persone (recensioni verticali su nove criteri). Una base informativa utile ai cittadini per scegliere e agli enti per vigilare.",
     "p3": "Progetto ideato e sviluppato da Giorgio Menicagli Pirina, con la collaborazione di Francesco Mancuso sul versante dell'analisi politica e normativa. Realizzato anche con l'ausilio di strumenti di intelligenza artificiale, sotto supervisione umana.",
     "back": "← Torna alla home"
+  },
+  "continents": {
+    "europa": "Europa",
+    "asia": "Medio Oriente",
+    "africa": "Africa"
   }
 }

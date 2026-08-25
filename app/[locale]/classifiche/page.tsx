@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { COUNTRIES, type BeachRanking } from "@/lib/types";
+import { COUNTRIES, CONTINENTS, CONTINENT_OF, FLAG_OF, type BeachRanking } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +21,7 @@ export default async function ClassifichePage({
   searchParams: { scope?: string; regione?: string; comune?: string; paese?: string };
 }) {
   const tc = await getTranslations("countries");
+  const tcont = await getTranslations("continents");
 
   const paese = (searchParams.paese || "IT").toUpperCase();
   const isIT = paese === "IT";
@@ -77,13 +78,28 @@ export default async function ClassifichePage({
         </p>
       </div>
 
-      {/* selettore Paese */}
-      <div className="flex flex-wrap gap-2">
-        {COUNTRIES.map((c) => (
-          <Link key={c.code} href={countryHref(c.code)} className={chip(paese === c.code)}>
-            {c.flag} {tc(c.code)}
-          </Link>
-        ))}
+      {/* selettore: continenti → bandiere */}
+      <div className="space-y-2">
+        {CONTINENTS.map((cont) => {
+          const isOpen = CONTINENT_OF[paese] === cont.key;
+          return (
+            <details key={cont.key} open={isOpen} className="rounded-2xl border border-sea-100 bg-white">
+              <summary className="flex cursor-pointer list-none items-center gap-2 px-4 py-3 font-medium text-sea-800">
+                <span>{cont.emoji}</span>
+                <span>{tcont(cont.key)}</span>
+                <span className="text-xs text-sea-400">{cont.codes.length}</span>
+                {isOpen && <span className="ml-auto text-xs text-sea-500">{flag} {tc(paese)}</span>}
+              </summary>
+              <div className="flex flex-wrap gap-2 border-t border-sea-100 p-3">
+                {cont.codes.map((code) => (
+                  <Link key={code} href={countryHref(code)} className={chip(paese === code)}>
+                    {FLAG_OF[code]} {tc(code)}
+                  </Link>
+                ))}
+              </div>
+            </details>
+          );
+        })}
       </div>
 
       {/* ambito: comunale/regionale solo per l'Italia */}

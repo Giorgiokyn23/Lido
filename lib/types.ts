@@ -28,7 +28,44 @@ export const COUNTRIES = [
   { code: "NO", flag: "🇳🇴" },
   { code: "RO", flag: "🇷🇴" },
   { code: "BG", flag: "🇧🇬" },
+  { code: "MA", flag: "🇲🇦" },
+  { code: "DZ", flag: "🇩🇿" },
+  { code: "TN", flag: "🇹🇳" },
+  { code: "LY", flag: "🇱🇾" },
+  { code: "EG", flag: "🇪🇬" },
 ] as const;
+
+// Raggruppamento per continente: l'interfaccia mostra i continenti,
+// che si espandono nelle bandiere dei Paesi. Ordine = priorità di lancio.
+export const CONTINENTS = [
+  {
+    key: "europa",
+    emoji: "🇪🇺",
+    codes: ["IT","ES","FR","PT","MT","MC","HR","GR","SI","ME","AL","GB","IE","NL","BE","DE","DK","SE","PL","FI","NO","RO","BG","CY"],
+  },
+  {
+    key: "asia",
+    emoji: "🕌",
+    codes: ["TR","IL"],
+  },
+  {
+    key: "africa",
+    emoji: "🌍",
+    codes: ["MA","DZ","TN","LY","EG"],
+  },
+] as const;
+
+export type ContinentKey = (typeof CONTINENTS)[number]["key"];
+
+// mappa inversa: code -> continente (per sapere quale pannello aprire)
+export const CONTINENT_OF: Record<string, ContinentKey> = Object.fromEntries(
+  CONTINENTS.flatMap((cont) => cont.codes.map((code) => [code, cont.key]))
+) as Record<string, ContinentKey>;
+
+// lookup bandiera per codice
+export const FLAG_OF: Record<string, string> = Object.fromEntries(
+  COUNTRIES.map((c) => [c.code, c.flag])
+);
 
 
 export const METRICS = [
