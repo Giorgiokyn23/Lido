@@ -28,11 +28,11 @@ export async function generateMetadata({
       apple: "/icon.png",
     },
     title: en
-      ? "LidoRank — Vertical reviews of Italian beach clubs"
-      : "LidoRank — Le recensioni verticali degli stabilimenti balneari italiani",
+      ? "LidoRank — Vertical reviews of beach clubs worldwide"
+      : "LidoRank — Le recensioni verticali dei beach club nel mondo",
     description: en
-      ? "Structured, transparent reviews of Italy's beach clubs across nine criteria — and a channel to report violations to the authorities."
-      : "Recensioni strutturate, trasparenti e conformi ai criteri Bolkestein per i lidi e le spiagge d'Italia.",
+      ? "Structured, transparent reviews of beach clubs and marinas worldwide across nine criteria — and a channel to report violations to the authorities."
+      : "Recensioni strutturate e trasparenti di lidi e porti in tutto il mondo, su nove criteri — e un canale per segnalare gli illeciti agli enti.",
     alternates: {
       canonical: en ? "/en" : "/",
       languages: { it: "/", en: "/en" },

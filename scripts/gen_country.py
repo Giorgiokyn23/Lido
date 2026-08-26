@@ -43,6 +43,12 @@ REGISTRO = {
     "PR":"Porto Rico","BB":"Barbados","AW":"Aruba","TT":"Trinidad e Tobago","KY":"Isole Cayman",
     "BR":"Brasile","AR":"Argentina","UY":"Uruguay","CL":"Cile","CO":"Colombia",
     "EC":"Ecuador","PE":"Perù","VE":"Venezuela","US":"Stati Uniti","CA":"Canada",
+    # Asia-Pacifico
+    "TH":"Thailandia","ID":"Indonesia","VN":"Vietnam","PH":"Filippine","MY":"Malaysia",
+    "KH":"Cambogia","SG":"Singapore","MM":"Myanmar","BN":"Brunei","LK":"Sri Lanka",
+    "MV":"Maldive","IN":"India","BD":"Bangladesh","JP":"Giappone","KR":"Corea del Sud",
+    "TW":"Taiwan","CN":"Cina","HK":"Hong Kong","AU":"Australia","NZ":"Nuova Zelanda",
+    "FJ":"Figi","NC":"Nuova Caledonia","PF":"Polinesia Francese","GU":"Guam",
 }
 
 LAT = re.compile(r"[A-Za-zÀ-ÿ]")

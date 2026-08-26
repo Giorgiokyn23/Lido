@@ -7,7 +7,7 @@
     "tagline": "The Trustpilot of beach clubs"
   },
   "home": {
-    "badge": "10,000+ beach clubs & marinas · 9 criteria · Italy & Europe",
+    "badge": "30,000+ beach clubs & marinas · 9 criteria · worldwide",
     "titleA": "Find the right beach club.",
     "titleB": "Reviews that truly matter.",
     "subtitle": "Privacy, families, accessibility, seabed, pets, prices, safety, rule compliance and atmosphere: nine vertical metrics to choose the perfect beach club — and report violations to the authorities.",
@@ -109,7 +109,24 @@
     "PE": "Peru",
     "VE": "Venezuela",
     "US": "United States",
-    "CA": "Canada"
+    "CA": "Canada",
+    "TH": "Thailand",
+    "ID": "Indonesia",
+    "VN": "Vietnam",
+    "PH": "Philippines",
+    "MY": "Malaysia",
+    "KH": "Cambodia",
+    "IN": "India",
+    "LK": "Sri Lanka",
+    "MV": "Maldives",
+    "BD": "Bangladesh",
+    "JP": "Japan",
+    "KR": "South Korea",
+    "TW": "Taiwan",
+    "CN": "China",
+    "AU": "Australia",
+    "NZ": "New Zealand",
+    "FJ": "Fiji"
   },
   "about": {
     "title": "About us",
@@ -126,9 +143,11 @@
   },
   "continents": {
     "europa": "Europe",
-    "asia": "Middle East",
+    "medioriente": "Middle East",
     "africa": "Africa",
-    "americhe": "Americas"
+    "americhe": "Americas",
+    "asia": "Asia",
+    "oceania": "Oceania"
   },
   "review": {
     "heading": "Leave your review",

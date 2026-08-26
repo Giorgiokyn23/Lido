@@ -61,6 +61,23 @@ export const COUNTRIES = [
   { code: "VE", flag: "🇻🇪" },
   { code: "US", flag: "🇺🇸" },
   { code: "CA", flag: "🇨🇦" },
+  { code: "TH", flag: "🇹🇭" },
+  { code: "ID", flag: "🇮🇩" },
+  { code: "VN", flag: "🇻🇳" },
+  { code: "PH", flag: "🇵🇭" },
+  { code: "MY", flag: "🇲🇾" },
+  { code: "KH", flag: "🇰🇭" },
+  { code: "IN", flag: "🇮🇳" },
+  { code: "LK", flag: "🇱🇰" },
+  { code: "MV", flag: "🇲🇻" },
+  { code: "BD", flag: "🇧🇩" },
+  { code: "JP", flag: "🇯🇵" },
+  { code: "KR", flag: "🇰🇷" },
+  { code: "TW", flag: "🇹🇼" },
+  { code: "CN", flag: "🇨🇳" },
+  { code: "AU", flag: "🇦🇺" },
+  { code: "NZ", flag: "🇳🇿" },
+  { code: "FJ", flag: "🇫🇯" },
 ] as const;
 
 // Raggruppamento per continente: l'interfaccia mostra i continenti,
@@ -72,7 +89,7 @@ export const CONTINENTS = [
     codes: ["IT","ES","FR","PT","MT","MC","HR","GR","SI","ME","AL","GB","IE","NL","BE","DE","DK","SE","PL","FI","NO","RO","BG","CY"],
   },
   {
-    key: "asia",
+    key: "medioriente",
     emoji: "🕌",
     codes: ["TR","IL"],
   },
@@ -85,6 +102,16 @@ export const CONTINENTS = [
     key: "americhe",
     emoji: "🌎",
     codes: ["MX","DO","CU","JM","BS","BB","US","CA","BR","AR","UY","CL","CO","EC","PE","VE"],
+  },
+  {
+    key: "asia",
+    emoji: "🌏",
+    codes: ["TH","ID","VN","PH","MY","KH","IN","LK","MV","BD","JP","KR","TW","CN"],
+  },
+  {
+    key: "oceania",
+    emoji: "🏝️",
+    codes: ["AU","NZ","FJ"],
   },
 ] as const;
 

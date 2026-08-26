@@ -7,7 +7,7 @@
     "tagline": "Il Trustpilot dei bagni"
   },
   "home": {
-    "badge": "10.000+ lidi e porti · 9 criteri · Italia ed Europa",
+    "badge": "30.000+ lidi e porti · 9 criteri · nel mondo",
     "titleA": "Trova il lido giusto.",
     "titleB": "Recensioni che contano davvero.",
     "subtitle": "Privacy, famiglie, accessibilità, fondale, animali, prezzi, sicurezza, rispetto delle regole e atmosfera: nove metriche verticali per scegliere lo stabilimento balneare perfetto — e segnalare gli illeciti agli enti.",
@@ -109,7 +109,24 @@
     "PE": "Perù",
     "VE": "Venezuela",
     "US": "Stati Uniti",
-    "CA": "Canada"
+    "CA": "Canada",
+    "TH": "Thailandia",
+    "ID": "Indonesia",
+    "VN": "Vietnam",
+    "PH": "Filippine",
+    "MY": "Malaysia",
+    "KH": "Cambogia",
+    "IN": "India",
+    "LK": "Sri Lanka",
+    "MV": "Maldive",
+    "BD": "Bangladesh",
+    "JP": "Giappone",
+    "KR": "Corea del Sud",
+    "TW": "Taiwan",
+    "CN": "Cina",
+    "AU": "Australia",
+    "NZ": "Nuova Zelanda",
+    "FJ": "Figi"
   },
   "about": {
     "title": "Chi siamo",
@@ -126,9 +143,11 @@
   },
   "continents": {
     "europa": "Europa",
-    "asia": "Medio Oriente",
+    "medioriente": "Medio Oriente",
     "africa": "Africa",
-    "americhe": "Americhe"
+    "americhe": "Americhe",
+    "asia": "Asia",
+    "oceania": "Oceania"
   },
   "review": {
     "heading": "Lascia la tua recensione",
