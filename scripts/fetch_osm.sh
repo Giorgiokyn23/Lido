@@ -21,12 +21,14 @@ mkdir -p "$OUT"
 # server Overpass (si ruota tra questi a ogni tentativo)
 ENDPOINTS=(
   "https://overpass-api.de/api/interpreter"
+  "https://overpass-api.de/api/interpreter"
   "https://overpass.kumi.systems/api/interpreter"
-  "https://overpass.private.coffee/api/interpreter"
   "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
+  "https://overpass.private.coffee/api/interpreter"
+  "https://overpass-api.de/api/interpreter"
 )
-MAX_TRIES=8          # tentativi per Paese
-TIMEOUT=1200         # secondi per singola richiesta
+MAX_TRIES=6          # tentativi per Paese
+TIMEOUT=600          # secondi per singola richiesta (fallisce prima, niente attese lunghe)
 
 fetch_one() {
   local iso="$1"
@@ -57,10 +59,9 @@ fetch_one() {
       return 0
     fi
 
-    # fallito: attesa crescente prima di riprovare (server occupato / timeout)
-    local wait=$(( try * 15 ))
-    echo "    …non riuscito (http ${code}); riprovo tra ${wait}s"
-    sleep "$wait"
+    # fallito: attesa FISSA breve prima di riprovare (niente più backoff lungo)
+    echo "    …non riuscito (http ${code}); riprovo tra 8s"
+    sleep 8
   done
 
   rm -f "$tmp"

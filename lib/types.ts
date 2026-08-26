@@ -45,6 +45,22 @@ export const COUNTRIES = [
   { code: "GH", flag: "🇬🇭" },
   { code: "SN", flag: "🇸🇳" },
   { code: "CV", flag: "🇨🇻" },
+  { code: "MX", flag: "🇲🇽" },
+  { code: "DO", flag: "🇩🇴" },
+  { code: "CU", flag: "🇨🇺" },
+  { code: "JM", flag: "🇯🇲" },
+  { code: "BS", flag: "🇧🇸" },
+  { code: "BB", flag: "🇧🇧" },
+  { code: "BR", flag: "🇧🇷" },
+  { code: "AR", flag: "🇦🇷" },
+  { code: "UY", flag: "🇺🇾" },
+  { code: "CL", flag: "🇨🇱" },
+  { code: "CO", flag: "🇨🇴" },
+  { code: "EC", flag: "🇪🇨" },
+  { code: "PE", flag: "🇵🇪" },
+  { code: "VE", flag: "🇻🇪" },
+  { code: "US", flag: "🇺🇸" },
+  { code: "CA", flag: "🇨🇦" },
 ] as const;
 
 // Raggruppamento per continente: l'interfaccia mostra i continenti,
@@ -64,6 +80,11 @@ export const CONTINENTS = [
     key: "africa",
     emoji: "🌍",
     codes: ["MA","DZ","TN","LY","EG","KE","TZ","MZ","MU","SC","MG","ZA","NA","AO","GH","SN","CV"],
+  },
+  {
+    key: "americhe",
+    emoji: "🌎",
+    codes: ["MX","DO","CU","JM","BS","BB","US","CA","BR","AR","UY","CL","CO","EC","PE","VE"],
   },
 ] as const;
 

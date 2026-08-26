@@ -93,7 +93,23 @@
     "AO": "Angola",
     "GH": "Ghana",
     "SN": "Senegal",
-    "CV": "Capo Verde"
+    "CV": "Capo Verde",
+    "MX": "Messico",
+    "DO": "Rep. Dominicana",
+    "CU": "Cuba",
+    "JM": "Giamaica",
+    "BS": "Bahamas",
+    "BB": "Barbados",
+    "BR": "Brasile",
+    "AR": "Argentina",
+    "UY": "Uruguay",
+    "CL": "Cile",
+    "CO": "Colombia",
+    "EC": "Ecuador",
+    "PE": "Perù",
+    "VE": "Venezuela",
+    "US": "Stati Uniti",
+    "CA": "Canada"
   },
   "about": {
     "title": "Chi siamo",
@@ -111,7 +127,8 @@
   "continents": {
     "europa": "Europa",
     "asia": "Medio Oriente",
-    "africa": "Africa"
+    "africa": "Africa",
+    "americhe": "Americhe"
   },
   "review": {
     "heading": "Lascia la tua recensione",

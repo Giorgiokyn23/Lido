@@ -1,0 +1,62 @@
+QUERY OVERPASS — AMERICHE (LidoRank va oltreoceano)
+Il modo migliore è il comando automatico:
+  ./scripts/fetch_osm.sh "MX,DO,CU,JM,BS,PR,BB,AW" ~/Desktop/lido-export
+(scarica tutti i Paesi del cluster in un colpo, con ritenta). Le query qui sotto
+servono solo se vuoi farne una a mano su https://overpass-turbo.eu .
+Paesi grandi (US, BR, MX): possono andare in timeout — alza [timeout:1800] o esporta a pezzi.
+======================================================================
+
+>>> CLUSTER 10 — Messico & Caraibi (FIT MASSIMO: beach club + lettini, turismo enorme)
+    Comando: ./scripts/fetch_osm.sh "MX,DO,CU,JM,BS,PR,BB,AW" ~/Desktop/lido-export
+
+  # Messico (MX)
+  [out:json][timeout:1800];area["ISO3166-1"="MX"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Repubblica Dominicana (DO)
+  [out:json][timeout:1800];area["ISO3166-1"="DO"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Cuba (CU)
+  [out:json][timeout:1800];area["ISO3166-1"="CU"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Giamaica (JM)
+  [out:json][timeout:1800];area["ISO3166-1"="JM"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Bahamas (BS)
+  [out:json][timeout:1800];area["ISO3166-1"="BS"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Porto Rico (PR)
+  [out:json][timeout:1800];area["ISO3166-1"="PR"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Barbados (BB)
+  [out:json][timeout:1800];area["ISO3166-1"="BB"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Aruba (AW)
+  [out:json][timeout:1800];area["ISO3166-1"="AW"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+----------------------------------------------------------------------
+CLUSTER 11 — Sud America (Brasile in testa, spiagge enormi)
+    Comando: ./scripts/fetch_osm.sh "BR,AR,UY,CL,CO,EC,PE,VE" ~/Desktop/lido-export
+
+  # Brasile (BR)  — grande, può servire ritenta
+  [out:json][timeout:1800];area["ISO3166-1"="BR"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Argentina (AR)
+  [out:json][timeout:1800];area["ISO3166-1"="AR"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Uruguay (UY)
+  [out:json][timeout:1800];area["ISO3166-1"="UY"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Cile (CL)
+  [out:json][timeout:1800];area["ISO3166-1"="CL"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Colombia (CO)
+  [out:json][timeout:1800];area["ISO3166-1"="CO"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Ecuador (EC)
+  [out:json][timeout:1800];area["ISO3166-1"="EC"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Perù (PE)
+  [out:json][timeout:1800];area["ISO3166-1"="PE"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Venezuela (VE)
+  [out:json][timeout:1800];area["ISO3166-1"="VE"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+----------------------------------------------------------------------
+CLUSTER 12 — Nord America (grande, fallo per ultimo)
+    Comando: ./scripts/fetch_osm.sh "US,CA" ~/Desktop/lido-export
+
+  # Stati Uniti (US)  — MOLTO grande: probabile timeout, rilancia più volte
+  [out:json][timeout:1800];area["ISO3166-1"="US"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+  # Canada (CA)
+  [out:json][timeout:1800];area["ISO3166-1"="CA"][admin_level=2]->.a;(nwr["leisure"="beach_resort"](area.a);nwr["leisure"="marina"](area.a););out center tags;
+
+======================================================================
+POI: carica i file export*.geojson (o lasciali in ~/Desktop/lido-export, li leggo io)
+e genero la migrazione con:
+  python scripts/gen_country.py --iso MX,DO,CU,JM,BS,PR,BB,AW --label cluster10_caraibi --migration 0028 --uploads ~/Desktop/lido-export --ne ne_admin1.geojson

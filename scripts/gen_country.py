@@ -38,6 +38,11 @@ REGISTRO = {
     "NA":"Namibia","ZA":"Sudafrica","MZ":"Mozambico","TZ":"Tanzania","KE":"Kenya",
     "SO":"Somalia","DJ":"Gibuti","ER":"Eritrea","SD":"Sudan","MG":"Madagascar",
     "MU":"Mauritius","SC":"Seychelles","CV":"Capo Verde",
+    # Americhe — Messico, Caraibi, Sud e Nord America
+    "MX":"Messico","DO":"Rep. Dominicana","CU":"Cuba","JM":"Giamaica","BS":"Bahamas",
+    "PR":"Porto Rico","BB":"Barbados","AW":"Aruba","TT":"Trinidad e Tobago","KY":"Isole Cayman",
+    "BR":"Brasile","AR":"Argentina","UY":"Uruguay","CL":"Cile","CO":"Colombia",
+    "EC":"Ecuador","PE":"Perù","VE":"Venezuela","US":"Stati Uniti","CA":"Canada",
 }
 
 LAT = re.compile(r"[A-Za-zÀ-ÿ]")
@@ -129,26 +134,26 @@ def main():
             pass
         return None
 
-    # trova un file export per ogni ISO
-    def find_file(iso):
-        pats = [f"*export{iso}.geojson", f"*export_{iso}.geojson", f"*{iso}.geojson"]
-        for pat in pats:
-            hits = glob.glob(os.path.join(args.uploads, pat))
-            if hits:
-                return sorted(hits, key=len)[0]
-        return None
+    # trova TUTTI i file export per un ISO (supporta il tiling: exportUS.geojson + exportUS-1.geojson…)
+    def find_files(iso):
+        hits = set()
+        for pat in (f"*export{iso}.geojson", f"*export{iso}-*.geojson", f"*export_{iso}.geojson"):
+            hits.update(glob.glob(os.path.join(args.uploads, pat)))
+        return sorted(hits)
 
     seen, rows, nreg = set(), [], 0
     per_paese = {}
     for iso in isos:
-        f = find_file(iso)
+        files = find_files(iso)
         itname = REGISTRO.get(iso, iso)
-        if not f:
+        if not files:
             print(f"  [!] {iso} ({itname}): nessun file trovato in {args.uploads} — salto")
             continue
-        d = json.load(open(f, encoding="utf-8"))
         st = ma = 0
-        for p, lon, lat, osmid in iter_points(d):
+        pts = []
+        for f in files:
+            pts.extend(iter_points(json.load(open(f, encoding="utf-8"))))
+        for p, lon, lat, osmid in pts:
             nm = pick_name(p)
             if not nm:
                 continue
@@ -167,7 +172,8 @@ def main():
             rows.append((q(osmid), q(nm.strip()), q(loc), q(regione), str(lat), str(lon),
                          q(cat), "'"+tipo+"'", "'OSM'", "'"+iso+"'"))
         per_paese[iso] = (itname, st, ma)
-        print(f"  {iso} ({itname}): stabilimenti={st} marine={ma}  [{os.path.basename(f)}]")
+        srcs = f"{len(files)} file" if len(files) > 1 else os.path.basename(files[0])
+        print(f"  {iso} ({itname}): stabilimenti={st} marine={ma}  [{srcs}]")
 
     if not rows:
         print("Nessuna riga generata. Controlla che i file siano nella cartella --uploads.")
