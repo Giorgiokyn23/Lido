@@ -73,7 +73,8 @@ export async function submitReview(
   const scores: Record<string, number> = {};
   for (const m of METRICS) {
     const n = Number(formData.get(m.key));
-    if (!Number.isInteger(n) || n < 1 || n > 5) {
+    // ammessi 1..5 a passi di 0,5 (mezzo voto)
+    if (!Number.isFinite(n) || n < 1 || n > 5 || (n * 2) % 1 !== 0) {
       return { ok: false, error: `Voto non valido per "${m.label}".` };
     }
     scores[m.key] = n;

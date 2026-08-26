@@ -32,7 +32,7 @@ function Slider({ metric }: { metric: (typeof METRICS)[number] }) {
         <label htmlFor={metric.key} className="text-sm font-medium text-sea-800">
           {tm(metric.key)}
         </label>
-        <span className="text-sm font-bold tabular-nums text-sea-600">{value}/5</span>
+        <span className="text-sm font-bold tabular-nums text-sea-600">{value.toFixed(1)}/5</span>
       </div>
       <input
         id={metric.key}
@@ -40,7 +40,7 @@ function Slider({ metric }: { metric: (typeof METRICS)[number] }) {
         type="range"
         min={1}
         max={5}
-        step={1}
+        step={0.5}
         value={value}
         onChange={(e) => setValue(Number(e.target.value))}
         className="lido-range mt-2 w-full"
