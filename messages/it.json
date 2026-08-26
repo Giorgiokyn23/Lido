@@ -87,7 +87,13 @@
     "MZ": "Mozambico",
     "MU": "Mauritius",
     "SC": "Seychelles",
-    "MG": "Madagascar"
+    "MG": "Madagascar",
+    "ZA": "Sudafrica",
+    "NA": "Namibia",
+    "AO": "Angola",
+    "GH": "Ghana",
+    "SN": "Senegal",
+    "CV": "Capo Verde"
   },
   "about": {
     "title": "Chi siamo",
@@ -106,5 +112,113 @@
     "europa": "Europa",
     "asia": "Medio Oriente",
     "africa": "Africa"
+  },
+  "review": {
+    "heading": "Lascia la tua recensione",
+    "submit": "Pubblica recensione",
+    "submitting": "Invio in corso…",
+    "successTitle": "Grazie! La tua recensione è stata pubblicata.",
+    "successBody": "I punteggi aggregati sono già aggiornati.",
+    "verifiedBadge": "✓ Verificata",
+    "anonPre": "Anonima — ",
+    "anonLink": "accedi",
+    "anonPost": " per verificarla",
+    "factsTitle": "Fatti oggettivi",
+    "factsOptional": "(facoltativi)",
+    "unknown": "— non so —",
+    "yes": "Sì",
+    "no": "No",
+    "commentLabel": "Commento (opzionale)",
+    "commentPlaceholder": "Com'è stata la tua esperienza al lido?"
+  },
+  "metricHints": {
+    "space_privacy": "Distanza tra ombrelloni e privacy",
+    "family_services": "Nursery, giochi, area bimbi",
+    "accessibility": "Passerelle, sedia JOB, servizi dedicati",
+    "seabed_quality": "Qualità del fondale e pulizia dell'acqua",
+    "pet_friendly": "Servizi per cani e animali",
+    "price_transparency": "Chiarezza listino e rapporto qualità/prezzo",
+    "sicurezza": "Sorveglianza, salvataggio, manutenzione e pulizia",
+    "rispetto_regole": "Distanze ombrelloni, battigia libera, norme demaniali",
+    "atmosfera": "Clima familiare e accoglienza"
+  },
+  "facts": {
+    "accesso_mare": {
+      "label": "Accesso al mare",
+      "hint": "Per legge la battigia e l'accesso al mare devono restare liberi",
+      "opt": {
+        "libero": "Libero",
+        "limitato": "Limitato",
+        "bloccato": "Bloccato / tornelli"
+      }
+    },
+    "docce": {
+      "label": "Docce",
+      "hint": "",
+      "opt": {
+        "gratuite": "Gratuite",
+        "a_pagamento": "A pagamento",
+        "assenti": "Assenti"
+      }
+    },
+    "acqua_calda": {
+      "label": "Acqua calda (doccia)",
+      "hint": "",
+      "opt": {
+        "inclusa": "Inclusa",
+        "a_pagamento": "A pagamento",
+        "assente": "Assente"
+      }
+    }
+  },
+  "boolFacts": {
+    "battigia_libera": "Battigia (5 m) libera e transitabile",
+    "chip_richiesto": "Serve chip / cauzione per entrare"
+  },
+  "segnalazione": {
+    "openButton": "⚠ Segnala un illecito (accesso al mare, minori paganti, lettini sulla battigia…)",
+    "successBody": "Grazie. La segnalazione è stata inviata all'ente competente per la verifica. Non viene pubblicata sul profilo del bagno.",
+    "title": "Segnala un illecito",
+    "intro": "La segnalazione va in una coda riservata agli enti (es. Comune) per un eventuale sopralluogo. Non è pubblica. Invia solo informazioni veritiere.",
+    "typeLabel": "Tipo",
+    "typeSelect": "— seleziona —",
+    "descLabel": "Descrizione (opzionale)",
+    "descPlaceholder": "Cosa hai osservato, quando…",
+    "emailLabel": "Email di contatto (opzionale)",
+    "emailPlaceholder": "se l'ente volesse ricontattarti",
+    "cancel": "Annulla",
+    "submit": "Invia segnalazione",
+    "submitting": "Invio…"
+  },
+  "segTipi": {
+    "pagamento_minori": "Fatti pagare a minori / bambini",
+    "lettini_battigia": "Lettini/ombrelloni sulla battigia (fascia dei 5 m)",
+    "accesso_bloccato": "Accesso al mare bloccato / tornelli senza varco libero",
+    "no_battigia_libera": "Battigia libera non garantita",
+    "prezzi_non_esposti": "Prezzi non esposti / non trasparenti",
+    "occupazione_abusiva": "Occupazione oltre i limiti della concessione",
+    "altro": "Altro"
+  },
+  "detail": {
+    "backAll": "← Tutti i lidi",
+    "inPlace": "#{rank} a {place}",
+    "reviewsCount": "{n} recensioni",
+    "umbrellaDistance": "{n} m tra ombrelloni",
+    "concessionLabel": "Concessione n. {id}",
+    "concessionTitle": "Numero della concessione demaniale (fonte SID/MIT)",
+    "reportsInReview": "⚠ {n, plural, one {# segnalazione in verifica} other {# segnalazioni in verifica}}",
+    "scoreOutOf": "punteggio / 5",
+    "whatUsersSay": "Cosa dicono gli utenti",
+    "yesShort": "sì",
+    "reviewsHeading": "Recensioni ({n})",
+    "noReviews": "Ancora nessuna recensione. Sii il primo a recensire questo lido!",
+    "verified": "✓ Verificata",
+    "notVerified": "Non verificata",
+    "noComment": "Nessun commento."
+  },
+  "detailMeta": {
+    "fallbackTitle": "Lido — LidoRank",
+    "title": "{nome} ({localita}) — Recensioni e voti | LidoRank",
+    "description": "{voto}{count} recensioni su {nome}, stabilimento balneare a {localita} ({regione}): privacy, servizi famiglie, accessibilità, fondale, prezzi. Scrivi la tua."
   }
 }

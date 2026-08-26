@@ -87,7 +87,13 @@
     "MZ": "Mozambique",
     "MU": "Mauritius",
     "SC": "Seychelles",
-    "MG": "Madagascar"
+    "MG": "Madagascar",
+    "ZA": "South Africa",
+    "NA": "Namibia",
+    "AO": "Angola",
+    "GH": "Ghana",
+    "SN": "Senegal",
+    "CV": "Cape Verde"
   },
   "about": {
     "title": "About us",
@@ -106,5 +112,113 @@
     "europa": "Europe",
     "asia": "Middle East",
     "africa": "Africa"
+  },
+  "review": {
+    "heading": "Leave your review",
+    "submit": "Publish review",
+    "submitting": "Submitting…",
+    "successTitle": "Thanks! Your review has been published.",
+    "successBody": "The aggregate scores are already updated.",
+    "verifiedBadge": "✓ Verified",
+    "anonPre": "Anonymous — ",
+    "anonLink": "sign in",
+    "anonPost": " to verify it",
+    "factsTitle": "Objective facts",
+    "factsOptional": "(optional)",
+    "unknown": "— not sure —",
+    "yes": "Yes",
+    "no": "No",
+    "commentLabel": "Comment (optional)",
+    "commentPlaceholder": "How was your experience at the beach club?"
+  },
+  "metricHints": {
+    "space_privacy": "Distance between umbrellas and privacy",
+    "family_services": "Nursery, playground, kids' area",
+    "accessibility": "Walkways, beach wheelchair, dedicated services",
+    "seabed_quality": "Seabed quality and water cleanliness",
+    "pet_friendly": "Facilities for dogs and pets",
+    "price_transparency": "Clear price list and value for money",
+    "sicurezza": "Surveillance, lifeguards, maintenance and cleanliness",
+    "rispetto_regole": "Umbrella spacing, free shoreline, public-domain rules",
+    "atmosfera": "Family-friendly vibe and welcome"
+  },
+  "facts": {
+    "accesso_mare": {
+      "label": "Sea access",
+      "hint": "By law the shoreline and sea access must remain free",
+      "opt": {
+        "libero": "Free",
+        "limitato": "Limited",
+        "bloccato": "Blocked / turnstiles"
+      }
+    },
+    "docce": {
+      "label": "Showers",
+      "hint": "",
+      "opt": {
+        "gratuite": "Free",
+        "a_pagamento": "Paid",
+        "assenti": "None"
+      }
+    },
+    "acqua_calda": {
+      "label": "Hot water (shower)",
+      "hint": "",
+      "opt": {
+        "inclusa": "Included",
+        "a_pagamento": "Paid",
+        "assente": "None"
+      }
+    }
+  },
+  "boolFacts": {
+    "battigia_libera": "Shoreline (5 m) free and walkable",
+    "chip_richiesto": "Chip / deposit required to enter"
+  },
+  "segnalazione": {
+    "openButton": "⚠ Report a violation (sea access, paying minors, loungers on the shoreline…)",
+    "successBody": "Thank you. The report has been sent to the competent authority for review. It is not published on the beach club's profile.",
+    "title": "Report a violation",
+    "intro": "The report goes to a queue reserved for authorities (e.g. the municipality) for a possible inspection. It is not public. Submit truthful information only.",
+    "typeLabel": "Type",
+    "typeSelect": "— select —",
+    "descLabel": "Description (optional)",
+    "descPlaceholder": "What you observed, when…",
+    "emailLabel": "Contact email (optional)",
+    "emailPlaceholder": "if the authority needs to reach you",
+    "cancel": "Cancel",
+    "submit": "Send report",
+    "submitting": "Sending…"
+  },
+  "segTipi": {
+    "pagamento_minori": "Charging minors / children",
+    "lettini_battigia": "Loungers/umbrellas on the shoreline (5 m strip)",
+    "accesso_bloccato": "Sea access blocked / turnstiles with no free passage",
+    "no_battigia_libera": "Free shoreline not guaranteed",
+    "prezzi_non_esposti": "Prices not displayed / not transparent",
+    "occupazione_abusiva": "Occupation beyond the concession limits",
+    "altro": "Other"
+  },
+  "detail": {
+    "backAll": "← All beach clubs",
+    "inPlace": "#{rank} in {place}",
+    "reviewsCount": "{n} reviews",
+    "umbrellaDistance": "{n} m between umbrellas",
+    "concessionLabel": "Concession no. {id}",
+    "concessionTitle": "State concession number (source: SID/MIT)",
+    "reportsInReview": "⚠ {n, plural, one {# report under review} other {# reports under review}}",
+    "scoreOutOf": "score / 5",
+    "whatUsersSay": "What users say",
+    "yesShort": "yes",
+    "reviewsHeading": "Reviews ({n})",
+    "noReviews": "No reviews yet. Be the first to review this beach club!",
+    "verified": "✓ Verified",
+    "notVerified": "Not verified",
+    "noComment": "No comment."
+  },
+  "detailMeta": {
+    "fallbackTitle": "Beach club — LidoRank",
+    "title": "{nome} ({localita}) — Reviews & ratings | LidoRank",
+    "description": "{voto}{count} reviews of {nome}, a beach club in {localita} ({regione}): privacy, family services, accessibility, seabed, prices. Write yours."
   }
 }
