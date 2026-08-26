@@ -43,7 +43,7 @@
     "atmosfera": "Atmosfera"
   },
   "footer": {
-    "desc": "Le recensioni verticali degli stabilimenti balneari italiani. Dati strutturati e trasparenti, pensati anche per i criteri dei bandi Bolkestein.",
+    "desc": "Le recensioni verticali di lidi e beach club nel mondo. Dati strutturati e trasparenti, su nove criteri.",
     "usefulTitle": "A chi è utile",
     "usefulText": "Ai bagnanti per scegliere, ai gestori per farsi conoscere, e a Comuni ed enti di controllo del demanio marittimo come base dati sul rispetto delle regole. LidoRank è un progetto indipendente: nessuna affiliazione con enti pubblici salvo accordi dichiarati.",
     "creditsTitle": "Crediti",
@@ -130,7 +130,7 @@
   },
   "about": {
     "title": "Chi siamo",
-    "heroText": "LidoRank è un progetto civico indipendente: portare trasparenza sulle spiagge italiane ed europee con recensioni strutturate e dati verificabili, utili ai cittadini e agli enti che vigilano sul demanio marittimo.",
+    "heroText": "LidoRank è un progetto civico indipendente: portare trasparenza alle spiagge di tutto il mondo con recensioni strutturate e dati verificabili, utili ai cittadini e agli enti che vigilano sul demanio marittimo.",
     "founderRole": "Founder",
     "cofounderRole": "Co-founder",
     "giorgioBio": "Ingegnere italiano specializzato in sistemi avanzati di intelligenza artificiale per il settore aerospaziale e della difesa. Ha conseguito una laurea in Informatica e un master in Intelligenza Artificiale (con lode) alla Northeastern University di Londra, e ha collaborato con i ricercatori del DESY su reti neurali convoluzionali quantistiche. I suoi interessi vanno oltre l'ingegneria, toccando le implicazioni sociali dell'IA — economia, filosofia politica, storia del cambiamento tecnologico. È autore del libro AMAKOM: Una pace perpetua per l'età dei robot.",
@@ -256,5 +256,39 @@
     "fallbackTitle": "Lido — LidoRank",
     "title": "{nome} ({localita}) — Recensioni e voti | LidoRank",
     "description": "{voto}{count} recensioni su {nome}, stabilimento balneare a {localita} ({regione}): privacy, servizi famiglie, accessibilità, fondale, prezzi. Scrivi la tua."
+  },
+  "rankings": {
+    "title": "🏆 Classifiche",
+    "intro": "Punteggio pesato: i lidi salgono solo con recensioni vere e verificate. Ogni Paese ha la sua graduatoria.",
+    "tabComune": "Comunale",
+    "tabRegione": "Regionale",
+    "tabNazionale": "Nazionale",
+    "nationalOnly": "{flag} Classifica nazionale — {country}. Le graduatorie comunali e regionali per questo Paese arriveranno con la mappatura di dettaglio.",
+    "townLabel": "Comune:",
+    "townPlaceholder": "es. Livorno",
+    "regionLabel": "Regione:",
+    "show": "Mostra",
+    "capNational": "{flag} I migliori lidi — {country}",
+    "capRegion": "I migliori lidi in {region}",
+    "capTown": "I migliori lidi di {town}",
+    "errorLoad": "Errore nel caricamento della classifica: {msg}",
+    "emptyPre": "Ancora nessun lido recensito in questo ambito. Le classifiche si popolano man mano che arrivano le recensioni.",
+    "emptyLink": "Lascia la prima →",
+    "reviews": "{n} recensioni",
+    "weightedScore": "punteggio pesato"
+  },
+  "login": {
+    "title": "Accedi a LidoRank",
+    "intro": "Con un account le tue recensioni risultano <b>verificate</b> e pesano di più. Ti inviamo un link magico via email: nessuna password da ricordare.",
+    "sent": "Ti abbiamo inviato un link a <b>{email}</b>. Aprilo da questo dispositivo per entrare. Controlla anche lo spam.",
+    "emailPlaceholder": "latua@email.it",
+    "submit": "Inviami il link di accesso",
+    "submitting": "Invio…",
+    "anonNote": "Puoi anche recensire in forma anonima dalla scheda di un lido, ma quelle recensioni sono marcate come non verificate."
+  },
+  "flag": {
+    "tooltip": "Segnala come sospetta / falsa",
+    "flag": "⚑ Segnala",
+    "flagged": "✓ Segnalata"
   }
 }

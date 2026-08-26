@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 
 export function FlagButton({ reviewId }: { reviewId: string }) {
+  const t = useTranslations("flag");
   const [done, setDone] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -20,10 +22,10 @@ export function FlagButton({ reviewId }: { reviewId: string }) {
     <button
       onClick={flag}
       disabled={busy || done}
-      title="Segnala come sospetta / falsa"
+      title={t("tooltip")}
       className="text-[11px] text-sea-400 hover:text-amber-600 disabled:opacity-60"
     >
-      {done ? "✓ Segnalata" : "⚑ Segnala"}
+      {done ? t("flagged") : t("flag")}
     </button>
   );
 }

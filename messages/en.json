@@ -43,7 +43,7 @@
     "atmosfera": "Atmosphere"
   },
   "footer": {
-    "desc": "Vertical reviews of Italian beach clubs. Structured, transparent data, designed also for the criteria of the Bolkestein tenders.",
+    "desc": "Vertical reviews of beach clubs and marinas worldwide. Structured, transparent data across nine criteria.",
     "usefulTitle": "Who it's for",
     "usefulText": "For beachgoers to choose, for operators to get known, and for municipalities and maritime-domain authorities as a dataset on rule compliance. LidoRank is an independent project: no affiliation with public bodies unless explicitly stated.",
     "creditsTitle": "Credits",
@@ -130,7 +130,7 @@
   },
   "about": {
     "title": "About us",
-    "heroText": "LidoRank is an independent civic project: bringing transparency to Italian and European beaches with structured reviews and verifiable data, useful to citizens and to the authorities overseeing the maritime public domain.",
+    "heroText": "LidoRank is an independent civic project: bringing transparency to beaches worldwide with structured reviews and verifiable data, useful to citizens and to the authorities overseeing the maritime public domain.",
     "founderRole": "Founder",
     "cofounderRole": "Co-founder",
     "giorgioBio": "Italian engineer specialized in advanced artificial-intelligence systems for the aerospace and defense sector. He holds a BSc in Computer Science and an MSc in Artificial Intelligence (with honors) from Northeastern University London, and has collaborated with DESY researchers on quantum convolutional neural networks. His interests go beyond engineering, touching the social implications of AI — economics, political philosophy, the history of technological change. He is the author of the book AMAKOM: A Perpetual Peace for the Age of Robots.",
@@ -256,5 +256,39 @@
     "fallbackTitle": "Beach club — LidoRank",
     "title": "{nome} ({localita}) — Reviews & ratings | LidoRank",
     "description": "{voto}{count} reviews of {nome}, a beach club in {localita} ({regione}): privacy, family services, accessibility, seabed, prices. Write yours."
+  },
+  "rankings": {
+    "title": "🏆 Rankings",
+    "intro": "Weighted score: places rise only with real, verified reviews. Every country has its own ranking.",
+    "tabComune": "By town",
+    "tabRegione": "By region",
+    "tabNazionale": "National",
+    "nationalOnly": "{flag} National ranking — {country}. Town and region rankings for this country will come with detailed mapping.",
+    "townLabel": "Town:",
+    "townPlaceholder": "e.g. Livorno",
+    "regionLabel": "Region:",
+    "show": "Show",
+    "capNational": "{flag} Top beach clubs — {country}",
+    "capRegion": "Top beach clubs in {region}",
+    "capTown": "Top beach clubs in {town}",
+    "errorLoad": "Error loading the ranking: {msg}",
+    "emptyPre": "No places reviewed here yet. Rankings fill up as reviews come in.",
+    "emptyLink": "Leave the first →",
+    "reviews": "{n} reviews",
+    "weightedScore": "weighted score"
+  },
+  "login": {
+    "title": "Sign in to LidoRank",
+    "intro": "With an account your reviews are <b>verified</b> and weigh more. We email you a magic link: no password to remember.",
+    "sent": "We sent a link to <b>{email}</b>. Open it on this device to sign in. Check your spam too.",
+    "emailPlaceholder": "you@email.com",
+    "submit": "Send me the sign-in link",
+    "submitting": "Sending…",
+    "anonNote": "You can also review anonymously from a place's page, but those reviews are marked as unverified."
+  },
+  "flag": {
+    "tooltip": "Report as suspicious / fake",
+    "flag": "⚑ Report",
+    "flagged": "✓ Reported"
   }
 }
