@@ -33,6 +33,12 @@ export const COUNTRIES = [
   { code: "TN", flag: "🇹🇳" },
   { code: "LY", flag: "🇱🇾" },
   { code: "EG", flag: "🇪🇬" },
+  { code: "KE", flag: "🇰🇪" },
+  { code: "TZ", flag: "🇹🇿" },
+  { code: "MZ", flag: "🇲🇿" },
+  { code: "MU", flag: "🇲🇺" },
+  { code: "SC", flag: "🇸🇨" },
+  { code: "MG", flag: "🇲🇬" },
 ] as const;
 
 // Raggruppamento per continente: l'interfaccia mostra i continenti,
@@ -51,7 +57,7 @@ export const CONTINENTS = [
   {
     key: "africa",
     emoji: "🌍",
-    codes: ["MA","DZ","TN","LY","EG"],
+    codes: ["MA","DZ","TN","LY","EG","KE","TZ","MZ","MU","SC","MG"],
   },
 ] as const;
 

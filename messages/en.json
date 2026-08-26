@@ -81,7 +81,13 @@
     "DZ": "Algeria",
     "TN": "Tunisia",
     "LY": "Libya",
-    "EG": "Egypt"
+    "EG": "Egypt",
+    "KE": "Kenya",
+    "TZ": "Tanzania",
+    "MZ": "Mozambique",
+    "MU": "Mauritius",
+    "SC": "Seychelles",
+    "MG": "Madagascar"
   },
   "about": {
     "title": "About us",

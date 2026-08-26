@@ -55,6 +55,32 @@ def pick_name(p):
 def q(s):
     return "'" + s.replace("'", "''") + "'"
 
+def iter_points(d):
+    """Normalizza due formati: GeoJSON di overpass-turbo (features) e
+    JSON grezzo dell'API Overpass (elements). Restituisce (props, lon, lat, osmid)."""
+    if isinstance(d.get("features"), list):           # overpass-turbo GeoJSON
+        for ft in d["features"]:
+            p = ft.get("properties") or {}
+            g = ft.get("geometry") or {}
+            c = g.get("coordinates")
+            if not c or len(c) != 2:
+                continue
+            osmid = p.get("@id") or ft.get("id")
+            yield p, float(c[0]), float(c[1]), osmid
+    elif isinstance(d.get("elements"), list):         # API Overpass grezza (out center tags)
+        for el in d["elements"]:
+            p = el.get("tags") or {}
+            if "lat" in el and "lon" in el:
+                lat, lon = el["lat"], el["lon"]
+            elif isinstance(el.get("center"), dict):
+                lat, lon = el["center"].get("lat"), el["center"].get("lon")
+            else:
+                continue
+            if lat is None or lon is None:
+                continue
+            osmid = f"{el.get('type')}/{el.get('id')}"
+            yield p, float(lon), float(lat), osmid
+
 def load_regions(ne_path, iso_set):
     from shapely.geometry import shape
     ne = json.load(open(ne_path))
@@ -122,13 +148,10 @@ def main():
             continue
         d = json.load(open(f, encoding="utf-8"))
         st = ma = 0
-        for ft in d.get("features", []):
-            p = ft["properties"]; nm = pick_name(p)
-            g = ft.get("geometry") or {}; c = g.get("coordinates")
-            if not nm or not c or len(c) != 2:
+        for p, lon, lat, osmid in iter_points(d):
+            nm = pick_name(p)
+            if not nm:
                 continue
-            lon, lat = float(c[0]), float(c[1])
-            osmid = p.get("@id") or ft.get("id")
             if not osmid or osmid in seen:
                 continue
             seen.add(osmid)
