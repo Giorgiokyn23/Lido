@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "../globals.css";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
@@ -14,6 +14,13 @@ const base = process.env.NEXT_PUBLIC_SITE_URL || "https://lidorank.com";
 // pagine dinamiche (dati live da Supabase ad ogni richiesta)
 export const dynamic = "force-dynamic";
 
+// colore barra di stato (Android/PWA) + viewport per app installata
+export const viewport: Viewport = {
+  themeColor: "#166a92",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -23,9 +30,19 @@ export async function generateMetadata({
   return {
     metadataBase: new URL(base),
     icons: {
-      icon: "/icon.png",
-      shortcut: "/icon.png",
+      // /favicon.ico è il percorso che Google sonda per primo nei risultati
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icon.png", type: "image/png" },
+      ],
+      shortcut: "/favicon.ico",
       apple: "/icon.png",
+    },
+    // iOS: comportamento da app quando aggiunta alla schermata Home
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: "LidoRank",
     },
     title: en
       ? "LidoRank — Vertical reviews of beach clubs worldwide"

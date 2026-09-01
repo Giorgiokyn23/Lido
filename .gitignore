@@ -5,3 +5,11 @@
 next-env.d.ts
 *.tsbuildinfo
 .DS_Store
+
+# PWA — file generati da next-pwa in build (NON committare)
+/public/sw.js
+/public/sw.js.map
+/public/workbox-*.js
+/public/workbox-*.js.map
+/public/worker-*.js
+/public/fallback-*.js
