@@ -172,12 +172,12 @@
     "optionalHint": "Se non puoi giudicarli, lasciali su «Non valutato».",
     "notRated": "Non valutato",
     "na": "N/D",
-    "tapToRate": "Tocca per valutare",
     "visitTitle": "La tua visita",
     "visitConfirm": "Confermo di aver visitato di persona questo stabilimento.",
     "visitWhen": "Quando ci sei stato/a? (facoltativo)",
     "errNoRate": "Dai un voto a «{label}» (è tra i criteri obbligatori).",
-    "errConfirmVisit": "Per pubblicare, conferma di aver visitato lo stabilimento."
+    "errConfirmVisit": "Per pubblicare, conferma di aver visitato lo stabilimento.",
+    "subtitle": "La tua esperienza aiuta gli altri a scegliere e gli enti a vigilare. Bastano due minuti."
   },
   "metricHints": {
     "space_privacy": "Distanza tra ombrelloni e privacy",
@@ -324,5 +324,14 @@
     "s5Body": "Nella scheda teniamo distinti i voti soggettivi (la tua esperienza) dai fatti oggettivi (accesso al mare, docce, chip). I fatti sono mostrati come percentuali aggregate e non trasformano da soli un lido in «irregolare»: le eventuali segnalazioni di illeciti seguono un percorso separato e privato.",
     "disclaimer": "LidoRank è una piattaforma in fase pilota: soglie e criteri possono essere affinati man mano che la community cresce.",
     "back": "← Torna alle classifiche"
+  },
+  "legal": {
+    "title": "Note legali",
+    "privacy": "Privacy",
+    "terms": "Termini d'uso",
+    "guidelines": "Linee guida recensioni",
+    "moderation": "Moderazione e reclami",
+    "methodology": "Metodologia classifiche",
+    "contact": "Contatti"
   }
 }

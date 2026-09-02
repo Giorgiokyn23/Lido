@@ -235,9 +235,14 @@ export default async function BeachPage({ params }: { params: { id: string; loca
         </div>
       </section>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-        {/* Recensioni */}
-        <section className="lg:col-span-3">
+      <div className="space-y-8">
+        {/* Scrivi la tua recensione — è il cuore del progetto: prominente e a tutta larghezza */}
+        <section id="scrivi-recensione">
+          <ReviewForm beachId={b.id} isLoggedIn={!!user} />
+        </section>
+
+        {/* Recensioni esistenti */}
+        <section>
           <h2 className="mb-3 text-lg font-semibold text-sea-900">
             {td("reviewsHeading", { n: reviews.length })}
           </h2>
@@ -298,11 +303,6 @@ export default async function BeachPage({ params }: { params: { id: string; loca
               })}
             </div>
           )}
-        </section>
-
-        {/* Form recensione */}
-        <section className="lg:col-span-2">
-          <ReviewForm beachId={b.id} isLoggedIn={!!user} />
         </section>
       </div>
     </div>

@@ -36,6 +36,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/classifiche`, changeFrequency: "daily", priority: 0.9 },
     { url: `${base}/metodologia`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${base}/chi-siamo`, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${base}/privacy`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/termini`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/linee-guida`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/moderazione`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${base}/contatti`, changeFrequency: "yearly", priority: 0.3 },
   ];
 
   return [...staticPages, ...beachPages];

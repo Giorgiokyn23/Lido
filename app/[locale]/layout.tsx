@@ -69,6 +69,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
   const t = await getTranslations("nav");
   const tf = await getTranslations("footer");
+  const tl = await getTranslations("legal");
 
   const supabase = createClient();
   const {
@@ -142,6 +143,14 @@ export default async function LocaleLayout({
                 </p>
               </div>
             </div>
+            <nav className="flex flex-wrap justify-center gap-x-4 gap-y-2 border-t border-sea-100 px-4 py-4 text-xs text-sea-500">
+              <Link href="/privacy" className="hover:text-sea-700 hover:underline">{tl("privacy")}</Link>
+              <Link href="/termini" className="hover:text-sea-700 hover:underline">{tl("terms")}</Link>
+              <Link href="/linee-guida" className="hover:text-sea-700 hover:underline">{tl("guidelines")}</Link>
+              <Link href="/moderazione" className="hover:text-sea-700 hover:underline">{tl("moderation")}</Link>
+              <Link href="/metodologia" className="hover:text-sea-700 hover:underline">{tl("methodology")}</Link>
+              <Link href="/contatti" className="hover:text-sea-700 hover:underline">{tl("contact")}</Link>
+            </nav>
             <div className="border-t border-sea-100 px-4 py-5 text-center text-xs text-sea-500">
               © {new Date().getFullYear()} LidoRank — Giorgio Menicagli Pirina e Francesco Mancuso. {tf("rights")}
             </div>

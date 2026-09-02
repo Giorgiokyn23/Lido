@@ -172,12 +172,12 @@
     "optionalHint": "If you can't judge them, leave them as “Not rated”.",
     "notRated": "Not rated",
     "na": "N/A",
-    "tapToRate": "Tap to rate",
     "visitTitle": "Your visit",
     "visitConfirm": "I confirm I visited this establishment in person.",
     "visitWhen": "When did you go? (optional)",
     "errNoRate": "Please rate “{label}” (it's a required criterion).",
-    "errConfirmVisit": "To publish, please confirm you visited the establishment."
+    "errConfirmVisit": "To publish, please confirm you visited the establishment.",
+    "subtitle": "Your experience helps others choose and authorities keep watch. It takes two minutes."
   },
   "metricHints": {
     "space_privacy": "Distance between umbrellas and privacy",
@@ -324,5 +324,14 @@
     "s5Body": "On the profile we keep subjective ratings (your experience) separate from objective facts (sea access, showers, deposit chip). Facts are shown as aggregate percentages and do not, on their own, turn a club into “non-compliant”: any reports of violations follow a separate, private path.",
     "disclaimer": "LidoRank is a pilot-stage platform: thresholds and criteria may be refined as the community grows.",
     "back": "← Back to rankings"
+  },
+  "legal": {
+    "title": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms of use",
+    "guidelines": "Review guidelines",
+    "moderation": "Moderation & complaints",
+    "methodology": "Ranking methodology",
+    "contact": "Contact"
   }
 }
