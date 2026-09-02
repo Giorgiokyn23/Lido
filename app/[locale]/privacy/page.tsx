@@ -9,10 +9,8 @@ export const metadata: Metadata = {
 
 const IT: LegalContent = {
   title: "Informativa sulla privacy",
-  updated: "Ultimo aggiornamento: settembre 2026 · Bozza",
+  updated: "Ultimo aggiornamento: settembre 2026",
   backLabel: "← Torna alla home",
-  draftNote:
-    "Bozza operativa. Prima della pubblicazione va rivista da un professionista della privacy: i campi tra [ ] vanno completati con i dati reali del titolare.",
   intro:
     "Questa informativa spiega quali dati personali trattiamo su LidoRank, perché, per quanto tempo e quali diritti hai. Trattiamo i dati nel rispetto del Regolamento (UE) 2016/679 (GDPR).",
   sections: [
@@ -20,7 +18,7 @@ const IT: LegalContent = {
       h: "1. Titolare del trattamento",
       body: [
         "Il progetto LidoRank è gestito da Giorgio Menicagli Pirina e Francesco Mancuso (di seguito «i titolari»).",
-        "Per qualunque richiesta relativa ai dati: [indirizzo email da configurare]. Indirizzo: [indirizzo da inserire].",
+        "Per qualunque richiesta relativa ai dati: info@lidorank.com.",
       ],
     },
     {
@@ -62,7 +60,7 @@ const IT: LegalContent = {
     {
       h: "7. I tuoi diritti",
       body: [
-        "Puoi chiedere accesso, rettifica, cancellazione, limitazione, opposizione e portabilità dei tuoi dati scrivendo a [indirizzo email da configurare].",
+        "Puoi chiedere accesso, rettifica, cancellazione, limitazione, opposizione e portabilità dei tuoi dati scrivendo a info@lidorank.com.",
         "Hai inoltre diritto di proporre reclamo all'Autorità Garante per la protezione dei dati personali.",
       ],
     },
@@ -83,10 +81,8 @@ const IT: LegalContent = {
 
 const EN: LegalContent = {
   title: "Privacy policy",
-  updated: "Last updated: September 2026 · Draft",
+  updated: "Last updated: September 2026",
   backLabel: "← Back to home",
-  draftNote:
-    "Working draft. Before publication it must be reviewed by a privacy professional: fields in [ ] must be completed with the controller's real details.",
   intro:
     "This policy explains what personal data we process on LidoRank, why, for how long and what rights you have. We process data in line with Regulation (EU) 2016/679 (GDPR).",
   sections: [
@@ -94,7 +90,7 @@ const EN: LegalContent = {
       h: "1. Data controller",
       body: [
         "The LidoRank project is run by Giorgio Menicagli Pirina and Francesco Mancuso (the “controllers”).",
-        "For any data-related request: [email to be configured]. Address: [address to be added].",
+        "For any data-related request: info@lidorank.com.",
       ],
     },
     {
@@ -136,7 +132,7 @@ const EN: LegalContent = {
     {
       h: "7. Your rights",
       body: [
-        "You can request access, rectification, erasure, restriction, objection and portability of your data by writing to [email to be configured].",
+        "You can request access, rectification, erasure, restriction, objection and portability of your data by writing to info@lidorank.com.",
         "You also have the right to lodge a complaint with the competent data-protection authority.",
       ],
     },

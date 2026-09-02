@@ -7,7 +7,7 @@ export type LegalContent = {
   updated: string;
   intro?: string;
   sections: LegalSection[];
-  draftNote: string;
+  draftNote?: string;
   backLabel: string;
 };
 
@@ -26,9 +26,11 @@ export function LegalPage({ c }: { c: LegalContent }) {
         <p className="mt-1 text-xs text-sea-400">{c.updated}</p>
       </div>
 
-      <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-        {c.draftNote}
-      </div>
+      {c.draftNote ? (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          {c.draftNote}
+        </div>
+      ) : null}
 
       {c.intro ? <p className="text-sea-600">{c.intro}</p> : null}
 

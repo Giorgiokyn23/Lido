@@ -191,11 +191,19 @@ export default async function BeachPage({ params }: { params: { id: string; loca
               )}
             </div>
           </div>
-          <div className="rounded-2xl bg-sea-500 px-5 py-3 text-center text-white">
-            <div className="text-3xl font-bold leading-none tabular-nums">
-              {b.avg_overall == null ? "—" : b.avg_overall.toFixed(1)}
+          <div className="flex shrink-0 flex-col items-stretch gap-2">
+            <div className="rounded-2xl bg-sea-500 px-5 py-3 text-center text-white">
+              <div className="text-3xl font-bold leading-none tabular-nums">
+                {b.avg_overall == null ? "—" : b.avg_overall.toFixed(1)}
+              </div>
+              <div className="text-[11px] uppercase tracking-wide opacity-80">{td("scoreOutOf")}</div>
             </div>
-            <div className="text-[11px] uppercase tracking-wide opacity-80">{td("scoreOutOf")}</div>
+            <a
+              href="#scrivi-recensione"
+              className="rounded-xl bg-amber-400 px-4 py-2 text-center text-sm font-semibold text-sea-900 transition hover:bg-amber-300"
+            >
+              {td("writeReview")}
+            </a>
           </div>
         </div>
 
@@ -237,7 +245,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
 
       <div className="space-y-8">
         {/* Scrivi la tua recensione — è il cuore del progetto: prominente e a tutta larghezza */}
-        <section id="scrivi-recensione">
+        <section id="scrivi-recensione" className="scroll-mt-24">
           <ReviewForm beachId={b.id} isLoggedIn={!!user} />
         </section>
 

@@ -13,3 +13,16 @@ next-env.d.ts
 /public/workbox-*.js.map
 /public/worker-*.js
 /public/fallback-*.js
+
+# Ops import OSM — query e script una-tantum, non fanno parte dell'app
+/QUERY_OVERPASS_*.txt
+/scripts/
+
+# Guide e note di lavoro interne (non pubbliche)
+/ATTIVA_CLUSTER.md
+/GUIDA_DEPLOY.md
+/GUIDA_SICUREZZA_E_GLOBALE.md
+/PASSO_PASSO.md
+
+# Screenshot e file locali sparsi
+/Screenshot*.png

@@ -265,7 +265,8 @@
     "verified": "✓ Verified",
     "notVerified": "Not verified",
     "noComment": "No comment.",
-    "rankBuilding": "Ranked after {n} reviews"
+    "rankBuilding": "Ranked after {n} reviews",
+    "writeReview": "✍️ Write a review"
   },
   "detailMeta": {
     "fallbackTitle": "Beach club — LidoRank",

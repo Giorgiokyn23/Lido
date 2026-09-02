@@ -77,7 +77,7 @@ export default async function LocaleLayout({
   } = await supabase.auth.getUser();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className="scroll-smooth">
       <body>
         <NextIntlClientProvider messages={messages}>
           <header className="sticky top-0 z-20 border-b border-sea-100 bg-white/80 backdrop-blur">

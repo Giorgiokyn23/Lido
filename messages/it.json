@@ -265,7 +265,8 @@
     "verified": "✓ Verificata",
     "notVerified": "Non verificata",
     "noComment": "Nessun commento.",
-    "rankBuilding": "In classifica dopo {n} recensioni"
+    "rankBuilding": "In classifica dopo {n} recensioni",
+    "writeReview": "✍️ Lascia una recensione"
   },
   "detailMeta": {
     "fallbackTitle": "Lido — LidoRank",

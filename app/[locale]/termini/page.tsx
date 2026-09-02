@@ -9,10 +9,8 @@ export const metadata: Metadata = {
 
 const IT: LegalContent = {
   title: "Termini d'uso",
-  updated: "Ultimo aggiornamento: settembre 2026 · Bozza",
+  updated: "Ultimo aggiornamento: settembre 2026",
   backLabel: "← Torna alla home",
-  draftNote:
-    "Bozza operativa da sottoporre a revisione legale prima della pubblicazione.",
   intro:
     "Usando LidoRank accetti questi termini. LidoRank è un progetto indipendente che raccoglie recensioni strutturate di lidi e beach club.",
   sections: [
@@ -59,7 +57,7 @@ const IT: LegalContent = {
     {
       h: "7. Legge applicabile",
       body: [
-        "Questi termini sono regolati dalla legge italiana. Per le controversie è competente il Foro di [__], salvo le tutele inderogabili previste per i consumatori.",
+        "Questi termini sono regolati dalla legge italiana, salvo le tutele inderogabili previste per i consumatori.",
       ],
     },
   ],
@@ -67,9 +65,8 @@ const IT: LegalContent = {
 
 const EN: LegalContent = {
   title: "Terms of use",
-  updated: "Last updated: September 2026 · Draft",
+  updated: "Last updated: September 2026",
   backLabel: "← Back to home",
-  draftNote: "Working draft to be reviewed by a lawyer before publication.",
   intro:
     "By using LidoRank you accept these terms. LidoRank is an independent project that collects structured reviews of beach clubs.",
   sections: [
@@ -116,7 +113,7 @@ const EN: LegalContent = {
     {
       h: "7. Governing law",
       body: [
-        "These terms are governed by Italian law. The court of [__] has jurisdiction, without prejudice to mandatory consumer protections.",
+        "These terms are governed by Italian law, without prejudice to mandatory consumer protections.",
       ],
     },
   ],

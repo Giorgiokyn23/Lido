@@ -9,10 +9,8 @@ export const metadata: Metadata = {
 
 const IT: LegalContent = {
   title: "Moderazione e reclami",
-  updated: "Ultimo aggiornamento: settembre 2026 · Bozza",
+  updated: "Ultimo aggiornamento: settembre 2026",
   backLabel: "← Torna alla home",
-  draftNote:
-    "Bozza operativa da rivedere con un legale, in particolare per la procedura di replica e correzione riservata ai gestori.",
   intro:
     "Spieghiamo come teniamo affidabili le recensioni, come si contesta un contenuto e come un gestore può chiedere una correzione o rispondere.",
   sections: [
@@ -32,7 +30,7 @@ const IT: LegalContent = {
     {
       h: "3. Sei un gestore? Come chiedere una correzione o replicare",
       body: [
-        "Se un'informazione sulla scheda del tuo stabilimento è errata, puoi scriverci a [indirizzo email da configurare] indicando il nome del lido e l'informazione da correggere; valuteremo la richiesta.",
+        "Se un'informazione sulla scheda del tuo stabilimento è errata, puoi scriverci a info@lidorank.com indicando il nome del lido e l'informazione da correggere; valuteremo la richiesta.",
         "In linea con il modello Trustpilot, potrai rivendicare la scheda e rispondere pubblicamente alle recensioni, ma non modificarle o eliminarle né alterare le classifiche.",
       ],
     },
@@ -51,7 +49,7 @@ const IT: LegalContent = {
     {
       h: "6. Tempi e contatti",
       body: [
-        "Cerchiamo di rispondere alle richieste in tempi ragionevoli. Per ogni questione di moderazione scrivi a [indirizzo email da configurare].",
+        "Cerchiamo di rispondere alle richieste in tempi ragionevoli. Per ogni questione di moderazione scrivi a info@lidorank.com.",
       ],
     },
   ],
@@ -59,10 +57,8 @@ const IT: LegalContent = {
 
 const EN: LegalContent = {
   title: "Moderation and complaints",
-  updated: "Last updated: September 2026 · Draft",
+  updated: "Last updated: September 2026",
   backLabel: "← Back to home",
-  draftNote:
-    "Working draft to review with a lawyer, especially the operator reply-and-correction procedure.",
   intro:
     "Here's how we keep reviews reliable, how to contest content, and how an operator can request a correction or reply.",
   sections: [
@@ -82,7 +78,7 @@ const EN: LegalContent = {
     {
       h: "3. Are you an operator? Requesting a correction or replying",
       body: [
-        "If information on your establishment's page is wrong, write to [email to be configured] with the club name and the item to correct; we'll assess the request.",
+        "If information on your establishment's page is wrong, write to info@lidorank.com with the club name and the item to correct; we'll assess the request.",
         "In line with the Trustpilot model, you'll be able to claim the page and reply publicly to reviews, but not edit or delete them or alter rankings.",
       ],
     },
@@ -101,7 +97,7 @@ const EN: LegalContent = {
     {
       h: "6. Timing and contact",
       body: [
-        "We aim to respond to requests within a reasonable time. For any moderation matter, write to [email to be configured].",
+        "We aim to respond to requests within a reasonable time. For any moderation matter, write to info@lidorank.com.",
       ],
     },
   ],

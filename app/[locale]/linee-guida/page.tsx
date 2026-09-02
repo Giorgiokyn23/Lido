@@ -9,10 +9,8 @@ export const metadata: Metadata = {
 
 const IT: LegalContent = {
   title: "Linee guida per le recensioni",
-  updated: "Ultimo aggiornamento: settembre 2026 · Bozza",
+  updated: "Ultimo aggiornamento: settembre 2026",
   backLabel: "← Torna alla home",
-  draftNote:
-    "Bozza operativa. Queste regole aiutano a mantenere le recensioni utili e affidabili.",
   intro:
     "Le recensioni sono il cuore di LidoRank. Perché siano utili e corrette, chiediamo a tutti di rispettare poche regole chiare.",
   sections: [
@@ -57,9 +55,8 @@ const IT: LegalContent = {
 
 const EN: LegalContent = {
   title: "Review guidelines",
-  updated: "Last updated: September 2026 · Draft",
+  updated: "Last updated: September 2026",
   backLabel: "← Back to home",
-  draftNote: "Working draft. These rules keep reviews useful and reliable.",
   intro:
     "Reviews are the heart of LidoRank. To keep them useful and fair, we ask everyone to follow a few clear rules.",
   sections: [

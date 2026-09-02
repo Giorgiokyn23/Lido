@@ -9,26 +9,24 @@ export const metadata: Metadata = {
 
 const IT: LegalContent = {
   title: "Contatti",
-  updated: "Ultimo aggiornamento: settembre 2026 · Bozza",
+  updated: "Ultimo aggiornamento: settembre 2026",
   backLabel: "← Torna alla home",
-  draftNote:
-    "Completa gli indirizzi email reali prima della pubblicazione: i campi tra [ ] sono da configurare.",
   intro: "Come raggiungerci per domande, correzioni o questioni legali e privacy.",
   sections: [
     {
       h: "Richieste generali",
-      body: ["Per informazioni generali sul progetto: [indirizzo email da configurare]."],
+      body: ["Per informazioni generali sul progetto: info@lidorank.com."],
     },
     {
       h: "Gestori — correzioni e replica",
       body: [
-        "Sei il gestore di uno stabilimento e un'informazione è errata? Scrivi a [indirizzo email da configurare] indicando il nome del lido e cosa correggere. Vedi anche la pagina Moderazione e reclami.",
+        "Sei il gestore di uno stabilimento e un'informazione è errata? Scrivi a info@lidorank.com indicando il nome del lido e cosa correggere. Vedi anche la pagina Moderazione e reclami.",
       ],
     },
     {
       h: "Privacy e dati personali",
       body: [
-        "Per esercitare i tuoi diritti sui dati (accesso, rettifica, cancellazione…): [indirizzo email da configurare]. Vedi l'Informativa privacy.",
+        "Per esercitare i tuoi diritti sui dati (accesso, rettifica, cancellazione…): info@lidorank.com. Vedi l'Informativa privacy.",
       ],
     },
     {
@@ -42,26 +40,24 @@ const IT: LegalContent = {
 
 const EN: LegalContent = {
   title: "Contact",
-  updated: "Last updated: September 2026 · Draft",
+  updated: "Last updated: September 2026",
   backLabel: "← Back to home",
-  draftNote:
-    "Fill in the real email addresses before publication: fields in [ ] must be configured.",
   intro: "How to reach us for questions, corrections or legal and privacy matters.",
   sections: [
     {
       h: "General enquiries",
-      body: ["For general information about the project: [email to be configured]."],
+      body: ["For general information about the project: info@lidorank.com."],
     },
     {
       h: "Operators — corrections and replies",
       body: [
-        "Are you the operator of an establishment and something is wrong? Write to [email to be configured] with the club name and what to correct. See also the Moderation and complaints page.",
+        "Are you the operator of an establishment and something is wrong? Write to info@lidorank.com with the club name and what to correct. See also the Moderation and complaints page.",
       ],
     },
     {
       h: "Privacy and personal data",
       body: [
-        "To exercise your data rights (access, rectification, erasure…): [email to be configured]. See the Privacy policy.",
+        "To exercise your data rights (access, rectification, erasure…): info@lidorank.com. See the Privacy policy.",
       ],
     },
     {
