@@ -165,7 +165,19 @@
     "yes": "Yes",
     "no": "No",
     "commentLabel": "Comment (optional)",
-    "commentPlaceholder": "How was your experience at the beach club?"
+    "commentPlaceholder": "How was your experience at the beach club?",
+    "coreTitle": "Rate the main criteria",
+    "coreHint": "Tap the stars (half-star allowed). The 6 main criteria are required.",
+    "optionalTitle": "Additional criteria",
+    "optionalHint": "If you can't judge them, leave them as “Not rated”.",
+    "notRated": "Not rated",
+    "na": "N/A",
+    "tapToRate": "Tap to rate",
+    "visitTitle": "Your visit",
+    "visitConfirm": "I confirm I visited this establishment in person.",
+    "visitWhen": "When did you go? (optional)",
+    "errNoRate": "Please rate “{label}” (it's a required criterion).",
+    "errConfirmVisit": "To publish, please confirm you visited the establishment."
   },
   "metricHints": {
     "space_privacy": "Distance between umbrellas and privacy",
@@ -213,18 +225,20 @@
   },
   "segnalazione": {
     "openButton": "⚠ Report a violation (sea access, paying minors, loungers on the shoreline…)",
-    "successBody": "Thank you. The report has been sent to the competent authority for review. It is not published on the beach club's profile.",
+    "successBody": "Thank you. Your report has been received and is private: it is not published on the club's profile. Where appropriate, it may be verified and forwarded to the competent authorities.",
     "title": "Report a violation",
-    "intro": "The report goes to a queue reserved for authorities (e.g. the municipality) for a possible inspection. It is not public. Submit truthful information only.",
+    "intro": "Your report is received by LidoRank and is not a formal complaint. It stays private and, where appropriate and in line with our privacy notice, it may be verified and possibly forwarded to the competent authorities. We do not promise inspections. Submit truthful information only.",
     "typeLabel": "Type",
     "typeSelect": "— select —",
     "descLabel": "Description (optional)",
     "descPlaceholder": "What you observed, when…",
     "emailLabel": "Contact email (optional)",
-    "emailPlaceholder": "if the authority needs to reach you",
+    "emailPlaceholder": "so we can reach you if needed",
     "cancel": "Cancel",
     "submit": "Send report",
-    "submitting": "Sending…"
+    "submitting": "Sending…",
+    "officialNote": "For official action you can also contact the competent authority directly (e.g. Coast Guard, Municipality or Local Police).",
+    "emailPrivacyNote": "Your email is not shared with third parties without a legal basis and without informing you."
   },
   "segTipi": {
     "pagamento_minori": "Charging minors / children",
@@ -250,7 +264,8 @@
     "noReviews": "No reviews yet. Be the first to review this beach club!",
     "verified": "✓ Verified",
     "notVerified": "Not verified",
-    "noComment": "No comment."
+    "noComment": "No comment.",
+    "rankBuilding": "Ranked after {n} reviews"
   },
   "detailMeta": {
     "fallbackTitle": "Beach club — LidoRank",
@@ -259,7 +274,7 @@
   },
   "rankings": {
     "title": "🏆 Rankings",
-    "intro": "Weighted score: places rise only with real, verified reviews. Every country has its own ranking.",
+    "intro": "Rankings reward beach clubs with real, verified reviews: a club enters a ranking only after a minimum number of reviews. Until it does, we assign it no position.",
     "tabComune": "By town",
     "tabRegione": "By region",
     "tabNazionale": "National",
@@ -275,7 +290,10 @@
     "emptyPre": "No places reviewed here yet. Rankings fill up as reviews come in.",
     "emptyLink": "Leave the first →",
     "reviews": "{n} reviews",
-    "weightedScore": "weighted score"
+    "weightedScore": "weighted score",
+    "methodologyLink": "How the rankings work →",
+    "buildingTitle": "Rankings in progress",
+    "buildingBody": "In this scope no beach club has yet reached the {n} reviews needed to enter the ranking. Rankings fill up as real reviews come in."
   },
   "login": {
     "title": "Sign in to LidoRank",
@@ -290,5 +308,21 @@
     "tooltip": "Report as suspicious / fake",
     "flag": "⚑ Report",
     "flagged": "✓ Reported"
+  },
+  "methodology": {
+    "title": "How the rankings work",
+    "intro": "Transparency first: here's how LidoRank's scores and rankings are built, and why a ranking is sometimes shown as “in progress”.",
+    "s1Title": "Real reviews only",
+    "s1Body": "We don't publish fake or paid reviews. Every score comes from someone filling in the questionnaire across our nine criteria. Reviews from verified accounts count more than anonymous ones.",
+    "s2Title": "A weighted score, not a plain average",
+    "s2Body": "A ranking score isn't the plain average of the votes: we use a Bayesian weighted average that also accounts for how many reviews there are. With few votes the score stays cautious and close to the overall mean; as reviews grow, it increasingly reflects the real judgement. This way a club with a single enthusiastic review doesn't leapfrog one with dozens of solid ones.",
+    "s3Title": "Thresholds to enter a ranking",
+    "s3Body": "A club enters a ranking only after a minimum number of reviews: at least {comune} for the town ranking, {regione} for the regional one and {nazionale} for the national one. Below these thresholds we assign no position: we'd rather say “ranking in progress” than crown a “best” on the basis of very little data.",
+    "s4Title": "Anti-fraud defences",
+    "s4Body": "Every review has a weight and a status. Rate limits, anti-surge checks and the option to flag a suspicious review reduce the risk of manipulation: anomalous votes are down-weighted or put on hold, without erasing the rights of good-faith reviewers.",
+    "s5Title": "Objective facts kept separate from ratings",
+    "s5Body": "On the profile we keep subjective ratings (your experience) separate from objective facts (sea access, showers, deposit chip). Facts are shown as aggregate percentages and do not, on their own, turn a club into “non-compliant”: any reports of violations follow a separate, private path.",
+    "disclaimer": "LidoRank is a pilot-stage platform: thresholds and criteria may be refined as the community grows.",
+    "back": "← Back to rankings"
   }
 }

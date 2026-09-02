@@ -10,6 +10,7 @@ import {
   METRICS,
   FACTS,
   BOOL_FACTS,
+  RANK_MIN,
   type BeachScore,
   type Review,
   type BeachRanking,
@@ -127,21 +128,42 @@ export default async function BeachPage({ params }: { params: { id: string; loca
             <p className="text-sea-500">
               {b.localita} · {b.regione}
             </p>
-            {rank && (
-              <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
-                {b.localita && b.localita !== b.regione && (
-                  <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-800">
-                    {td("inPlace", { rank: rank.rank_comune, place: b.localita })}
+            {(() => {
+              const rc = b.reviews_count ?? 0;
+              const showComune = !!rank && !!b.localita && b.localita !== b.regione && rc >= RANK_MIN.comune;
+              const showRegione = !!rank && rc >= RANK_MIN.regione;
+              const showNazionale = !!rank && rc >= RANK_MIN.nazionale;
+              const anyRank = showComune || showRegione || showNazionale;
+              if (anyRank) {
+                return (
+                  <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
+                    {showComune && (
+                      <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-800">
+                        {td("inPlace", { rank: rank!.rank_comune, place: b.localita })}
+                      </span>
+                    )}
+                    {showRegione && (
+                      <span className="rounded-full bg-sea-100 px-3 py-1 text-sea-800">
+                        #{rank!.rank_regione} · {b.regione}
+                      </span>
+                    )}
+                    {showNazionale && (
+                      <span className="rounded-full bg-sea-600 px-3 py-1 text-white">
+                        #{rank!.rank_nazionale} · {tcy(b.paese ?? "IT")}
+                      </span>
+                    )}
+                  </div>
+                );
+              }
+              // Sotto soglia: nessun rango eletto sui pochi dati disponibili
+              return (
+                <div className="mt-3">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-sea-50 px-3 py-1 text-xs font-medium text-sea-500">
+                    {td("rankBuilding", { n: RANK_MIN.comune })}
                   </span>
-                )}
-                <span className="rounded-full bg-sea-100 px-3 py-1 text-sea-800">
-                  #{rank.rank_regione} · {b.regione}
-                </span>
-                <span className="rounded-full bg-sea-600 px-3 py-1 text-white">
-                  #{rank.rank_nazionale} · {tcy(b.paese ?? "IT")}
-                </span>
-              </div>
-            )}
+                </div>
+              );
+            })()}
             <div className="mt-3 flex flex-wrap gap-2 text-xs text-sea-600">
               <span className="rounded-full bg-sea-50 px-3 py-1">
                 {td("reviewsCount", { n: b.reviews_count })}

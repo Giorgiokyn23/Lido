@@ -142,6 +142,21 @@ export const METRICS = [
 
 export type MetricKey = (typeof METRICS)[number]["key"];
 
+// I 6 criteri principali: obbligatori (ma a scelta cosciente).
+// I 3 extra (sicurezza, rispetto_regole, atmosfera): opzionali, ammettono "Non valutato".
+export const CORE_METRIC_KEYS: MetricKey[] = [
+  "space_privacy", "family_services", "accessibility",
+  "seabed_quality", "pet_friendly", "price_transparency",
+];
+export const OPTIONAL_METRIC_KEYS: MetricKey[] = [
+  "sicurezza", "rispetto_regole", "atmosfera",
+];
+
+// Soglie minime di recensioni perché un lido entri in classifica ed esponga il badge di rango.
+// Sotto soglia: nessun rango mostrato ("classifica in costruzione"), per non
+// eleggere un "migliore" sulla base di pochissimi dati.
+export const RANK_MIN = { comune: 10, regione: 20, nazionale: 30 } as const;
+
 // Fatti oggettivi (attributi, non voti): raccolti nella recensione, aggregati come percentuali.
 export const FACTS = [
   {

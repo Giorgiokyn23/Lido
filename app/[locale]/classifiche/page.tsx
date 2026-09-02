@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { COUNTRIES, CONTINENTS, CONTINENT_OF, FLAG_OF, type BeachRanking } from "@/lib/types";
+import { COUNTRIES, CONTINENTS, CONTINENT_OF, FLAG_OF, RANK_MIN, type BeachRanking } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -49,7 +49,12 @@ export default async function ClassifichePage({
   }
 
   const { data, error } = await query;
-  const rows = (data ?? []) as BeachRanking[];
+  const allRows = (data ?? []) as BeachRanking[];
+  // soglia minima di recensioni per l'ambito selezionato:
+  // un lido entra in classifica solo con abbastanza recensioni (niente "migliore" da pochi dati)
+  const minReviews =
+    scope === "regione" ? RANK_MIN.regione : scope === "comune" ? RANK_MIN.comune : RANK_MIN.nazionale;
+  const rows = allRows.filter((r) => (r.reviews_count ?? 0) >= minReviews);
   const rankKey =
     scope === "regione" ? "rank_regione" : scope === "comune" ? "rank_comune" : "rank_nazionale";
 
@@ -78,6 +83,9 @@ export default async function ClassifichePage({
       <div>
         <h1 className="text-3xl font-bold text-sea-900">{tr("title")}</h1>
         <p className="mt-1 text-sea-600">{tr("intro")}</p>
+        <Link href="/metodologia" className="mt-1 inline-block text-sm text-sea-500 underline hover:text-sea-700">
+          {tr("methodologyLink")}
+        </Link>
       </div>
 
       {/* selettore: continenti → bandiere */}
@@ -148,8 +156,13 @@ export default async function ClassifichePage({
 
       {!error && rows.length === 0 && (
         <div className="rounded-2xl border border-dashed border-sea-200 bg-white p-8 text-center text-sea-500">
-          {tr("emptyPre")}{" "}
-          <Link href="/" className="text-sea-700 underline">{tr("emptyLink")}</Link>
+          <p className="font-medium text-sea-700">{tr("buildingTitle")}</p>
+          <p className="mx-auto mt-1 max-w-xl text-sm">{tr("buildingBody", { n: minReviews })}</p>
+          <p className="mt-3 text-sm">
+            <Link href="/metodologia" className="text-sea-700 underline">{tr("methodologyLink")}</Link>
+            {" · "}
+            <Link href="/" className="text-sea-700 underline">{tr("emptyLink")}</Link>
+          </p>
         </div>
       )}
 

@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useFormState } from "react-dom";
 import { useTranslations } from "next-intl";
 import { submitReview, type SubmitState } from "@/app/actions";
-import { METRICS, FACTS, BOOL_FACTS } from "@/lib/types";
+import {
+  FACTS,
+  BOOL_FACTS,
+  CORE_METRIC_KEYS,
+  OPTIONAL_METRIC_KEYS,
+} from "@/lib/types";
+import { StarRating } from "@/components/StarRating";
 import { Turnstile } from "@/components/Turnstile";
 
 function SubmitButton() {
@@ -22,39 +27,13 @@ function SubmitButton() {
   );
 }
 
-function Slider({ metric }: { metric: (typeof METRICS)[number] }) {
-  const [value, setValue] = useState(3);
-  const tm = useTranslations("metrics");
-  const th = useTranslations("metricHints");
-  return (
-    <div>
-      <div className="flex items-baseline justify-between">
-        <label htmlFor={metric.key} className="text-sm font-medium text-sea-800">
-          {tm(metric.key)}
-        </label>
-        <span className="text-sm font-bold tabular-nums text-sea-600">{value.toFixed(1)}/5</span>
-      </div>
-      <input
-        id={metric.key}
-        name={metric.key}
-        type="range"
-        min={1}
-        max={5}
-        step={0.5}
-        value={value}
-        onChange={(e) => setValue(Number(e.target.value))}
-        className="lido-range mt-2 w-full"
-      />
-      <p className="mt-1 text-xs text-sea-400">{th(metric.key)}</p>
-    </div>
-  );
-}
-
 const initial: SubmitState = { ok: false };
 
 export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; isLoggedIn?: boolean }) {
   const [state, formAction] = useFormState(submitReview, initial);
   const tr = useTranslations("review");
+  const tm = useTranslations("metrics");
+  const th = useTranslations("metricHints");
   const tf = useTranslations("facts");
   const tb = useTranslations("boolFacts");
 
@@ -94,10 +73,30 @@ export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; i
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        {METRICS.map((m) => (
-          <Slider key={m.key} metric={m} />
-        ))}
+      {/* Criteri principali (obbligatori, scelta cosciente — nessun default) */}
+      <div className="space-y-4">
+        <div>
+          <p className="text-sm font-semibold text-sea-800">{tr("coreTitle")}</p>
+          <p className="text-xs text-sea-400">{tr("coreHint")}</p>
+        </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {CORE_METRIC_KEYS.map((key) => (
+            <StarRating key={key} name={key} label={tm(key)} hint={th(key)} />
+          ))}
+        </div>
+      </div>
+
+      {/* Criteri aggiuntivi (facoltativi, con N/D) */}
+      <div className="space-y-4 rounded-xl bg-sea-50/60 p-4">
+        <div>
+          <p className="text-sm font-semibold text-sea-800">{tr("optionalTitle")}</p>
+          <p className="text-xs text-sea-400">{tr("optionalHint")}</p>
+        </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {OPTIONAL_METRIC_KEYS.map((key) => (
+            <StarRating key={key} name={key} label={tm(key)} hint={th(key)} allowNA />
+          ))}
+        </div>
       </div>
 
       {/* Fatti oggettivi (facoltativi) */}
@@ -143,6 +142,32 @@ export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; i
               </select>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* La tua visita: conferma + quando (anti-recensioni fantasma) */}
+      <div className="space-y-3 rounded-xl border border-sea-100 bg-white p-4">
+        <p className="text-sm font-semibold text-sea-800">{tr("visitTitle")}</p>
+        <label className="flex items-start gap-2 text-sm text-sea-700">
+          <input
+            type="checkbox"
+            name="visitato"
+            value="1"
+            required
+            className="mt-0.5 h-4 w-4 rounded border-sea-300 text-sea-600"
+          />
+          <span>{tr("visitConfirm")}</span>
+        </label>
+        <div>
+          <label htmlFor="visita_periodo" className="text-xs font-medium text-sea-700">
+            {tr("visitWhen")}
+          </label>
+          <input
+            id="visita_periodo"
+            name="visita_periodo"
+            type="month"
+            className="mt-1 block rounded-lg border border-sea-200 bg-white px-3 py-2 text-sm text-sea-900"
+          />
         </div>
       </div>
 

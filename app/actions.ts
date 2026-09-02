@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { createHash } from "crypto";
 import { createClient } from "@/lib/supabase/server";
-import { METRICS, FACTS, BOOL_FACTS, SEGNALAZIONE_TIPI } from "@/lib/types";
+import { METRICS, FACTS, BOOL_FACTS, SEGNALAZIONE_TIPI, CORE_METRIC_KEYS } from "@/lib/types";
 
 export type SubmitState = { ok: boolean; error?: string };
 
@@ -70,15 +70,36 @@ export async function submitReview(
   const okTs = await verifyTurnstile(String(formData.get("cf-turnstile-response") ?? ""));
   if (!okTs) return { ok: false, error: "Verifica anti-bot non superata. Riprova." };
 
-  const scores: Record<string, number> = {};
+  // Voti: nessun default. I 6 criteri principali sono obbligatori (scelta cosciente);
+  // i 3 extra sono opzionali → "" o "na" diventano null.
+  const coreSet = new Set<string>(CORE_METRIC_KEYS);
+  const scores: Record<string, number | null> = {};
   for (const m of METRICS) {
-    const n = Number(formData.get(m.key));
+    const raw = String(formData.get(m.key) ?? "").trim();
+    if (raw === "" || raw === "na") {
+      if (coreSet.has(m.key)) {
+        return { ok: false, error: `Dai un voto a "${m.label}" (è tra i criteri obbligatori).` };
+      }
+      scores[m.key] = null; // criterio opzionale non valutato
+      continue;
+    }
+    const n = Number(raw);
     // ammessi 1..5 a passi di 0,5 (mezzo voto)
     if (!Number.isFinite(n) || n < 1 || n > 5 || (n * 2) % 1 !== 0) {
       return { ok: false, error: `Voto non valido per "${m.label}".` };
     }
     scores[m.key] = n;
   }
+
+  // Conferma di visita: obbligatoria (anti-recensioni fantasma)
+  const visitato = String(formData.get("visitato") ?? "");
+  if (visitato !== "1" && visitato !== "on" && visitato !== "true") {
+    return { ok: false, error: "Per pubblicare, conferma di aver visitato lo stabilimento." };
+  }
+  // Periodo di visita (facoltativo): "YYYY-MM"
+  const visita_periodo = /^\d{4}-\d{2}$/.test(String(formData.get("visita_periodo") ?? ""))
+    ? String(formData.get("visita_periodo"))
+    : null;
 
   const commento = String(formData.get("commento") ?? "").trim().slice(0, 2000) || null;
 
@@ -104,7 +125,7 @@ export async function submitReview(
     _beach: beach_id,
     _uid: user?.id ?? null,
     _ip: ip_hash,
-    _p: { ...scores, ...facts, commento },
+    _p: { ...scores, ...facts, commento, visita_periodo },
   });
 
   if (error) {

@@ -91,7 +91,12 @@ export function SegnalazioneForm({ beachId }: { beachId: string }) {
           placeholder={ts("emailPlaceholder")}
           className="mt-1 w-full rounded-lg border border-amber-300 bg-white px-3 py-2 text-sm"
         />
+        <p className="mt-1 text-[11px] text-amber-600">{ts("emailPrivacyNote")}</p>
       </div>
+
+      <p className="rounded-lg bg-amber-100/60 px-3 py-2 text-[11px] text-amber-800">
+        {ts("officialNote")}
+      </p>
 
       {state.error ? (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>

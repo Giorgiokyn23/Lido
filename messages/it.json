@@ -165,7 +165,19 @@
     "yes": "Sì",
     "no": "No",
     "commentLabel": "Commento (opzionale)",
-    "commentPlaceholder": "Com'è stata la tua esperienza al lido?"
+    "commentPlaceholder": "Com'è stata la tua esperienza al lido?",
+    "coreTitle": "Valuta i criteri principali",
+    "coreHint": "Tocca le stelle (mezzo voto ammesso). I 6 criteri principali sono obbligatori.",
+    "optionalTitle": "Criteri aggiuntivi",
+    "optionalHint": "Se non puoi giudicarli, lasciali su «Non valutato».",
+    "notRated": "Non valutato",
+    "na": "N/D",
+    "tapToRate": "Tocca per valutare",
+    "visitTitle": "La tua visita",
+    "visitConfirm": "Confermo di aver visitato di persona questo stabilimento.",
+    "visitWhen": "Quando ci sei stato/a? (facoltativo)",
+    "errNoRate": "Dai un voto a «{label}» (è tra i criteri obbligatori).",
+    "errConfirmVisit": "Per pubblicare, conferma di aver visitato lo stabilimento."
   },
   "metricHints": {
     "space_privacy": "Distanza tra ombrelloni e privacy",
@@ -213,18 +225,20 @@
   },
   "segnalazione": {
     "openButton": "⚠ Segnala un illecito (accesso al mare, minori paganti, lettini sulla battigia…)",
-    "successBody": "Grazie. La segnalazione è stata inviata all'ente competente per la verifica. Non viene pubblicata sul profilo del bagno.",
+    "successBody": "Grazie. La segnalazione è stata ricevuta ed è privata: non viene pubblicata sul profilo del bagno. Se opportuno, potrà essere verificata e inoltrata agli enti competenti.",
     "title": "Segnala un illecito",
-    "intro": "La segnalazione va in una coda riservata agli enti (es. Comune) per un eventuale sopralluogo. Non è pubblica. Invia solo informazioni veritiere.",
+    "intro": "La segnalazione è ricevuta da LidoRank e non costituisce una denuncia formale. Resta privata e, ove appropriato e nel rispetto dell'informativa privacy, può essere verificata ed eventualmente trasmessa agli enti competenti. Non promettiamo sopralluoghi. Invia solo informazioni veritiere.",
     "typeLabel": "Tipo",
     "typeSelect": "— seleziona —",
     "descLabel": "Descrizione (opzionale)",
     "descPlaceholder": "Cosa hai osservato, quando…",
     "emailLabel": "Email di contatto (opzionale)",
-    "emailPlaceholder": "se l'ente volesse ricontattarti",
+    "emailPlaceholder": "così possiamo eventualmente ricontattarti",
     "cancel": "Annulla",
     "submit": "Invia segnalazione",
-    "submitting": "Invio…"
+    "submitting": "Invio…",
+    "officialNote": "Per un intervento ufficiale puoi rivolgerti direttamente all'ente competente (es. Capitaneria di Porto, Comune o Polizia Municipale).",
+    "emailPrivacyNote": "La tua email non viene trasmessa a terzi senza una base legale e senza informarti."
   },
   "segTipi": {
     "pagamento_minori": "Fatti pagare a minori / bambini",
@@ -250,7 +264,8 @@
     "noReviews": "Ancora nessuna recensione. Sii il primo a recensire questo lido!",
     "verified": "✓ Verificata",
     "notVerified": "Non verificata",
-    "noComment": "Nessun commento."
+    "noComment": "Nessun commento.",
+    "rankBuilding": "In classifica dopo {n} recensioni"
   },
   "detailMeta": {
     "fallbackTitle": "Lido — LidoRank",
@@ -259,7 +274,7 @@
   },
   "rankings": {
     "title": "🏆 Classifiche",
-    "intro": "Punteggio pesato: i lidi salgono solo con recensioni vere e verificate. Ogni Paese ha la sua graduatoria.",
+    "intro": "Le classifiche premiano i lidi con recensioni vere e verificate: un lido entra in graduatoria solo dopo un numero minimo di recensioni. Finché non lo raggiunge, non gli assegniamo alcuna posizione.",
     "tabComune": "Comunale",
     "tabRegione": "Regionale",
     "tabNazionale": "Nazionale",
@@ -275,7 +290,10 @@
     "emptyPre": "Ancora nessun lido recensito in questo ambito. Le classifiche si popolano man mano che arrivano le recensioni.",
     "emptyLink": "Lascia la prima →",
     "reviews": "{n} recensioni",
-    "weightedScore": "punteggio pesato"
+    "weightedScore": "punteggio pesato",
+    "methodologyLink": "Come funzionano le classifiche →",
+    "buildingTitle": "Classifiche in costruzione",
+    "buildingBody": "In questo ambito nessun lido ha ancora raggiunto le {n} recensioni necessarie per entrare in classifica. Le graduatorie si popolano man mano che arrivano recensioni vere."
   },
   "login": {
     "title": "Accedi a LidoRank",
@@ -290,5 +308,21 @@
     "tooltip": "Segnala come sospetta / falsa",
     "flag": "⚑ Segnala",
     "flagged": "✓ Segnalata"
+  },
+  "methodology": {
+    "title": "Come funzionano le classifiche",
+    "intro": "Trasparenza prima di tutto: ecco come nascono i punteggi e le graduatorie di LidoRank, e perché a volte una classifica appare «in costruzione».",
+    "s1Title": "Solo recensioni vere",
+    "s1Body": "Non pubblichiamo recensioni finte o comprate. Ogni voto arriva da chi compila il questionario sui nostri nove criteri. Le recensioni con account verificato pesano di più di quelle anonime.",
+    "s2Title": "Punteggio pesato, non media semplice",
+    "s2Body": "Il punteggio in classifica non è la media dei voti: usiamo una media pesata di tipo bayesiano che tiene conto anche di quante recensioni ci sono. Con pochi voti il punteggio resta prudente e vicino alla media generale; man mano che le recensioni aumentano, riflette sempre più il giudizio reale. Così un lido con una sola recensione entusiasta non scavalca uno con decine di giudizi solidi.",
+    "s3Title": "Soglie per entrare in classifica",
+    "s3Body": "Un lido entra in graduatoria solo dopo un numero minimo di recensioni: almeno {comune} per la classifica comunale, {regione} per quella regionale e {nazionale} per quella nazionale. Sotto queste soglie non assegniamo alcuna posizione: preferiamo dire «classifica in costruzione» piuttosto che eleggere un «migliore» sulla base di pochissimi dati.",
+    "s4Title": "Difese anti-frode",
+    "s4Body": "Ogni recensione ha un peso e uno stato. Limiti di frequenza, controlli anti-ondata e la possibilità di segnalare una recensione sospetta riducono il rischio di manipolazioni: i voti anomali vengono ridotti di peso o messi in sospeso, senza cancellare il diritto di chi recensisce in buona fede.",
+    "s5Title": "Fatti oggettivi separati dai voti",
+    "s5Body": "Nella scheda teniamo distinti i voti soggettivi (la tua esperienza) dai fatti oggettivi (accesso al mare, docce, chip). I fatti sono mostrati come percentuali aggregate e non trasformano da soli un lido in «irregolare»: le eventuali segnalazioni di illeciti seguono un percorso separato e privato.",
+    "disclaimer": "LidoRank è una piattaforma in fase pilota: soglie e criteri possono essere affinati man mano che la community cresce.",
+    "back": "← Torna alle classifiche"
   }
 }
