@@ -143,7 +143,7 @@ export default async function LocaleLayout({
               </div>
             </div>
             <div className="border-t border-sea-100 px-4 py-5 text-center text-xs text-sea-500">
-              © {new Date().getFullYear()} LidoRank — Giorgio Menicagli Pirina. {tf("rights")}
+              © {new Date().getFullYear()} LidoRank — Giorgio Menicagli Pirina e Francesco Mancuso. {tf("rights")}
             </div>
           </footer>
         </NextIntlClientProvider>
