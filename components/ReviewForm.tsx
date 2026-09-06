@@ -8,7 +8,6 @@ import {
   FACTS,
   BOOL_FACTS,
   CORE_METRIC_KEYS,
-  OPTIONAL_METRIC_KEYS,
 } from "@/lib/types";
 import { StarRating } from "@/components/StarRating";
 import { Turnstile } from "@/components/Turnstile";
@@ -91,17 +90,6 @@ export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; i
           </div>
         </fieldset>
 
-        {/* Criteri aggiuntivi (facoltativi, con N/D) */}
-        <fieldset className="rounded-xl bg-sea-50/60 p-4">
-          <legend className="px-1 text-sm font-semibold text-sea-800">{tr("optionalTitle")}</legend>
-          <p className="mb-2 text-xs text-sea-400">{tr("optionalHint")}</p>
-          <div className="grid grid-cols-1 gap-x-6 gap-y-1 md:grid-cols-2">
-            {OPTIONAL_METRIC_KEYS.map((key) => (
-              <StarRating key={key} name={key} label={tm(key)} allowNA />
-            ))}
-          </div>
-        </fieldset>
-
         {/* Fatti oggettivi (facoltativi) */}
         <fieldset className="rounded-xl bg-sea-50/60 p-4">
           <legend className="px-1 text-sm font-semibold text-sea-800">
@@ -167,7 +155,7 @@ export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; i
             <input
               id="visita_periodo"
               name="visita_periodo"
-              type="month"
+              type="date"
               className="mt-1 block rounded-lg border border-sea-200 bg-white px-3 py-2 text-sm text-sea-900"
             />
           </div>

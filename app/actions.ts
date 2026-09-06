@@ -96,8 +96,8 @@ export async function submitReview(
   if (visitato !== "1" && visitato !== "on" && visitato !== "true") {
     return { ok: false, error: "Per pubblicare, conferma di aver visitato lo stabilimento." };
   }
-  // Periodo di visita (facoltativo): "YYYY-MM"
-  const visita_periodo = /^\d{4}-\d{2}$/.test(String(formData.get("visita_periodo") ?? ""))
+  // Data di visita (facoltativo): "YYYY-MM-DD"
+  const visita_periodo = /^\d{4}-\d{2}-\d{2}$/.test(String(formData.get("visita_periodo") ?? ""))
     ? String(formData.get("visita_periodo"))
     : null;
 

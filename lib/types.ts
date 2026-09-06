@@ -147,10 +147,9 @@ export type MetricKey = (typeof METRICS)[number]["key"];
 export const CORE_METRIC_KEYS: MetricKey[] = [
   "space_privacy", "family_services", "accessibility",
   "seabed_quality", "pet_friendly", "price_transparency",
-];
-export const OPTIONAL_METRIC_KEYS: MetricKey[] = [
   "sicurezza", "rispetto_regole", "atmosfera",
 ];
+export const OPTIONAL_METRIC_KEYS: MetricKey[] = [];
 
 // Soglie minime di recensioni perché un lido entri in classifica ed esponga il badge di rango.
 // Sotto soglia: nessun rango mostrato ("classifica in costruzione"), per non
