@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { createHash } from "crypto";
 import { createClient } from "@/lib/supabase/server";
 import { METRICS, FACTS, BOOL_FACTS, SEGNALAZIONE_TIPI, CORE_METRIC_KEYS } from "@/lib/types";
+import { cleanComment } from "@/lib/profanity";
 
 export type SubmitState = { ok: boolean; error?: string };
 
@@ -101,7 +102,9 @@ export async function submitReview(
     ? String(formData.get("visita_periodo"))
     : null;
 
-  const commento = String(formData.get("commento") ?? "").trim().slice(0, 2000) || null;
+  // commento: maschera bestemmie/volgarità prima di salvare (moderazione)
+  const commentoRaw = String(formData.get("commento") ?? "").trim().slice(0, 2000);
+  const commento = commentoRaw ? cleanComment(commentoRaw) : null;
 
   // fatti oggettivi (opzionali)
   const facts: Record<string, string | boolean | null> = {};
