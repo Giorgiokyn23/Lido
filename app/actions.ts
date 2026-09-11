@@ -4,8 +4,9 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { createHash } from "crypto";
 import { createClient } from "@/lib/supabase/server";
-import { METRICS, FACTS, BOOL_FACTS, SEGNALAZIONE_TIPI, CORE_METRIC_KEYS } from "@/lib/types";
+import { METRICS, FACTS, BOOL_FACTS, SEGNALAZIONE_TIPI, CORE_METRIC_KEYS, NOTICE_TIPI } from "@/lib/types";
 import { cleanComment } from "@/lib/profanity";
+import { sendNoticeAck } from "@/lib/email";
 
 export type SubmitState = { ok: boolean; error?: string };
 
@@ -144,6 +145,55 @@ export async function submitReview(
 
   revalidatePath(`/lido/${beach_id}`);
   revalidatePath("/");
+  return { ok: true };
+}
+
+// Server Action: segnala una RECENSIONE come contenuto illecito (DSA art. 16).
+// Salva la segnalazione tramite RPC e, se è stata lasciata un'email e Resend è
+// configurato, invia la conferma di ricezione (art. 16). L'invio email non
+// blocca mai il salvataggio.
+export async function submitReviewNotice(
+  _prev: SubmitState,
+  formData: FormData
+): Promise<SubmitState> {
+  const review_id = String(formData.get("review_id") ?? "");
+  if (!review_id) return { ok: false, error: "Recensione non valida." };
+
+  const motivo = pickEnum(
+    formData.get("motivo"),
+    NOTICE_TIPI.map((t) => t.value)
+  );
+  if (!motivo) return { ok: false, error: "Seleziona un motivo." };
+
+  const buonaFede = String(formData.get("buona_fede") ?? "");
+  if (buonaFede !== "on" && buonaFede !== "1" && buonaFede !== "true") {
+    return { ok: false, error: "Conferma la dichiarazione di buona fede per inviare." };
+  }
+
+  const spiegazione = String(formData.get("spiegazione") ?? "").trim().slice(0, 2000) || null;
+  const email = String(formData.get("email") ?? "").trim().slice(0, 200) || null;
+
+  const supabase = createClient();
+  const { data, error } = await supabase.rpc("submit_review_notice", {
+    _rid: review_id,
+    _motivo: motivo,
+    _spiegazione: spiegazione,
+    _email: email,
+    _buonafede: true,
+  });
+
+  if (error) return { ok: false, error: error.message || "Invio non riuscito." };
+
+  // Conferma di ricezione (art. 16): best-effort, non blocca in caso di errore.
+  if (email) {
+    try {
+      await sendNoticeAck(email, String(data ?? ""));
+    } catch {
+      // ignora: la segnalazione è comunque registrata
+    }
+  }
+
+  revalidatePath(`/lido`);
   return { ok: true };
 }
 
