@@ -284,9 +284,10 @@ export default async function BeachPage({ params }: { params: { id: string; loca
 
         {/* Recensioni esistenti */}
         <section>
-          <h2 className="mb-3 text-lg font-semibold text-sea-900">
+          <h2 className="text-lg font-semibold text-sea-900">
             {td("reviewsHeading", { n: reviews.length })}
           </h2>
+          <p className="mb-3 mt-1 text-xs italic text-sea-400">{td("reviewsDisclaimer")}</p>
           {reviews.length === 0 ? (
             <p className="rounded-xl bg-white p-6 text-sea-500 shadow-sm">
               {td("noReviews")}

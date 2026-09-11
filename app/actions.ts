@@ -6,6 +6,7 @@ import { createHash } from "crypto";
 import { createClient } from "@/lib/supabase/server";
 import { METRICS, FACTS, BOOL_FACTS, SEGNALAZIONE_TIPI, CORE_METRIC_KEYS, NOTICE_TIPI } from "@/lib/types";
 import { cleanComment } from "@/lib/profanity";
+import { hasHighRiskAccusation } from "@/lib/defamation";
 import { sendNoticeAck } from "@/lib/email";
 
 export type SubmitState = { ok: boolean; error?: string };
@@ -107,6 +108,11 @@ export async function submitReview(
   const commentoRaw = String(formData.get("commento") ?? "").trim().slice(0, 2000);
   const commento = commentoRaw ? cleanComment(commentoRaw) : null;
 
+  // Anti-diffamazione: se il commento contiene accuse esplicite di reato,
+  // la recensione viene messa in attesa (non pubblicata) per un controllo umano,
+  // invece di andare subito online. Riduce la finestra di esposizione.
+  const hold = hasHighRiskAccusation(commento);
+
   // fatti oggettivi (opzionali)
   const facts: Record<string, string | boolean | null> = {};
   for (const f of FACTS) {
@@ -129,7 +135,7 @@ export async function submitReview(
     _beach: beach_id,
     _uid: user?.id ?? null,
     _ip: ip_hash,
-    _p: { ...scores, ...facts, commento, visita_periodo },
+    _p: { ...scores, ...facts, commento, visita_periodo, hold },
   });
 
   if (error) {
