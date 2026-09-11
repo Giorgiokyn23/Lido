@@ -54,9 +54,10 @@ export default async function ClassifichePage({
   // un lido entra in classifica solo con abbastanza recensioni (niente "migliore" da pochi dati)
   const minReviews =
     scope === "regione" ? RANK_MIN.regione : scope === "comune" ? RANK_MIN.comune : RANK_MIN.nazionale;
+  // La posizione mostrata è calcolata SOLO tra i lido qualificati (≥ soglia),
+  // non il rango grezzo del DB (che conta anche i lido nascosti sotto soglia).
+  // Così niente buchi: la lista è numerata 1,2,3… senza "#2 senza #1".
   const rows = allRows.filter((r) => (r.reviews_count ?? 0) >= minReviews);
-  const rankKey =
-    scope === "regione" ? "rank_regione" : scope === "comune" ? "rank_comune" : "rank_nazionale";
 
   const tabHref = (s: Scope) => {
     const sp = new URLSearchParams({ paese, scope: s });
@@ -168,8 +169,8 @@ export default async function ClassifichePage({
 
       {rows.length > 0 && (
         <ol className="space-y-2">
-          {rows.map((b) => {
-            const pos = b[rankKey as keyof BeachRanking] as number;
+          {rows.map((b, i) => {
+            const pos = i + 1; // posizione tra i soli qualificati (niente buchi)
             return (
               <li key={b.id}>
                 <Link href={`/lido/${b.id}`}

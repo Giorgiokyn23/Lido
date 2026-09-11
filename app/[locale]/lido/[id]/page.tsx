@@ -91,6 +91,39 @@ export default async function BeachPage({ params }: { params: { id: string; loca
   const idConcessione = (beachRow?.id_concessione as string | undefined) ?? null;
   const categoria = (beachRow?.categoria as string | undefined) ?? null;
 
+  // Posizione in classifica calcolata SOLO tra i lido qualificati (≥ soglia di
+  // recensioni), esattamente come nella pagina /classifiche. Così il badge della
+  // scheda e la lista coincidono, e un lido non risulta "#2" se sopra di lui ci
+  // sono solo lido nascosti perché sotto soglia.
+  const paese = b.paese ?? "IT";
+  const rc = b.reviews_count ?? 0;
+  async function positionAmongQualified(opts: {
+    col?: "localita" | "regione";
+    val?: string;
+    threshold: number;
+    orderBy: "rank_comune" | "rank_regione" | "rank_nazionale";
+  }): Promise<number | null> {
+    if (!rank || rc < opts.threshold) return null;
+    let q = supabase
+      .from("beach_rankings")
+      .select("id")
+      .eq("paese", paese)
+      .gte("reviews_count", opts.threshold)
+      .order(opts.orderBy)
+      .limit(1000);
+    if (opts.col && opts.val) q = q.eq(opts.col, opts.val);
+    const { data } = await q;
+    const idx = (data ?? []).findIndex((r: { id: string }) => r.id === b.id);
+    return idx >= 0 ? idx + 1 : null;
+  }
+  const [posComune, posRegione, posNazionale] = await Promise.all([
+    b.localita && b.localita !== b.regione
+      ? positionAmongQualified({ col: "localita", val: b.localita, threshold: RANK_MIN.comune, orderBy: "rank_comune" })
+      : Promise.resolve<number | null>(null),
+    positionAmongQualified({ col: "regione", val: b.regione, threshold: RANK_MIN.regione, orderBy: "rank_regione" }),
+    positionAmongQualified({ threshold: RANK_MIN.nazionale, orderBy: "rank_nazionale" }),
+  ]);
+
   // aggregati fatti oggettivi (dalle recensioni caricate) — chiavi/valori, tradotti nel render
   const factSummary = FACTS.map((f) => {
     const vals = reviews
@@ -129,27 +162,26 @@ export default async function BeachPage({ params }: { params: { id: string; loca
               {b.localita} · {b.regione}
             </p>
             {(() => {
-              const rc = b.reviews_count ?? 0;
-              const showComune = !!rank && !!b.localita && b.localita !== b.regione && rc >= RANK_MIN.comune;
-              const showRegione = !!rank && rc >= RANK_MIN.regione;
-              const showNazionale = !!rank && rc >= RANK_MIN.nazionale;
+              const showComune = posComune != null;
+              const showRegione = posRegione != null;
+              const showNazionale = posNazionale != null;
               const anyRank = showComune || showRegione || showNazionale;
               if (anyRank) {
                 return (
                   <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
                     {showComune && (
                       <span className="rounded-full bg-amber-100 px-3 py-1 text-amber-800">
-                        {td("inPlace", { rank: rank!.rank_comune, place: b.localita })}
+                        {td("inPlace", { rank: posComune!, place: b.localita })}
                       </span>
                     )}
                     {showRegione && (
                       <span className="rounded-full bg-sea-100 px-3 py-1 text-sea-800">
-                        #{rank!.rank_regione} · {b.regione}
+                        #{posRegione!} · {b.regione}
                       </span>
                     )}
                     {showNazionale && (
                       <span className="rounded-full bg-sea-600 px-3 py-1 text-white">
-                        #{rank!.rank_nazionale} · {tcy(b.paese ?? "IT")}
+                        #{posNazionale!} · {tcy(b.paese ?? "IT")}
                       </span>
                     )}
                   </div>
