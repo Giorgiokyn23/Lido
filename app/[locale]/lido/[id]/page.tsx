@@ -249,7 +249,8 @@ export default async function BeachPage({ params }: { params: { id: string; loca
         {/* Cosa dicono gli utenti — fatti oggettivi */}
         {(factSummary.length > 0 || boolSummary.length > 0) && (
           <div className="mt-6 rounded-xl bg-sea-50/60 p-4">
-            <p className="mb-3 text-sm font-semibold text-sea-800">{td("whatUsersSay")}</p>
+            <p className="text-sm font-semibold text-sea-800">{td("whatUsersSay")}</p>
+            <p className="mb-3 text-[11px] italic text-sea-400">{td("factsNote")}</p>
             <div className="flex flex-wrap gap-2 text-xs">
               {factSummary.map((f) => (
                 <span key={f.key} className="rounded-full bg-white px-3 py-1 text-sea-700 shadow-sm">

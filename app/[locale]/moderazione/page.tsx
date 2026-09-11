@@ -22,22 +22,24 @@ const IT: LegalContent = {
       ],
     },
     {
-      h: "2. Segnalare una recensione",
+      h: "2. Segnalare una recensione come contenuto illecito (DSA art. 16)",
       body: [
-        "Sotto ogni recensione c'è un pulsante per segnalarla. Oltre una certa soglia di segnalazioni, la recensione viene automaticamente messa in quarantena in attesa di verifica.",
+        "Sotto ogni recensione c'è un pulsante «Segnala» che apre un modulo strutturato: scegli il motivo dell'illiceità (recensione falsa, diffamatoria, con dati personali di terzi, ecc.), puoi aggiungere una spiegazione, lasciare un'email di contatto e confermare una dichiarazione di buona fede. Il contenuto segnalato è la recensione stessa, che identifichiamo in modo univoco.",
+        "Se lasci l'email, ti confermiamo la ricezione e, presa la decisione, te ne comunichiamo l'esito. Oltre una certa soglia di segnalazioni, la recensione viene automaticamente messa in quarantena in attesa di verifica umana.",
       ],
     },
     {
       h: "3. Sei un gestore? Come chiedere una correzione o replicare",
       body: [
         "Se un'informazione sulla scheda del tuo stabilimento è errata, puoi scriverci a info@lidorank.com indicando il nome del lido e l'informazione da correggere; valuteremo la richiesta.",
-        "In linea con il modello Trustpilot, potrai rivendicare la scheda e rispondere pubblicamente alle recensioni, ma non modificarle o eliminarle né alterare le classifiche.",
+        "In linea con il nostro modello di moderazione indipendente, potrai rivendicare la scheda e rispondere pubblicamente alle recensioni, ma non modificarle o eliminarle né alterare le classifiche.",
       ],
     },
     {
-      h: "4. Rimozione di contenuti illeciti (notice and takedown)",
+      h: "4. Decisione e motivazione (DSA art. 17)",
       body: [
-        "Su segnalazione motivata rimuoviamo i contenuti manifestamente illeciti (diffamatori, offensivi, che violano diritti di terzi). Puoi inviare la richiesta all'indirizzo indicato nella pagina Contatti.",
+        "Valutiamo ogni segnalazione motivata. Se rimuoviamo o declassiamo una recensione e conosciamo l'autore, gli forniamo una motivazione specifica della decisione e l'indicazione dei rimedi disponibili (contestazione). Allo stesso modo comunichiamo l'esito al segnalante che ci ha lasciato un contatto.",
+        "Puoi inviare o contestare una segnalazione anche via email all'indirizzo indicato nella pagina Contatti. Le decisioni automatiche (quarantena a soglia, freno anti-ondata) sono sempre riesaminabili da una persona.",
       ],
     },
     {
@@ -70,22 +72,24 @@ const EN: LegalContent = {
       ],
     },
     {
-      h: "2. Flagging a review",
+      h: "2. Reporting a review as unlawful content (DSA Art. 16)",
       body: [
-        "Under each review there's a button to flag it. Above a certain flag threshold, the review is automatically quarantined pending verification.",
+        "Under each review there's a “Report” button that opens a structured form: pick the ground of unlawfulness (fake, defamatory, containing third parties' personal data, etc.), optionally add an explanation, leave a contact email and confirm a good-faith declaration. The reported content is the review itself, which we identify uniquely.",
+        "If you leave your email, we confirm receipt and, once a decision is made, we tell you the outcome. Above a certain flag threshold, the review is automatically quarantined pending human review.",
       ],
     },
     {
       h: "3. Are you an operator? Requesting a correction or replying",
       body: [
         "If information on your establishment's page is wrong, write to info@lidorank.com with the club name and the item to correct; we'll assess the request.",
-        "In line with the Trustpilot model, you'll be able to claim the page and reply publicly to reviews, but not edit or delete them or alter rankings.",
+        "In line with our independent moderation model, you'll be able to claim the page and reply publicly to reviews, but not edit or delete them or alter rankings.",
       ],
     },
     {
-      h: "4. Removal of unlawful content (notice and takedown)",
+      h: "4. Decision and statement of reasons (DSA Art. 17)",
       body: [
-        "Upon a reasoned report we remove manifestly unlawful content (defamatory, offensive, infringing third-party rights). You can send the request to the address on the Contact page.",
+        "We assess every reasoned report. If we remove or down-weight a review and we know its author, we give them a specific statement of reasons for the decision and information on the available remedies (how to contest it). Likewise we tell the reporter the outcome where they left a contact.",
+        "You can also send or contest a report by email at the address on the Contact page. Automatic decisions (threshold quarantine, anti-surge damper) can always be reviewed by a human.",
       ],
     },
     {

@@ -200,6 +200,21 @@ export const BOOL_FACTS = [
 
 export type BoolFactKey = (typeof BOOL_FACTS)[number]["key"];
 
+// Motivi per segnalare una RECENSIONE come contenuto illecito (DSA art. 16).
+// Le etichette visibili vengono tradotte dal namespace "noticeTipi" (it/en).
+export const NOTICE_TIPI = [
+  { value: "falsa",                   label: "Recensione falsa o non genuina" },
+  { value: "diffamazione",            label: "Diffamatoria / calunniosa" },
+  { value: "dati_personali",          label: "Contiene dati personali di terzi" },
+  { value: "odio",                    label: "Incitamento all'odio / discriminazione" },
+  { value: "osceno",                  label: "Contenuto osceno o illecito" },
+  { value: "spam",                    label: "Spam / pubblicità" },
+  { value: "proprieta_intellettuale", label: "Violazione di proprietà intellettuale" },
+  { value: "altro",                   label: "Altro motivo di illiceità" },
+] as const;
+
+export type NoticeTipo = (typeof NOTICE_TIPI)[number]["value"];
+
 // Tipi di segnalazione illeciti (coda privata per l'ente)
 export const SEGNALAZIONE_TIPI = [
   { value: "pagamento_minori",    label: "Fatti pagare a minori / bambini" },

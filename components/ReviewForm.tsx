@@ -95,6 +95,7 @@ export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; i
           <legend className="px-1 text-sm font-semibold text-sea-800">
             {tr("factsTitle")} <span className="font-normal text-sea-400">{tr("factsOptional")}</span>
           </legend>
+          <p className="mt-1 px-1 text-[11px] italic text-sea-400">{tr("factsDisclaimer")}</p>
           <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {FACTS.map((f) => {
               const hint = tf(`${f.key}.hint`);

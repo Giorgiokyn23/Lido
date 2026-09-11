@@ -27,9 +27,10 @@ const IT: LegalContent = {
       ],
     },
     {
-      h: "3. Distinzione tra fatti e opinioni",
+      h: "3. Distinzione tra ciò che segnali e ciò che giudichi",
       body: [
-        "I voti sui nove criteri sono opinioni personali. I «fatti oggettivi» (accesso al mare, docce, chip) vanno indicati con onestà perché descrivono circostanze verificabili. Non presentare un'opinione come un fatto accertato.",
+        "I voti sui nove criteri sono opinioni personali. Le informazioni fattuali che segnali (accesso al mare, docce, chip) vanno indicate con onestà: sono tue dichiarazioni, non accertamenti di LidoRank né di un'autorità.",
+        "Anche il criterio «Rispetto Regole» esprime la tua percezione ed esperienza, non una certificazione della legalità dello stabilimento. Non presentare un'opinione come un fatto accertato.",
       ],
     },
     {
@@ -73,9 +74,10 @@ const EN: LegalContent = {
       ],
     },
     {
-      h: "3. Facts vs opinions",
+      h: "3. What you report vs what you judge",
       body: [
-        "The nine-criteria scores are personal opinions. The “objective facts” (sea access, showers, deposit chip) should be reported honestly because they describe verifiable circumstances. Don't present an opinion as an established fact.",
+        "The nine-criteria scores are personal opinions. The factual information you report (sea access, showers, deposit chip) should be reported honestly: it is your statement, not a finding by LidoRank or any authority.",
+        "The “Rule Compliance” criterion, too, expresses your perception and experience, not a certification of the establishment's legality. Don't present an opinion as an established fact.",
       ],
     },
     {
