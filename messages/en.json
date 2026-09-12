@@ -16,6 +16,8 @@
     "filtersHeading": "Vertical filters — minimum rating",
     "optAll": "All",
     "reset": "Reset filters",
+    "clearAll": "Clear all",
+    "clearSearch": "Clear search",
     "found": "{count} beach clubs found · page {page} of {pages}",
     "prev": "← Previous",
     "next": "Next →",

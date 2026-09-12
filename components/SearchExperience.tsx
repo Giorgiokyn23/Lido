@@ -126,6 +126,26 @@ export function SearchExperience({ locale }: { locale: string }) {
     setFilters({});
     setPage(1);
   };
+  // svuota SOLO la ricerca testuale (query committata e campo)
+  const clearSearch = () => {
+    setQ("");
+    setCommittedQ("");
+    setSuggestions([]);
+    setOpenSug(false);
+    setPage(1);
+  };
+  // azzera TUTTO: ricerca + paese/continente + filtri numerici
+  const clearAll = () => {
+    setQ("");
+    setCommittedQ("");
+    setPaese("");
+    setOpenContinent(null);
+    setFilters({});
+    setSuggestions([]);
+    setOpenSug(false);
+    setPage(1);
+  };
+  const hasAnyFilter = committedQ !== "" || paese !== "" || activeFilters > 0;
 
   const chip = (active: boolean) =>
     `rounded-full px-3 py-1.5 text-sm font-medium transition ${
@@ -200,11 +220,30 @@ export function SearchExperience({ locale }: { locale: string }) {
             >
               <input
                 value={q}
-                onChange={(e) => setQ(e.target.value)}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setQ(v);
+                  // svuotando il campo si ripristinano tutti i risultati
+                  if (v.trim() === "") {
+                    setCommittedQ("");
+                    setPage(1);
+                  }
+                }}
                 onFocus={() => suggestions.length && setOpenSug(true)}
                 placeholder={t("searchPlaceholder")}
-                className="w-full rounded-xl border border-sea-200 px-4 py-2.5 text-sea-900 placeholder:text-sea-300 focus:border-sea-400 focus:outline-none focus:ring-2 focus:ring-sea-200"
+                className="w-full rounded-xl border border-sea-200 px-4 py-2.5 pr-10 text-sea-900 placeholder:text-sea-300 focus:border-sea-400 focus:outline-none focus:ring-2 focus:ring-sea-200"
               />
+              {q && (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  aria-label={t("clearSearch")}
+                  title={t("clearSearch")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full px-2 py-0.5 text-lg leading-none text-sea-400 hover:bg-sea-50 hover:text-sea-600"
+                >
+                  ×
+                </button>
+              )}
             </form>
             {openSug && suggestions.length > 0 && (
               <ul className="absolute z-30 mt-1 w-full overflow-hidden rounded-xl border border-sea-100 bg-white shadow-lg">
@@ -280,14 +319,34 @@ export function SearchExperience({ locale }: { locale: string }) {
         <p className="rounded-xl bg-red-50 p-4 text-sm text-red-700">{t("error")} {err}</p>
       ) : (
         <section>
-          <p className="mb-3 text-sm text-sea-500">
-            {loading
-              ? t("loading")
-              : t("found", { count: total.toLocaleString(locale), page, pages: totalPages })}
-          </p>
+          <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-sea-500">
+            <span>
+              {loading
+                ? t("loading")
+                : t("found", { count: total.toLocaleString(locale), page, pages: totalPages })}
+            </span>
+            {hasAnyFilter && (
+              <button
+                onClick={clearAll}
+                className="font-medium text-sea-600 underline underline-offset-2 hover:text-sea-800"
+              >
+                {t("clearAll")}
+              </button>
+            )}
+          </div>
 
           {!loading && rows.length === 0 ? (
-            <p className="rounded-xl bg-white p-8 text-center text-sea-500 shadow-sm">{t("empty")}</p>
+            <div className="rounded-xl bg-white p-8 text-center text-sea-500 shadow-sm">
+              <p>{t("empty")}</p>
+              {hasAnyFilter && (
+                <button
+                  onClick={clearAll}
+                  className="mt-3 inline-block rounded-lg bg-sea-500 px-4 py-2 text-sm font-medium text-white hover:bg-sea-600"
+                >
+                  {t("clearAll")}
+                </button>
+              )}
+            </div>
           ) : (
             <div
               className={`grid grid-cols-1 gap-4 transition-opacity sm:grid-cols-2 lg:grid-cols-3 ${

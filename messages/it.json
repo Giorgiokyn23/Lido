@@ -16,6 +16,8 @@
     "filtersHeading": "Filtri verticali — voto minimo",
     "optAll": "Tutti",
     "reset": "Azzera filtri",
+    "clearAll": "Azzera tutto",
+    "clearSearch": "Cancella la ricerca",
     "found": "{count} lidi trovati · pagina {page} di {pages}",
     "prev": "← Precedente",
     "next": "Successiva →",
