@@ -200,6 +200,21 @@ export const BOOL_FACTS = [
 
 export type BoolFactKey = (typeof BOOL_FACTS)[number]["key"];
 
+// Fatti "civici" sull'uso del demanio a beneficio della collettività (ottica
+// Bolkestein): osservabili da un bagnante, NON sono voti e NON entrano nei
+// punteggi/classifiche. Aggregati sulla scheda come percentuali. Etichette dal
+// namespace "boolFacts" (it/en).
+export const CIVIC_FACTS = [
+  { key: "eventi_giovani",              label: "Eventi/attività per giovani e comunità" },
+  { key: "fuori_stagione",              label: "Aperto o attivo anche fuori stagione" },
+  { key: "ingresso_giornaliero",        label: "Ingresso a giornata senza abbonamento stagionale" },
+  { key: "tariffe_agevolate",           label: "Tariffe agevolate per residenti, famiglie o disabili" },
+  { key: "prezzi_esposti",              label: "Listino prezzi esposto e visibile" },
+  { key: "estremi_concessione_esposti", label: "Estremi della concessione demaniale esposti al pubblico" },
+] as const;
+
+export type CivicFactKey = (typeof CIVIC_FACTS)[number]["key"];
+
 // Motivi per segnalare una RECENSIONE come contenuto illecito (DSA art. 16).
 // Le etichette visibili vengono tradotte dal namespace "noticeTipi" (it/en).
 export const NOTICE_TIPI = [
@@ -272,6 +287,12 @@ export interface Review {
   acqua_calda: string | null;
   battigia_libera: boolean | null;
   chip_richiesto: boolean | null;
+  eventi_giovani: boolean | null;
+  fuori_stagione: boolean | null;
+  ingresso_giornaliero: boolean | null;
+  tariffe_agevolate: boolean | null;
+  prezzi_esposti: boolean | null;
+  estremi_concessione_esposti: boolean | null;
   verified: boolean;
   segnalata: number;
   peso: number;                 // 0..1 — peso della review nel punteggio (anti-frode)

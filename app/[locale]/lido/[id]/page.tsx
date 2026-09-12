@@ -10,6 +10,7 @@ import {
   METRICS,
   FACTS,
   BOOL_FACTS,
+  CIVIC_FACTS,
   RANK_MIN,
   type BeachScore,
   type Review,
@@ -147,6 +148,16 @@ export default async function BeachPage({ params }: { params: { id: string; loca
     return { key: bf.key, pct: Math.round((yes / vals.length) * 100), total: vals.length };
   }).filter(Boolean) as { key: string; pct: number; total: number }[];
 
+  // aggregati dei fatti civici (uso del demanio) — stesse regole, blocco separato
+  const civicSummary = CIVIC_FACTS.map((cf) => {
+    const vals = reviews
+      .map((r) => (r as unknown as Record<string, boolean | null>)[cf.key])
+      .filter((v): v is boolean => v === true || v === false);
+    if (!vals.length) return null;
+    const yes = vals.filter(Boolean).length;
+    return { key: cf.key, pct: Math.round((yes / vals.length) * 100), total: vals.length };
+  }).filter(Boolean) as { key: string; pct: number; total: number }[];
+
   return (
     <div className="space-y-8">
       <Link href="/" className="inline-block text-sm text-sea-500 hover:underline">
@@ -262,6 +273,22 @@ export default async function BeachPage({ params }: { params: { id: string; loca
               ))}
               {boolSummary.map((f) => (
                 <span key={f.key} className="rounded-full bg-white px-3 py-1 text-sea-700 shadow-sm">
+                  {tb(f.key)}: <b>{f.pct}% {td("yesShort")}</b>{" "}
+                  <span className="text-sea-400">({f.total})</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Uso del demanio e valore civico (fatti degli utenti) */}
+        {civicSummary.length > 0 && (
+          <div className="mt-6 rounded-xl border border-sea-100 bg-white p-4">
+            <p className="text-sm font-semibold text-sea-800">{td("civicTitle")}</p>
+            <p className="mb-3 text-[11px] italic text-sea-400">{td("civicNote")}</p>
+            <div className="flex flex-wrap gap-2 text-xs">
+              {civicSummary.map((f) => (
+                <span key={f.key} className="rounded-full bg-sea-50 px-3 py-1 text-sea-700 shadow-sm">
                   {tb(f.key)}: <b>{f.pct}% {td("yesShort")}</b>{" "}
                   <span className="text-sea-400">({f.total})</span>
                 </span>

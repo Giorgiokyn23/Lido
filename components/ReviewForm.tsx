@@ -7,6 +7,7 @@ import { submitReview, type SubmitState } from "@/app/actions";
 import {
   FACTS,
   BOOL_FACTS,
+  CIVIC_FACTS,
   CORE_METRIC_KEYS,
 } from "@/lib/types";
 import { StarRating } from "@/components/StarRating";
@@ -125,6 +126,31 @@ export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; i
                 <select
                   id={bf.key}
                   name={bf.key}
+                  defaultValue=""
+                  className="mt-1 w-full rounded-lg border border-sea-200 bg-white px-2 py-2 text-sm text-sea-900"
+                >
+                  <option value="">{tr("unknown")}</option>
+                  <option value="si">{tr("yes")}</option>
+                  <option value="no">{tr("no")}</option>
+                </select>
+              </div>
+            ))}
+          </div>
+        </fieldset>
+
+        {/* Uso del demanio e valore civico (fatti, non voti) */}
+        <fieldset className="rounded-xl border border-sea-100 bg-white p-4">
+          <legend className="px-1 text-sm font-semibold text-sea-800">
+            {tr("civicTitle")} <span className="font-normal text-sea-400">{tr("factsOptional")}</span>
+          </legend>
+          <p className="mt-1 px-1 text-[11px] italic text-sea-400">{tr("civicHint")}</p>
+          <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {CIVIC_FACTS.map((cf) => (
+              <div key={cf.key}>
+                <label htmlFor={cf.key} className="text-xs font-medium text-sea-700">{tb(cf.key)}</label>
+                <select
+                  id={cf.key}
+                  name={cf.key}
                   defaultValue=""
                   className="mt-1 w-full rounded-lg border border-sea-200 bg-white px-2 py-2 text-sm text-sea-900"
                 >

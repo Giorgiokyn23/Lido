@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { createHash } from "crypto";
 import { createClient } from "@/lib/supabase/server";
-import { METRICS, FACTS, BOOL_FACTS, SEGNALAZIONE_TIPI, CORE_METRIC_KEYS, NOTICE_TIPI } from "@/lib/types";
+import { METRICS, FACTS, BOOL_FACTS, CIVIC_FACTS, SEGNALAZIONE_TIPI, CORE_METRIC_KEYS, NOTICE_TIPI } from "@/lib/types";
 import { cleanComment } from "@/lib/profanity";
 import { hasHighRiskAccusation } from "@/lib/defamation";
 import { sendNoticeAck } from "@/lib/email";
@@ -120,6 +120,10 @@ export async function submitReview(
   }
   for (const bf of BOOL_FACTS) {
     facts[bf.key] = pickBool(formData.get(bf.key));
+  }
+  // fatti civici (uso del demanio) — anch'essi booleani facoltativi
+  for (const cf of CIVIC_FACTS) {
+    facts[cf.key] = pickBool(formData.get(cf.key));
   }
 
   const supabase = createClient();

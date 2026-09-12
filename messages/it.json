@@ -180,7 +180,9 @@
     "visitWhen": "Quando ci sei stato/a? (facoltativo)",
     "errNoRate": "Dai un voto a «{label}» (è tra i criteri obbligatori).",
     "errConfirmVisit": "Per pubblicare, conferma di aver visitato lo stabilimento.",
-    "subtitle": "La tua esperienza aiuta gli altri a scegliere e gli enti a vigilare. Bastano due minuti."
+    "subtitle": "La tua esperienza aiuta gli altri a scegliere e gli enti a vigilare. Bastano due minuti.",
+    "civicTitle": "Uso del demanio e valore civico",
+    "civicHint": "Domande facoltative: se questa concessione di spiaggia serve la collettività (accesso non escludente, trasparenza, agevolazioni). Sono informazioni, non voti: non influiscono sul punteggio."
   },
   "metricHints": {
     "space_privacy": "Distanza tra ombrelloni e privacy",
@@ -224,7 +226,13 @@
   },
   "boolFacts": {
     "battigia_libera": "Battigia (5 m) libera e transitabile",
-    "chip_richiesto": "Serve chip / cauzione per entrare"
+    "chip_richiesto": "Serve chip / cauzione per entrare",
+    "eventi_giovani": "Eventi/attività per giovani e comunità",
+    "fuori_stagione": "Aperto o attivo anche fuori stagione",
+    "ingresso_giornaliero": "Ingresso a giornata senza abbonamento stagionale",
+    "tariffe_agevolate": "Tariffe agevolate per residenti, famiglie o disabili",
+    "prezzi_esposti": "Listino prezzi esposto e visibile",
+    "estremi_concessione_esposti": "Estremi della concessione demaniale esposti"
   },
   "segnalazione": {
     "openButton": "⚠ Segnala un illecito (accesso al mare, minori paganti, lettini sulla battigia…)",
@@ -263,6 +271,8 @@
     "scoreOutOf": "punteggio / 5",
     "whatUsersSay": "Informazioni segnalate dagli utenti",
     "factsNote": "Sono dichiarazioni di chi ha recensito, non accertamenti di LidoRank né di un'autorità.",
+    "civicTitle": "Uso del demanio e valore civico",
+    "civicNote": "Cosa dicono gli utenti sull'uso di questo bene pubblico. Sono loro dichiarazioni, non accertamenti di LidoRank, e non influiscono sul punteggio.",
     "yesShort": "sì",
     "reviewsHeading": "Recensioni ({n})",
     "reviewsDisclaimer": "Le recensioni sono opinioni ed esperienze personali di chi le scrive, non dichiarazioni di LidoRank.",

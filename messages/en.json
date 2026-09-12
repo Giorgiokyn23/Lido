@@ -180,7 +180,9 @@
     "visitWhen": "When did you go? (optional)",
     "errNoRate": "Please rate “{label}” (it's a required criterion).",
     "errConfirmVisit": "To publish, please confirm you visited the establishment.",
-    "subtitle": "Your experience helps others choose and authorities keep watch. It takes two minutes."
+    "subtitle": "Your experience helps others choose and authorities keep watch. It takes two minutes.",
+    "civicTitle": "Public-domain use & civic value",
+    "civicHint": "Optional questions: whether this beach concession serves the community (non-excluding access, transparency, reduced fees). These are information, not ratings: they don't affect the score."
   },
   "metricHints": {
     "space_privacy": "Distance between umbrellas and privacy",
@@ -224,7 +226,13 @@
   },
   "boolFacts": {
     "battigia_libera": "Shoreline (5 m) free and walkable",
-    "chip_richiesto": "Chip / deposit required to enter"
+    "chip_richiesto": "Chip / deposit required to enter",
+    "eventi_giovani": "Events/activities for young people & community",
+    "fuori_stagione": "Open or active off-season too",
+    "ingresso_giornaliero": "Day entry without a seasonal subscription",
+    "tariffe_agevolate": "Reduced fees for residents, families or disabled",
+    "prezzi_esposti": "Price list displayed and visible",
+    "estremi_concessione_esposti": "Concession details displayed to the public"
   },
   "segnalazione": {
     "openButton": "⚠ Report a violation (sea access, paying minors, loungers on the shoreline…)",
@@ -263,6 +271,8 @@
     "scoreOutOf": "score / 5",
     "whatUsersSay": "User-reported information",
     "factsNote": "These are statements by reviewers, not findings by LidoRank or any authority.",
+    "civicTitle": "Public-domain use & civic value",
+    "civicNote": "What users say about the use of this public asset. These are their statements, not findings by LidoRank, and they don't affect the score.",
     "yesShort": "yes",
     "reviewsHeading": "Reviews ({n})",
     "reviewsDisclaimer": "Reviews are the personal opinions and experiences of the people who write them, not statements by LidoRank.",
