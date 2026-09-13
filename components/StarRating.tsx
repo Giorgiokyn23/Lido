@@ -58,10 +58,14 @@ export function StarRating({
   };
 
   return (
-    <div className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition hover:bg-sea-50/70">
-      <span className="min-w-0 flex-1 truncate text-sm font-medium text-sea-800">{label}</span>
+    <div className="rounded-lg px-1.5 py-2 transition hover:bg-sea-50/70">
+      <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3">
+        <span className="text-sm font-medium leading-snug text-sea-800 sm:min-w-0 sm:flex-1 sm:truncate">
+          {label}
+        </span>
 
-      <div className="flex shrink-0" onMouseLeave={() => setHover(0)}>
+        <div className="flex items-center gap-2 sm:shrink-0">
+          <div className="flex" onMouseLeave={() => setHover(0)}>
         {[1, 2, 3, 4, 5].map((i) => {
           const fill = Math.max(0, Math.min(1, display - (i - 1)));
           return (
@@ -86,28 +90,30 @@ export function StarRating({
         })}
       </div>
 
-      <span
-        className={`w-14 shrink-0 text-right text-xs font-semibold tabular-nums ${
-          rated ? "text-sea-700" : "text-sea-300"
-        }`}
-      >
-        {na ? "" : rated ? `${value.toFixed(1)}` : "—"}
-      </span>
+          <span
+            className={`w-9 shrink-0 text-right text-xs font-semibold tabular-nums ${
+              rated ? "text-sea-700" : "text-sea-300"
+            }`}
+          >
+            {na ? "" : rated ? `${value.toFixed(1)}` : "—"}
+          </span>
 
-      {allowNA && (
-        <button
-          type="button"
-          onClick={() => {
-            setNA(true);
-            setValue(0);
-          }}
-          className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium transition ${
-            na ? "bg-sea-200 text-sea-800" : "bg-white text-sea-400 ring-1 ring-sea-200 hover:bg-sea-100"
-          }`}
-        >
-          {t("na")}
-        </button>
-      )}
+          {allowNA && (
+            <button
+              type="button"
+              onClick={() => {
+                setNA(true);
+                setValue(0);
+              }}
+              className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium transition ${
+                na ? "bg-sea-200 text-sea-800" : "bg-white text-sea-400 ring-1 ring-sea-200 hover:bg-sea-100"
+              }`}
+            >
+              {t("na")}
+            </button>
+          )}
+        </div>
+      </div>
 
       <input type="hidden" name={name} value={hiddenVal} />
     </div>
