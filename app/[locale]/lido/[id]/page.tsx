@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { ScoreBar } from "@/components/ScoreBar";
 import { ReviewForm } from "@/components/ReviewForm";
 import { SegnalazioneForm } from "@/components/SegnalazioneForm";
@@ -17,10 +17,14 @@ import {
   type BeachRanking,
 } from "@/lib/types";
 
-export const dynamic = "force-dynamic";
+// ISR: la scheda viene generata alla prima visita e servita da cache; si
+// aggiorna da sola ogni ora e subito quando arriva una recensione
+// (revalidatePath in submitReview). Niente rendering server a ogni crawl.
+export const revalidate = 3600;
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const supabase = createClient();
+export async function generateMetadata({ params }: { params: { id: string; locale: string } }) {
+  setRequestLocale(params.locale);
+  const supabase = createPublicClient();
   const tmeta = await getTranslations("detailMeta");
   const { data } = await supabase
     .from("beach_scores")
@@ -54,7 +58,8 @@ function fmtDate(iso: string, locale: string) {
 }
 
 export default async function BeachPage({ params }: { params: { id: string; locale: string } }) {
-  const supabase = createClient();
+  setRequestLocale(params.locale);
+  const supabase = createPublicClient();
 
   const [{ data: beach }, { data: reviewsData }, { data: rankData }, { data: beachRow }] =
     await Promise.all([
@@ -73,9 +78,6 @@ export default async function BeachPage({ params }: { params: { id: string; loca
         .maybeSingle(),
     ]);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
   const tcy = await getTranslations("countries");
   const td = await getTranslations("detail");
   const tm = await getTranslations("metrics");
@@ -312,7 +314,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
       <div className="space-y-8">
         {/* Scrivi la tua recensione — è il cuore del progetto: prominente e a tutta larghezza */}
         <section id="scrivi-recensione" className="scroll-mt-24">
-          <ReviewForm beachId={b.id} isLoggedIn={!!user} />
+          <ReviewForm beachId={b.id} />
         </section>
 
         {/* Recensioni esistenti */}

@@ -320,7 +320,9 @@
     "emailPlaceholder": "you@email.com",
     "submit": "Send me the sign-in link",
     "submitting": "Sending…",
-    "anonNote": "You can also review anonymously from a place's page, but those reviews are marked as unverified."
+    "anonNote": "You can also review anonymously from a place's page, but those reviews are marked as unverified.",
+    "errRate": "Too many sign-in requests in a short time. Try again in a few minutes — if you already requested the link, check your inbox (and spam).",
+    "errGeneric": "We couldn't send the sign-in link. Check the email address and try again."
   },
   "flag": {
     "tooltip": "Report this review as unlawful content",

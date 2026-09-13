@@ -22,8 +22,12 @@ export default function LoginPage() {
       options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
     });
     setLoading(false);
-    if (error) setError(error.message);
-    else setSent(true);
+    if (error) {
+      // Supabase SMTP integrato limita a poche email/ora a livello di progetto:
+      // mostriamo un messaggio chiaro invece dell'errore tecnico in inglese.
+      const rate = (error as { status?: number }).status === 429 || /rate/i.test(error.message);
+      setError(rate ? t("errRate") : t("errGeneric"));
+    } else setSent(true);
   }
 
   const strong = (chunks: React.ReactNode) => <strong>{chunks}</strong>;

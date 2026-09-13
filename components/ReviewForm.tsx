@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useFormState } from "react-dom";
 import { useTranslations } from "next-intl";
+import { createClient } from "@/lib/supabase/client";
 import { submitReview, type SubmitState } from "@/app/actions";
 import {
   FACTS,
@@ -29,8 +31,14 @@ function SubmitButton() {
 
 const initial: SubmitState = { ok: false };
 
-export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; isLoggedIn?: boolean }) {
+export function ReviewForm({ beachId }: { beachId: string }) {
   const [state, formAction] = useFormState(submitReview, initial);
+  // login rilevato lato client, così la scheda resta cache-abile (ISR)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setIsLoggedIn(!!data.user));
+  }, []);
   const tr = useTranslations("review");
   const tm = useTranslations("metrics");
   const th = useTranslations("metricHints");

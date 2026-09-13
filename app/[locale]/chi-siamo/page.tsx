@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
 export async function generateMetadata({
@@ -21,7 +21,8 @@ function Avatar({ src, initials, alt }: { src: string; initials: string; alt: st
   );
 }
 
-export default async function ChiSiamoPage() {
+export default async function ChiSiamoPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const t = await getTranslations("about");
 
   return (

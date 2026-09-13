@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage, type LegalContent } from "@/components/LegalPage";
-
-export const dynamic = "force-dynamic";
+import { setRequestLocale } from "next-intl/server";
 export const metadata: Metadata = {
   title: "LidoRank — Contatti",
   alternates: { canonical: "/contatti" },
@@ -70,5 +69,6 @@ const EN: LegalContent = {
 };
 
 export default function ContattiPage({ params }: { params: { locale: string } }) {
+  setRequestLocale(params.locale);
   return <LegalPage c={params.locale === "en" ? EN : IT} />;
 }

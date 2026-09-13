@@ -320,7 +320,9 @@
     "emailPlaceholder": "latua@email.it",
     "submit": "Inviami il link di accesso",
     "submitting": "Invio…",
-    "anonNote": "Puoi anche recensire in forma anonima dalla scheda di un lido, ma quelle recensioni sono marcate come non verificate."
+    "anonNote": "Puoi anche recensire in forma anonima dalla scheda di un lido, ma quelle recensioni sono marcate come non verificate.",
+    "errRate": "Troppe richieste di accesso in poco tempo. Riprova tra qualche minuto — se avevi già chiesto il link, controlla la posta (anche lo spam).",
+    "errGeneric": "Non è stato possibile inviare il link di accesso. Controlla l'indirizzo email e riprova."
   },
   "flag": {
     "tooltip": "Segnala questa recensione come contenuto illecito",

@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { RANK_MIN } from "@/lib/types";
 
-export const dynamic = "force-dynamic";
-
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("methodology");
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: "methodology" });
   return { title: `LidoRank — ${t("title")}`, alternates: { canonical: "/metodologia" } };
 }
 
-export default async function MetodologiaPage() {
+export default async function MetodologiaPage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const t = await getTranslations("methodology");
 
   const Section = ({ title, body }: { title: string; body: string }) => (

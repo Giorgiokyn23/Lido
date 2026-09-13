@@ -1,9 +1,9 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SearchExperience } from "@/components/SearchExperience";
 
-export const dynamic = "force-dynamic";
-
+// Statica: il guscio non cambia; i dati li carica il componente client.
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
+  setRequestLocale(locale);
   const t = await getTranslations("home");
 
   return (

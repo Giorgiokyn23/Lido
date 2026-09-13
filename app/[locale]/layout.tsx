@@ -2,17 +2,18 @@ import type { Metadata, Viewport } from "next";
 import "../globals.css";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, getTranslations } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { signOut } from "@/app/actions";
+import { NavAuth } from "@/components/NavAuth";
 import { Logo } from "@/components/Logo";
 
 const base = process.env.NEXT_PUBLIC_SITE_URL || "https://lidorank.com";
 
-// pagine dinamiche (dati live da Supabase ad ogni richiesta)
-export const dynamic = "force-dynamic";
+// Pre-render statico per entrambe le lingue: niente più CPU per ogni visita.
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 // colore barra di stato (Android/PWA) + viewport per app installata
 export const viewport: Viewport = {
@@ -65,16 +66,12 @@ export default async function LocaleLayout({
   params: { locale: string };
 }) {
   if (!routing.locales.includes(locale as "it" | "en")) notFound();
+  setRequestLocale(locale);
 
   const messages = await getMessages();
   const t = await getTranslations("nav");
   const tf = await getTranslations("footer");
   const tl = await getTranslations("legal");
-
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   return (
     <html lang={locale} className="scroll-smooth">
@@ -97,23 +94,7 @@ export default async function LocaleLayout({
                 <Link href="/" locale={locale === "en" ? "it" : "en"} className="rounded-full border border-sea-200 px-2.5 py-1 text-xs font-semibold text-sea-600 hover:bg-sea-50">
                   {locale === "en" ? "IT" : "EN"}
                 </Link>
-                {user ? (
-                  <form action={signOut} className="flex items-center gap-2">
-                    <span className="hidden max-w-[140px] truncate text-xs text-sea-500 sm:inline">
-                      {user.email}
-                    </span>
-                    <button className="rounded-full bg-sea-50 px-3 py-1 font-medium text-sea-700 hover:bg-sea-100">
-                      {t("logout")}
-                    </button>
-                  </form>
-                ) : (
-                  <Link
-                    href="/login"
-                    className="rounded-full bg-sea-500 px-4 py-1.5 font-medium text-white hover:bg-sea-600"
-                  >
-                    {t("login")}
-                  </Link>
-                )}
+                <NavAuth />
               </nav>
             </div>
           </header>
