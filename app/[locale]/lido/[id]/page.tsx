@@ -285,7 +285,13 @@ export default async function BeachPage({ params }: { params: { id: string; loca
         {civicSummary.length > 0 && (
           <div className="mt-6 rounded-xl border border-sea-100 bg-white p-4">
             <p className="text-sm font-semibold text-sea-800">{td("civicTitle")}</p>
-            <p className="mb-3 text-[11px] italic text-sea-400">{td("civicNote")}</p>
+            <div className="mt-2 rounded-lg border-l-4 border-amber-300 bg-amber-50/70 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-amber-700">
+                ⚖️ {td("civicWhyLabel")}
+              </p>
+              <p className="mt-0.5 text-xs leading-relaxed text-sea-700">{td("civicWhy")}</p>
+            </div>
+            <p className="mb-3 mt-2 text-[11px] italic text-sea-400">{td("civicNote")}</p>
             <div className="flex flex-wrap gap-2 text-xs">
               {civicSummary.map((f) => (
                 <span key={f.key} className="rounded-full bg-sea-50 px-3 py-1 text-sea-700 shadow-sm">

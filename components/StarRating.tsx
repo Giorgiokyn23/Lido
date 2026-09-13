@@ -35,10 +35,12 @@ function StarSVG({ fill, gid }: { fill: number; gid: string }) {
 export function StarRating({
   name,
   label,
+  hint,
   allowNA = false,
 }: {
   name: string;
   label: string;
+  hint?: string;
   allowNA?: boolean;
 }) {
   const t = useTranslations("review");
@@ -60,9 +62,12 @@ export function StarRating({
   return (
     <div className="rounded-lg px-1.5 py-2 transition hover:bg-sea-50/70">
       <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-3">
-        <span className="text-sm font-medium leading-snug text-sea-800 sm:min-w-0 sm:flex-1 sm:truncate">
-          {label}
-        </span>
+        <div className="sm:min-w-0 sm:flex-1">
+          <span className="block text-sm font-medium leading-snug text-sea-800">{label}</span>
+          {hint ? (
+            <span className="mt-0.5 block text-[11px] leading-snug text-sea-400">{hint}</span>
+          ) : null}
+        </div>
 
         <div className="flex items-center gap-2 sm:shrink-0">
           <div className="flex" onMouseLeave={() => setHover(0)}>

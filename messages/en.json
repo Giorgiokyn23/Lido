@@ -189,11 +189,11 @@
     "family_services": "Nursery, playground, kids' area",
     "accessibility": "Walkways, beach wheelchair, dedicated services",
     "seabed_quality": "Seabed quality and water cleanliness",
-    "pet_friendly": "Facilities for dogs and pets",
+    "pet_friendly": "Dogs: beach access, water bowls, shaded area",
     "price_transparency": "Clear price list and value for money",
     "sicurezza": "Surveillance, lifeguards, maintenance and cleanliness",
     "rispetto_regole": "Umbrella spacing, free shoreline, public-domain rules",
-    "atmosfera": "Family-friendly vibe and welcome"
+    "atmosfera": "Vibe and welcome: staff, music, overall feel"
   },
   "facts": {
     "accesso_mare": {
@@ -272,6 +272,8 @@
     "whatUsersSay": "User-reported information",
     "factsNote": "These are statements by reviewers, not findings by LidoRank or any authority.",
     "civicTitle": "Public-domain use & civic value",
+    "civicWhyLabel": "Why it matters",
+    "civicWhy": "The beach is a shared public asset licensed to private operators. The EU's «Bolkestein» Directive asks that these concessions genuinely serve the community: access for everyone and not only for season-pass holders, transparent prices and rules, a beach that stays alive beyond summer. These signals capture exactly that.",
     "civicNote": "What users say about the use of this public asset. These are their statements, not findings by LidoRank, and they don't affect the score.",
     "yesShort": "yes",
     "reviewsHeading": "Reviews ({n})",

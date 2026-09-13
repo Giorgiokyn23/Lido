@@ -33,6 +33,7 @@ export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; i
   const [state, formAction] = useFormState(submitReview, initial);
   const tr = useTranslations("review");
   const tm = useTranslations("metrics");
+  const th = useTranslations("metricHints");
   const tf = useTranslations("facts");
   const tb = useTranslations("boolFacts");
 
@@ -86,7 +87,7 @@ export function ReviewForm({ beachId, isLoggedIn = false }: { beachId: string; i
           <p className="mb-2 text-xs text-sea-400">{tr("coreHint")}</p>
           <div className="grid grid-cols-1 gap-x-6 gap-y-1 md:grid-cols-2">
             {CORE_METRIC_KEYS.map((key) => (
-              <StarRating key={key} name={key} label={tm(key)} />
+              <StarRating key={key} name={key} label={tm(key)} hint={th(key)} />
             ))}
           </div>
         </fieldset>

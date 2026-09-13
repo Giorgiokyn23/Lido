@@ -189,11 +189,11 @@
     "family_services": "Nursery, giochi, area bimbi",
     "accessibility": "Passerelle, sedia JOB, servizi dedicati",
     "seabed_quality": "Qualità del fondale e pulizia dell'acqua",
-    "pet_friendly": "Servizi per cani e animali",
+    "pet_friendly": "Servizi per cani: accesso in spiaggia, ciotole, area d'ombra",
     "price_transparency": "Chiarezza listino e rapporto qualità/prezzo",
     "sicurezza": "Sorveglianza, salvataggio, manutenzione e pulizia",
     "rispetto_regole": "Distanze ombrelloni, battigia libera, norme demaniali",
-    "atmosfera": "Clima familiare e accoglienza"
+    "atmosfera": "Clima e accoglienza: personale, musica, vibe generale"
   },
   "facts": {
     "accesso_mare": {
@@ -272,6 +272,8 @@
     "whatUsersSay": "Informazioni segnalate dagli utenti",
     "factsNote": "Sono dichiarazioni di chi ha recensito, non accertamenti di LidoRank né di un'autorità.",
     "civicTitle": "Uso del demanio e valore civico",
+    "civicWhyLabel": "Perché conta",
+    "civicWhy": "La spiaggia è un bene di tutti, dato in concessione ai privati. La direttiva europea «Bolkestein» chiede che queste concessioni servano davvero la collettività: accesso per tutti e non solo per chi paga la stagione, prezzi e regole trasparenti, spiaggia viva anche fuori estate. Questi segnali raccontano proprio questo.",
     "civicNote": "Cosa dicono gli utenti sull'uso di questo bene pubblico. Sono loro dichiarazioni, non accertamenti di LidoRank, e non influiscono sul punteggio.",
     "yesShort": "sì",
     "reviewsHeading": "Recensioni ({n})",
