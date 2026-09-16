@@ -33,6 +33,14 @@ export function SearchExperience({ locale }: { locale: string }) {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [openSug, setOpenSug] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  // cambio pagina: aggiorna e riporta in cima alla lista (block:start rispetta
+  // lo scroll-margin-top, così non finisce sotto la barra fissa)
+  const goToPage = (updater: (p: number) => number) => {
+    setPage(updater);
+    resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const activeFilters = Object.values(filters).filter(Boolean).length;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -319,7 +327,10 @@ export function SearchExperience({ locale }: { locale: string }) {
         <p className="rounded-xl bg-red-50 p-4 text-sm text-red-700">{t("error")} {err}</p>
       ) : (
         <section>
-          <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-sea-500">
+          <div
+            ref={resultsRef}
+            className="mb-3 flex scroll-mt-24 flex-wrap items-center gap-x-3 gap-y-1 text-sm text-sea-500"
+          >
             <span>
               {loading
                 ? t("loading")
@@ -362,7 +373,7 @@ export function SearchExperience({ locale }: { locale: string }) {
           {totalPages > 1 && (
             <nav className="mt-8 flex items-center justify-center gap-3">
               <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                onClick={() => goToPage((p) => Math.max(1, p - 1))}
                 disabled={page <= 1}
                 className="rounded-lg border border-sea-200 bg-white px-4 py-2 text-sm font-medium text-sea-700 hover:bg-sea-50 disabled:opacity-40"
               >
@@ -370,7 +381,7 @@ export function SearchExperience({ locale }: { locale: string }) {
               </button>
               <span className="text-sm text-sea-500">{page} / {totalPages}</span>
               <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                onClick={() => goToPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page >= totalPages}
                 className="rounded-lg border border-sea-200 bg-white px-4 py-2 text-sm font-medium text-sea-700 hover:bg-sea-50 disabled:opacity-40"
               >
