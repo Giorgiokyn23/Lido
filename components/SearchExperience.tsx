@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { METRICS, CONTINENTS, CONTINENT_OF, FLAG_OF, type BeachScore } from "@/lib/types";
 import { BeachCardClient } from "@/components/BeachCardClient";
+import { CommunityStrip } from "@/components/CommunityStrip";
 
 const PAGE_SIZE = 24;
 
@@ -217,7 +218,7 @@ export function SearchExperience({ locale }: { locale: string }) {
       </div>
 
       {/* ricerca + filtri */}
-      <div className="rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
+      <div id="cerca" className="scroll-mt-20 rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
         <div className="flex gap-2">
           <div ref={boxRef} className="relative flex-1">
             <form
@@ -290,6 +291,7 @@ export function SearchExperience({ locale }: { locale: string }) {
             )}
           </button>
         </div>
+        <p className="mt-2 px-1 text-xs text-sea-500">{t("reviewHint")}</p>
 
         {showFilters && (
           <div className="mt-4 border-t border-sea-100 pt-4">
@@ -321,6 +323,8 @@ export function SearchExperience({ locale }: { locale: string }) {
           </div>
         )}
       </div>
+
+      <CommunityStrip />
 
       {/* risultati */}
       {err ? (

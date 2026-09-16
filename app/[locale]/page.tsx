@@ -21,6 +21,14 @@ export default async function HomePage({ params: { locale } }: { params: { local
             <br className="hidden sm:block" /> {t("titleB")}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-sea-50/90">{t("subtitle")}</p>
+          <div className="mt-5 flex justify-center">
+            <a
+              href="#cerca"
+              className="rounded-xl bg-amber-400 px-5 py-2.5 text-sm font-semibold text-sea-900 shadow transition hover:bg-amber-300"
+            >
+              {t("reviewCta")}
+            </a>
+          </div>
         </div>
 
         <svg className="absolute inset-x-0 bottom-0 h-20 w-full" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">

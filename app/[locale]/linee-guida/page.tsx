@@ -22,7 +22,7 @@ const IT: LegalContent = {
     {
       h: "2. Sii onesto e specifico",
       body: [
-        "Basa i voti sulla tua esperienza reale. Un commento concreto (cosa hai visto, quando) è più utile di un giudizio generico. Assegna i voti in modo consapevole: se non puoi giudicare un criterio, lascialo su «Non valutato».",
+        "Basa i voti sulla tua esperienza reale. Un commento concreto (cosa hai visto, quando) è più utile di un giudizio generico. Valuta tutti e nove i criteri in modo consapevole, con il voto che meglio riflette la tua giornata.",
       ],
     },
     {
@@ -69,7 +69,7 @@ const EN: LegalContent = {
     {
       h: "2. Be honest and specific",
       body: [
-        "Base your scores on your real experience. A concrete comment (what you saw, when) is more useful than a generic verdict. Rate consciously: if you can't judge a criterion, leave it as “Not rated”.",
+        "Base your scores on your real experience. A concrete comment (what you saw, when) is more useful than a generic verdict. Rate all nine criteria consciously, with the score that best reflects your day.",
       ],
     },
     {
