@@ -110,6 +110,17 @@ export function SearchExperience({ locale }: { locale: string }) {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  // "intento recensione": arrivando dal bottone giallo (#cerca) mostriamo una
+  // guida chiara sopra i risultati (tocca un bagno per recensirlo)
+  const [reviewIntent, setReviewIntent] = useState(false);
+  useEffect(() => {
+    const check = () =>
+      setReviewIntent(typeof window !== "undefined" && window.location.hash === "#cerca");
+    check();
+    window.addEventListener("hashchange", check);
+    return () => window.removeEventListener("hashchange", check);
+  }, []);
+
   const doSearch = (term: string) => {
     setCommittedQ(term.trim());
     setPage(1);
@@ -349,6 +360,12 @@ export function SearchExperience({ locale }: { locale: string }) {
               </button>
             )}
           </div>
+
+          {reviewIntent && rows.length > 0 && (
+            <div className="mb-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm font-medium text-amber-800">
+              👇 {t("reviewBanner")}
+            </div>
+          )}
 
           {!loading && rows.length === 0 ? (
             <div className="rounded-xl bg-white p-8 text-center text-sea-500 shadow-sm">

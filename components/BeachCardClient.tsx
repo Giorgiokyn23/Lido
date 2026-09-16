@@ -53,11 +53,17 @@ export function BeachCardClient({ beach }: { beach: BeachScore }) {
         })}
       </div>
 
-      <div className="mt-4 flex items-center justify-between text-xs text-sea-400">
-        <span>{tc("reviews", { count: beach.reviews_count })}</span>
-        {beach.distanza_ombrelloni_metri != null && (
-          <span>{tc("umbrellas", { m: beach.distanza_ombrelloni_metri })}</span>
-        )}
+      <div className="mt-4 flex items-center justify-between gap-2 text-xs">
+        <span className="text-sea-400">
+          {tc("reviews", { count: beach.reviews_count })}
+          {beach.distanza_ombrelloni_metri != null && (
+            <span> · {tc("umbrellas", { m: beach.distanza_ombrelloni_metri })}</span>
+          )}
+        </span>
+        {/* piccolo invito: la card è la via per recensire */}
+        <span className="shrink-0 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700 transition group-hover:bg-amber-100">
+          ✍️ {tc("reviewShort")}
+        </span>
       </div>
       {beach.id_concessione && (
         <div className="mt-1 font-mono text-[10px] text-sea-300">conc. {beach.id_concessione}</div>

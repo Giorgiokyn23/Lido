@@ -85,12 +85,12 @@ export function CommunityStrip() {
         ⭐ {t("communityCount", { n: count.toLocaleString() })}
       </p>
       {rows.length > 0 && (
-        <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
+        <div className="mt-2 flex gap-2 overflow-x-auto pb-1 sm:overflow-visible">
           {rows.map((r) => (
             <Link
               key={r.id}
               href={`/lido/${r.beach_id}`}
-              className="w-60 shrink-0 rounded-xl border border-sea-100 bg-sea-50/50 p-3 transition hover:border-sea-300"
+              className="min-w-[15rem] rounded-xl border border-sea-100 bg-sea-50/50 p-3 transition hover:border-sea-300 sm:min-w-0 sm:flex-1"
             >
               <div className="flex items-center gap-2">
                 <span className="rounded-lg bg-sea-500 px-2 py-0.5 text-xs font-bold text-white tabular-nums">

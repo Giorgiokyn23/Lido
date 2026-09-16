@@ -16,7 +16,7 @@ const IT: LegalContent = {
     {
       h: "1. Come pesiamo le recensioni",
       body: [
-        "Ogni recensione ha un peso e uno stato. Le recensioni con account verificato pesano più di quelle anonime. Il punteggio in classifica usa una media pesata di tipo bayesiano descritta nella pagina Metodologia.",
+        "Ogni recensione ha un peso e uno stato. Le recensioni con account registrato pesano più di quelle anonime. Il punteggio in classifica usa una media pesata di tipo bayesiano descritta nella pagina Metodologia.",
         "Controlli automatici (limiti di frequenza e freno anti-ondata) riducono il rischio di manipolazioni.",
       ],
     },
@@ -66,7 +66,7 @@ const EN: LegalContent = {
     {
       h: "1. How we weight reviews",
       body: [
-        "Every review has a weight and a status. Verified-account reviews count more than anonymous ones. Ranking scores use a Bayesian weighted average described on the Methodology page.",
+        "Every review has a weight and a status. Registered-account reviews count more than anonymous ones. Ranking scores use a Bayesian weighted average described on the Methodology page.",
         "Automatic checks (rate limits and an anti-surge damper) reduce the risk of manipulation.",
       ],
     },
