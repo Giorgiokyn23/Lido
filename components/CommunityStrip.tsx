@@ -15,30 +15,42 @@ type Recent = {
   localita?: string;
 };
 
-// Prova sociale leggera in home: quante recensioni ha la community e le ultime.
+// Prova sociale leggera: quante recensioni ha la community e le ultime.
 // Client-side (non pesa sul rendering) e si nasconde da sola se non c'è nulla.
-export function CommunityStrip() {
+// Con `beachIds` la limita a un sottoinsieme di bagni (es. una città).
+export function CommunityStrip({ beachIds }: { beachIds?: string[] } = {}) {
   const t = useTranslations("home");
   const supabase = useMemo(() => createClient(), []);
   const [count, setCount] = useState<number | null>(null);
   const [rows, setRows] = useState<Recent[]>([]);
+  const idsKey = beachIds ? beachIds.join(",") : "*";
 
   useEffect(() => {
     let alive = true;
     (async () => {
-      const { count: c } = await supabase
+      // filtro opzionale per città: nessun bagno → niente da mostrare
+      if (beachIds && beachIds.length === 0) {
+        if (alive) setCount(0);
+        return;
+      }
+
+      let countQ = supabase
         .from("reviews")
         .select("*", { count: "exact", head: true })
         .in("stato", ["pubblicata", "ridotta"]);
+      if (beachIds) countQ = countQ.in("beach_id", beachIds);
+      const { count: c } = await countQ;
 
       const cols = "id,beach_id,commento,created_at," + METRICS.map((m) => m.key).join(",");
-      const { data: rev } = await supabase
+      let revQ = supabase
         .from("reviews")
         .select(cols)
         .in("stato", ["pubblicata", "ridotta"])
         .not("commento", "is", null)
         .order("created_at", { ascending: false })
-        .limit(3);
+        .limit(12);
+      if (beachIds) revQ = revQ.in("beach_id", beachIds);
+      const { data: rev } = await revQ;
 
       const list = (rev ?? []) as unknown as Record<string, number | string | null>[];
       const ids = list.map((r) => String(r.beach_id));
@@ -75,7 +87,8 @@ export function CommunityStrip() {
     return () => {
       alive = false;
     };
-  }, [supabase]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [supabase, idsKey]);
 
   if (!count) return null; // vuoto o in caricamento → nessun peso in pagina
 
@@ -85,12 +98,12 @@ export function CommunityStrip() {
         ⭐ {t("communityCount", { n: count.toLocaleString() })}
       </p>
       {rows.length > 0 && (
-        <div className="mt-2 flex gap-2 overflow-x-auto pb-1 sm:overflow-visible">
+        <div className="mt-2 flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
           {rows.map((r) => (
             <Link
               key={r.id}
               href={`/lido/${r.beach_id}`}
-              className="min-w-[15rem] rounded-xl border border-sea-100 bg-sea-50/50 p-3 transition hover:border-sea-300 sm:min-w-0 sm:flex-1"
+              className="w-[15rem] shrink-0 snap-start rounded-xl border border-sea-100 bg-sea-50/50 p-3 transition hover:border-sea-300"
             >
               <div className="flex items-center gap-2">
                 <span className="rounded-lg bg-sea-500 px-2 py-0.5 text-xs font-bold text-white tabular-nums">

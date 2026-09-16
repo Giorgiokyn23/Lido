@@ -28,7 +28,7 @@ const IT: LegalContent = {
     {
       h: "3. Distinzione tra ciò che segnali e ciò che giudichi",
       body: [
-        "I voti sui nove criteri sono opinioni personali. Le informazioni fattuali che segnali (accesso al mare, docce, chip) vanno indicate con onestà: sono tue dichiarazioni, non accertamenti di LidoRank né di un'autorità.",
+        "I voti sui otto criteri sono opinioni personali. Le informazioni fattuali che segnali (accesso al mare, docce, chip) vanno indicate con onestà: sono tue dichiarazioni, non accertamenti di LidoRank né di un'autorità.",
         "Anche il criterio «Rispetto Regole» esprime la tua percezione ed esperienza, non una certificazione della legalità dello stabilimento. Non presentare un'opinione come un fatto accertato.",
       ],
     },
@@ -69,7 +69,7 @@ const EN: LegalContent = {
     {
       h: "2. Be honest and specific",
       body: [
-        "Base your scores on your real experience. A concrete comment (what you saw, when) is more useful than a generic verdict. Rate all nine criteria consciously, with the score that best reflects your day.",
+        "Base your scores on your real experience. A concrete comment (what you saw, when) is more useful than a generic verdict. Rate all eight criteria consciously, with the score that best reflects your day.",
       ],
     },
     {

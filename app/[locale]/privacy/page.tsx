@@ -25,7 +25,7 @@ const IT: LegalContent = {
       h: "2. Quali dati raccogliamo",
       body: [
         "Dati dell'account (se ti registri): indirizzo email e credenziali di accesso gestite dal nostro fornitore di autenticazione.",
-        "Recensioni: i voti sui nove criteri, l'eventuale commento, le informazioni fattuali che indichi e il periodo di visita dichiarato.",
+        "Recensioni: i voti sui otto criteri, l'eventuale commento, le informazioni fattuali che indichi e il periodo di visita dichiarato.",
         "Segnalazioni di illeciti (condotta di un bagno) e segnalazioni di recensioni come contenuto illecito (DSA art. 16): motivo, descrizione ed eventuale email di contatto che scegli di fornire, oltre alla dichiarazione di buona fede.",
         "Dati tecnici: per limitare gli abusi conserviamo un hash dell'indirizzo IP (con salt), non l'IP in chiaro, oltre a log tecnici essenziali.",
       ],
@@ -103,7 +103,7 @@ const EN: LegalContent = {
       h: "2. What data we collect",
       body: [
         "Account data (if you register): email address and sign-in credentials handled by our authentication provider.",
-        "Reviews: your scores across the nine criteria, any comment, the factual information you report and the visit period you declare.",
+        "Reviews: your scores across the eight criteria, any comment, the factual information you report and the visit period you declare.",
         "Reports of a club's violations, and reports of reviews as unlawful content (DSA Art. 16): reason, description and any contact email you choose to provide, plus the good-faith declaration.",
         "Technical data: to limit abuse we store a salted hash of your IP address, not the IP itself, plus essential technical logs.",
       ],

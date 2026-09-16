@@ -133,7 +133,6 @@ export const METRICS = [
   { key: "family_services",    label: "Servizi Famiglie",      hint: "Nursery, giochi, area bimbi" },
   { key: "accessibility",      label: "Accessibilità",         hint: "Passerelle, sedia JOB, servizi dedicati" },
   { key: "seabed_quality",     label: "Fondale & Acqua",       hint: "Qualità del fondale e pulizia dell'acqua" },
-  { key: "pet_friendly",       label: "Pet Friendly",          hint: "Servizi per cani e animali" },
   { key: "price_transparency", label: "Trasparenza Prezzi",    hint: "Chiarezza listino e rapporto qualità/prezzo" },
   { key: "sicurezza",          label: "Sicurezza",             hint: "Sorveglianza, salvataggio, manutenzione e pulizia" },
   { key: "rispetto_regole",    label: "Rispetto Regole",       hint: "Distanze ombrelloni, battigia libera, norme demaniali" },
@@ -142,11 +141,13 @@ export const METRICS = [
 
 export type MetricKey = (typeof METRICS)[number]["key"];
 
-// I 6 criteri principali: obbligatori (ma a scelta cosciente).
-// I 3 extra (sicurezza, rispetto_regole, atmosfera): opzionali, ammettono "Non valutato".
+// Gli 8 criteri di qualità: tutti obbligatori (scelta cosciente).
+// Pet Friendly è stato tolto dai voti: non è un asse di qualità né una materia
+// Bolkestein, e "pet friendly 3/5" confondeva (solo chi ha un cane lo valuta).
+// Ora è un FATTO segnalato (accesso_cani), non un punteggio.
 export const CORE_METRIC_KEYS: MetricKey[] = [
   "space_privacy", "family_services", "accessibility",
-  "seabed_quality", "pet_friendly", "price_transparency",
+  "seabed_quality", "price_transparency",
   "sicurezza", "rispetto_regole", "atmosfera",
 ];
 export const OPTIONAL_METRIC_KEYS: MetricKey[] = [];
@@ -186,6 +187,19 @@ export const FACTS = [
       { value: "inclusa",      label: "Inclusa" },
       { value: "a_pagamento",  label: "A pagamento" },
       { value: "assente",      label: "Assente" },
+    ],
+  },
+  {
+    // Ex criterio a punteggio "Pet Friendly", ora fatto segnalato: informazione
+    // utile a chi ha un cane, ma non un voto di qualità.
+    key: "accesso_cani",
+    label: "Accesso cani",
+    hint: "",
+    options: [
+      { value: "si",            label: "Sì, ammessi" },
+      { value: "area_dedicata", label: "Area cani dedicata" },
+      { value: "fascia_oraria", label: "Solo in certi orari" },
+      { value: "no",            label: "Non ammessi" },
     ],
   },
 ] as const;
@@ -260,7 +274,6 @@ export interface BeachScore extends Beach {
   avg_family_services: number | null;
   avg_accessibility: number | null;
   avg_seabed_quality: number | null;
-  avg_pet_friendly: number | null;
   avg_price_transparency: number | null;
   avg_sicurezza: number | null;
   avg_rispetto_regole: number | null;
@@ -277,7 +290,7 @@ export interface Review {
   family_services: number;
   accessibility: number;
   seabed_quality: number;
-  pet_friendly: number;
+  pet_friendly: number | null; // storico: non più raccolto né conteggiato
   price_transparency: number;
   sicurezza: number | null;
   rispetto_regole: number | null;
@@ -285,6 +298,7 @@ export interface Review {
   accesso_mare: string | null;
   docce: string | null;
   acqua_calda: string | null;
+  accesso_cani: string | null;
   battigia_libera: boolean | null;
   chip_richiesto: boolean | null;
   eventi_giovani: boolean | null;
