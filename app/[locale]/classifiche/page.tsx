@@ -18,7 +18,7 @@ const medal = (n: number) => (n === 1 ? "🥇" : n === 2 ? "🥈" : n === 3 ? "�
 export default async function ClassifichePage({
   searchParams,
 }: {
-  searchParams: { scope?: string; regione?: string; comune?: string; paese?: string };
+  searchParams: { scope?: string; regione?: string; comune?: string; paese?: string; cat?: string };
 }) {
   const tc = await getTranslations("countries");
   const tcont = await getTranslations("continents");
@@ -37,14 +37,17 @@ export default async function ClassifichePage({
   const regione = searchParams.regione || "Toscana";
   const comune = searchParams.comune || "Livorno";
 
+  // Categoria: bagni (default) o porti — due graduatorie separate.
+  const cat: "bagni" | "porti" = searchParams.cat === "porti" ? "porti" : "bagni";
+  const porti = cat === "porti";
+
   const supabase = createClient();
-  // Solo strutture balneari: i porti hanno una classifica propria (categoria separata),
-  // non vanno mescolati ai bagni in questa graduatoria.
+  // Bagni e porti hanno classifiche distinte (categoria separata nella vista).
   let query = supabase
     .from("beach_rankings")
     .select("*")
     .eq("paese", paese)
-    .in("tipo", ["stabilimento", "spiaggia"]);
+    .in("tipo", porti ? ["porto"] : ["stabilimento", "spiaggia"]);
 
   if (scope === "regione") {
     query = query.eq("regione", regione).order("rank_regione").limit(50);
@@ -65,25 +68,42 @@ export default async function ClassifichePage({
   // Così niente buchi: la lista è numerata 1,2,3… senza "#2 senza #1".
   const rows = allRows.filter((r) => (r.reviews_count ?? 0) >= minReviews);
 
+  const withCat = (sp: URLSearchParams) => {
+    if (porti) sp.set("cat", "porti");
+    return sp;
+  };
   const tabHref = (s: Scope) => {
     const sp = new URLSearchParams({ paese, scope: s });
     if (s === "regione") sp.set("regione", regione);
     if (s === "comune") sp.set("comune", comune);
+    return `/classifiche?${withCat(sp).toString()}`;
+  };
+  const countryHref = (code: string) =>
+    `/classifiche?${withCat(new URLSearchParams({ paese: code })).toString()}`;
+  const catHref = (c: "bagni" | "porti") => {
+    const sp = new URLSearchParams({ paese, scope });
+    if (scope === "regione") sp.set("regione", regione);
+    if (scope === "comune") sp.set("comune", comune);
+    if (c === "porti") sp.set("cat", "porti");
     return `/classifiche?${sp.toString()}`;
   };
-  const countryHref = (code: string) => `/classifiche?paese=${code}`;
 
   const chip = (active: boolean) =>
     `rounded-full px-3 py-1.5 text-sm font-medium transition ${
       active ? "bg-sea-600 text-white" : "bg-sea-50 text-sea-700 hover:bg-sea-100"
     }`;
 
-  const caption =
-    scope === "nazionale"
-      ? tr("capNational", { flag, country: tc(paese) })
+  const caption = porti
+    ? scope === "nazionale"
+      ? tr("capNationalPorti", { flag, country: tc(paese) })
       : scope === "regione"
-      ? tr("capRegion", { region: regione })
-      : tr("capTown", { town: comune });
+      ? tr("capRegionPorti", { region: regione })
+      : tr("capTownPorti", { town: comune })
+    : scope === "nazionale"
+    ? tr("capNational", { flag, country: tc(paese) })
+    : scope === "regione"
+    ? tr("capRegion", { region: regione })
+    : tr("capTown", { town: comune });
 
   return (
     <div className="space-y-6">
@@ -93,6 +113,12 @@ export default async function ClassifichePage({
         <Link href="/metodologia" className="mt-1 inline-block text-sm text-sea-500 underline hover:text-sea-700">
           {tr("methodologyLink")}
         </Link>
+      </div>
+
+      {/* categoria: bagni o porti (due graduatorie separate) */}
+      <div className="flex flex-wrap gap-2">
+        <Link href={catHref("bagni")} className={chip(!porti)}>{tr("catBagni")}</Link>
+        <Link href={catHref("porti")} className={chip(porti)}>{tr("catPorti")}</Link>
       </div>
 
       {/* selettore: continenti → bandiere */}

@@ -431,7 +431,12 @@
     "weightedScore": "weighted score",
     "methodologyLink": "How the rankings work →",
     "buildingTitle": "Rankings in progress",
-    "buildingBody": "In this scope no beach club has yet reached the {n} reviews needed to enter the ranking. Rankings fill up as real reviews come in."
+    "buildingBody": "In this scope no beach club has yet reached the {n} reviews needed to enter the ranking. Rankings fill up as real reviews come in.",
+    "catBagni": "🏖️ Beaches",
+    "catPorti": "⚓ Marinas",
+    "capNationalPorti": "{flag} Top marinas — {country}",
+    "capRegionPorti": "Top marinas in {region}",
+    "capTownPorti": "Top marinas in {town}"
   },
   "login": {
     "title": "Sign in to LidoRank",

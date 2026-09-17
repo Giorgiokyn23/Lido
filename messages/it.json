@@ -431,7 +431,12 @@
     "weightedScore": "punteggio pesato",
     "methodologyLink": "Come funzionano le classifiche →",
     "buildingTitle": "Classifiche in costruzione",
-    "buildingBody": "In questo ambito nessun lido ha ancora raggiunto le {n} recensioni necessarie per entrare in classifica. Le graduatorie si popolano man mano che arrivano recensioni vere."
+    "buildingBody": "In questo ambito nessun lido ha ancora raggiunto le {n} recensioni necessarie per entrare in classifica. Le graduatorie si popolano man mano che arrivano recensioni vere.",
+    "catBagni": "🏖️ Bagni",
+    "catPorti": "⚓ Porti",
+    "capNationalPorti": "{flag} I migliori porti — {country}",
+    "capRegionPorti": "I migliori porti in {region}",
+    "capTownPorti": "I migliori porti di {town}"
   },
   "login": {
     "title": "Accedi a LidoRank",
