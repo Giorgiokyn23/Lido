@@ -192,7 +192,7 @@ export function ReviewForm({
         )}
 
         {/* Uso del demanio e valore civico (fatti, non voti) */}
-        {showBeachFacts && (
+        {showBeachFacts && CIVIC_FACTS.length > 0 && (
         <fieldset className="rounded-xl border border-sea-100 bg-white p-4">
           <legend className="px-1 text-sm font-semibold text-sea-800">
             {tr("civicTitle")} <span className="font-normal text-sea-400">{tr("factsOptional")}</span>

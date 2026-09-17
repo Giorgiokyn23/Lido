@@ -198,7 +198,7 @@ export const SUBPOINTS: Record<string, string[]> = {
   family_services:    ["sg_ristorazione", "sg_famiglie", "sg_noleggio", "sg_personale", "sg_accessori"],
   accessibility:      ["ac_passerelle", "ac_job", "ac_servizi", "ac_percorso", "ac_personale"],
   seabed_quality:     ["fa_acqua", "fa_fondale", "fa_balneazione", "fa_scarichi", "fa_ambiente"],
-  price_transparency: ["pr_listino", "pr_chiari", "pr_giornaliero", "pr_agevolate", "pr_qualita_prezzo"],
+  price_transparency: ["pr_listino", "pr_chiari", "pr_giornaliero", "pr_agevolate", "pr_qualita_prezzo", "pr_concessione"],
   sicurezza:          ["si_bagnino", "si_postazione", "si_bandiere", "si_soccorso", "si_manutenzione"],
   atmosfera:          ["at_accoglienza", "at_clima", "at_decoro", "at_rumore", "at_inclusione"],
   eventi_comunita:    ["ev_culturali", "ev_giovani", "ev_residenti", "ev_collaborazioni", "ev_fuori_stagione"],
@@ -304,17 +304,14 @@ export type BoolFactKey = (typeof BOOL_FACTS)[number]["key"];
 // Bolkestein): osservabili da un bagnante, NON sono voti e NON entrano nei
 // punteggi/classifiche. Aggregati sulla scheda come percentuali. Etichette dal
 // namespace "boolFacts" (it/en).
-export const CIVIC_FACTS = [
-  // NB: "eventi_giovani" è stato promosso a criterio a punteggio ("Eventi &
-  // Comunità"), quindi non è più un semplice fatto sì/no qui.
-  { key: "fuori_stagione",              label: "Aperto o attivo anche fuori stagione" },
-  { key: "ingresso_giornaliero",        label: "Ingresso a giornata senza abbonamento stagionale" },
-  { key: "tariffe_agevolate",           label: "Tariffe agevolate per residenti, famiglie o disabili" },
-  { key: "prezzi_esposti",              label: "Listino prezzi esposto e visibile" },
-  { key: "estremi_concessione_esposti", label: "Estremi della concessione demaniale esposti al pubblico" },
-] as const;
+// RIMOSSI (ridondanti coi sotto-punti): fuori_stagione↔ev_fuori_stagione,
+// ingresso_giornaliero↔pr_giornaliero, tariffe_agevolate↔pr_agevolate,
+// prezzi_esposti↔pr_listino. L'unico non duplicato ("estremi concessione
+// esposti") è stato spostato tra i sotto-punti di Trasparenza Prezzi (pr_concessione).
+// Sezione svuotata: il form e la scheda non mostrano più il blocco civico.
+export const CIVIC_FACTS: { key: string; label: string }[] = [];
 
-export type CivicFactKey = (typeof CIVIC_FACTS)[number]["key"];
+export type CivicFactKey = string;
 
 // Motivi per segnalare una RECENSIONE come contenuto illecito (DSA art. 16).
 // Le etichette visibili vengono tradotte dal namespace "noticeTipi" (it/en).
