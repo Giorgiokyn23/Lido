@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "LidoRank — recensioni di lidi e beach club",
     short_name: "LidoRank",
     description:
-      "Recensioni strutturate e trasparenti di lidi, beach club e porti nel mondo su otto criteri.",
+      "Recensioni strutturate e trasparenti di lidi, beach club e porti nel mondo su dieci criteri.",
     lang: "it",
     dir: "ltr",
     start_url: "/",

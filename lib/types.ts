@@ -135,20 +135,26 @@ export const METRICS = [
   { key: "seabed_quality",     label: "Fondale & Acqua",       hint: "Qualità del fondale e pulizia dell'acqua" },
   { key: "price_transparency", label: "Trasparenza Prezzi",    hint: "Chiarezza listino e rapporto qualità/prezzo" },
   { key: "sicurezza",          label: "Sicurezza",             hint: "Sorveglianza, salvataggio, manutenzione e pulizia" },
-  { key: "rispetto_regole",    label: "Rispetto Regole",       hint: "Distanze ombrelloni, battigia libera, norme demaniali" },
   { key: "atmosfera",          label: "Atmosfera",             hint: "Clima familiare e accoglienza" },
+  { key: "eventi_comunita",    label: "Eventi & Comunità",     hint: "Eventi culturali, attività per giovani, iniziative per la comunità" },
+  { key: "pulizia_igiene",     label: "Pulizia & Igiene",      hint: "Pulizia di spiaggia, bagni e docce; cura degli spazi" },
+  { key: "impianti_sportivi",  label: "Impianti Sportivi",     hint: "Campi e attrezzature: beach volley, ping pong, calcetto, biliardino" },
 ] as const;
 
 export type MetricKey = (typeof METRICS)[number]["key"];
 
-// Gli 8 criteri di qualità: tutti obbligatori (scelta cosciente).
-// Pet Friendly è stato tolto dai voti: non è un asse di qualità né una materia
-// Bolkestein, e "pet friendly 3/5" confondeva (solo chi ha un cane lo valuta).
-// Ora è un FATTO segnalato (accesso_cani), non un punteggio.
+// I 10 criteri di qualità: tutti obbligatori (scelta cosciente).
+// - Pet Friendly tolto dai voti (ora fatto "accesso_cani"): non è un asse di
+//   qualità e "pet friendly 3/5" confondeva.
+// - "Rispetto Regole" sostituito da "Eventi & Comunità": le recensioni storiche
+//   NON si perdono, il voto di rispetto_regole è stato ereditato da eventi_comunita
+//   (backfill in migrazione), così l'overall dei vecchi resta invariato.
+// - Nuovi: pulizia_igiene, impianti_sportivi (le recensioni vecchie non li hanno →
+//   la media usa i criteri effettivamente votati, present-mean).
 export const CORE_METRIC_KEYS: MetricKey[] = [
   "space_privacy", "family_services", "accessibility",
-  "seabed_quality", "price_transparency",
-  "sicurezza", "rispetto_regole", "atmosfera",
+  "seabed_quality", "price_transparency", "sicurezza", "atmosfera",
+  "eventi_comunita", "pulizia_igiene", "impianti_sportivi",
 ];
 export const OPTIONAL_METRIC_KEYS: MetricKey[] = [];
 
@@ -219,7 +225,8 @@ export type BoolFactKey = (typeof BOOL_FACTS)[number]["key"];
 // punteggi/classifiche. Aggregati sulla scheda come percentuali. Etichette dal
 // namespace "boolFacts" (it/en).
 export const CIVIC_FACTS = [
-  { key: "eventi_giovani",              label: "Eventi/attività per giovani e comunità" },
+  // NB: "eventi_giovani" è stato promosso a criterio a punteggio ("Eventi &
+  // Comunità"), quindi non è più un semplice fatto sì/no qui.
   { key: "fuori_stagione",              label: "Aperto o attivo anche fuori stagione" },
   { key: "ingresso_giornaliero",        label: "Ingresso a giornata senza abbonamento stagionale" },
   { key: "tariffe_agevolate",           label: "Tariffe agevolate per residenti, famiglie o disabili" },
@@ -276,8 +283,10 @@ export interface BeachScore extends Beach {
   avg_seabed_quality: number | null;
   avg_price_transparency: number | null;
   avg_sicurezza: number | null;
-  avg_rispetto_regole: number | null;
   avg_atmosfera: number | null;
+  avg_eventi_comunita: number | null;
+  avg_pulizia_igiene: number | null;
+  avg_impianti_sportivi: number | null;
   avg_overall: number | null;
 }
 
@@ -293,8 +302,11 @@ export interface Review {
   pet_friendly: number | null; // storico: non più raccolto né conteggiato
   price_transparency: number;
   sicurezza: number | null;
-  rispetto_regole: number | null;
+  rispetto_regole: number | null; // storico: non più raccolto (ereditato da eventi_comunita)
   atmosfera: number | null;
+  eventi_comunita: number | null;
+  pulizia_igiene: number | null;
+  impianti_sportivi: number | null;
   accesso_mare: string | null;
   docce: string | null;
   acqua_calda: string | null;

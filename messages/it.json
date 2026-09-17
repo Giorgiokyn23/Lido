@@ -7,7 +7,7 @@
     "tagline": "Il Trustpilot dei bagni"
   },
   "home": {
-    "badge": "30.000+ lidi e porti · 8 criteri · nel mondo",
+    "badge": "30.000+ lidi e porti · 10 criteri · nel mondo",
     "titleA": "LidoRank: qualità di un bagno",
     "titleB": "su criteri balneari e di demanio",
     "subtitle": "Prezzi, accoglienza, famiglie, accesso al mare: scopri com'è davvero un bagno dalle recensioni di chi c'è stato — e contribuisci a tenere le spiagge, che sono di tutti, accessibili e trasparenti.",
@@ -41,16 +41,18 @@
   },
   "metrics": {
     "space_privacy": "Spazio & Privacy",
-    "family_services": "Servizi Famiglie",
+    "family_services": "Servizi generali",
     "accessibility": "Accessibilità",
     "seabed_quality": "Fondale & Acqua",
     "price_transparency": "Trasparenza Prezzi",
     "sicurezza": "Sicurezza",
-    "rispetto_regole": "Rispetto Regole",
-    "atmosfera": "Atmosfera"
+    "atmosfera": "Atmosfera",
+    "eventi_comunita": "Eventi & Comunità",
+    "pulizia_igiene": "Pulizia & Igiene",
+    "impianti_sportivi": "Impianti Sportivi"
   },
   "footer": {
-    "desc": "Le recensioni verticali di lidi e beach club nel mondo. Dati strutturati e trasparenti, su otto criteri.",
+    "desc": "Le recensioni verticali di lidi e beach club nel mondo. Dati strutturati e trasparenti, su dieci criteri.",
     "usefulTitle": "A chi è utile",
     "usefulText": "Ai bagnanti per scegliere, ai gestori per farsi conoscere, e a Comuni ed enti di controllo del demanio marittimo come base dati sul rispetto delle regole. LidoRank è un progetto indipendente: nessuna affiliazione con enti pubblici salvo accordi dichiarati.",
     "creditsTitle": "Crediti",
@@ -144,7 +146,7 @@
     "francescoBio": "Ricercatore italiano di dottorato in Scienze Politiche e Relazioni Internazionali alla University of Southern California, specializzato in politica comparata, relazioni internazionali e teoria politica analitica. La sua ricerca esamina l'attuazione e le conseguenze locali della direttiva Bolkestein, con un focus più ampio su come il capitale sociale locale plasmi le risposte delle comunità e delle istituzioni alle politiche di liberalizzazione del mercato nel processo di integrazione europea. Basandosi sul lavoro sul campo con funzionari pubblici, gestori balneari e bagnanti, studia le strategie di armonizzazione, adattamento e cambiamento istituzionale. Nato a Livorno, Francesco ha conseguito un MA in Legal and Political Theory alla University College London e un BA in Economia e Finanza all'Università di Pisa.",
     "howTitle": "Come nasce LidoRank",
     "p1": "LidoRank nasce da una domanda semplice: perché scegliere uno stabilimento balneare è ancora così poco trasparente? Prezzi non sempre esposti, accesso al mare che dovrebbe essere libero per legge, servizi per famiglie e accessibilità difficili da confrontare. Nel pieno del dibattito sulle concessioni (direttiva Bolkestein), mancava uno strumento neutrale.",
-    "p2": "L'idea è unire due mondi: il rigore dei dati pubblici (le concessioni del demanio marittimo) e l'esperienza reale delle persone (recensioni verticali su otto criteri). Una base informativa utile ai cittadini per scegliere e agli enti per vigilare.",
+    "p2": "L'idea è unire due mondi: il rigore dei dati pubblici (le concessioni del demanio marittimo) e l'esperienza reale delle persone (recensioni verticali su dieci criteri). Una base informativa utile ai cittadini per scegliere e agli enti per vigilare.",
     "p3": "LidoRank è co-fondato da Giorgio Menicagli Pirina e Francesco Mancuso. Giorgio guida prodotto e sviluppo tecnico; Francesco l'analisi delle politiche, la ricerca e le relazioni istituzionali. Realizzato anche con l'ausilio di strumenti di intelligenza artificiale, sotto supervisione umana.",
     "back": "← Torna alla home"
   },
@@ -175,7 +177,7 @@
     "commentLabel": "Commento (opzionale)",
     "commentPlaceholder": "Com'è stata la tua esperienza al lido?",
     "coreTitle": "Valuta tutti i criteri",
-    "coreHint": "Tocca le stelle (mezzo voto ammesso). Tutti e 8 i criteri sono obbligatori.",
+    "coreHint": "Tocca le stelle (mezzo voto ammesso). Tutti e 10 i criteri sono obbligatori.",
     "optionalTitle": "Criteri aggiuntivi",
     "optionalHint": "Se non puoi giudicarli, lasciali su «Non valutato».",
     "notRated": "Non valutato",
@@ -191,13 +193,15 @@
   },
   "metricHints": {
     "space_privacy": "Distanza tra ombrelloni e privacy",
-    "family_services": "Nursery, giochi, area bimbi",
+    "family_services": "Ristorazione, servizi per famiglie e bambini, comfort e noleggi",
     "accessibility": "Passerelle, sedia JOB, servizi dedicati",
     "seabed_quality": "Qualità del fondale e pulizia dell'acqua",
     "price_transparency": "Chiarezza listino e rapporto qualità/prezzo",
     "sicurezza": "Sorveglianza, salvataggio, manutenzione e pulizia",
-    "rispetto_regole": "Distanze ombrelloni, battigia libera, norme demaniali",
-    "atmosfera": "Clima e accoglienza: personale, musica, vibe generale"
+    "atmosfera": "Clima e accoglienza: personale, musica, vibe generale",
+    "eventi_comunita": "Eventi culturali, attività per giovani, iniziative per la comunità",
+    "pulizia_igiene": "Pulizia di spiaggia, bagni e docce; cura degli spazi",
+    "impianti_sportivi": "Campi e attrezzature: beach volley, ping pong, calcetto, biliardino"
   },
   "facts": {
     "accesso_mare": {
@@ -241,7 +245,6 @@
   "boolFacts": {
     "battigia_libera": "Battigia (5 m) libera e transitabile",
     "chip_richiesto": "Serve chip / cauzione per entrare",
-    "eventi_giovani": "Eventi/attività per giovani e comunità",
     "fuori_stagione": "Aperto o attivo anche fuori stagione",
     "ingresso_giornaliero": "Ingresso a giornata senza abbonamento stagionale",
     "tariffe_agevolate": "Tariffe agevolate per residenti, famiglie o disabili",
@@ -370,7 +373,7 @@
     "title": "Come funzionano le classifiche",
     "intro": "Trasparenza prima di tutto: ecco come nascono i punteggi e le graduatorie di LidoRank, e perché a volte una classifica appare «in costruzione».",
     "s1Title": "Da dove vengono le recensioni",
-    "s1Body": "Ogni voto arriva da chi compila il questionario sui nostri otto criteri. Distinguiamo tre categorie, tenute sempre separate: recensione anonima; recensione con account registrato (di cui confermiamo l'indirizzo email); e — in futuro — visita verificata, l'unica che attesterà l'effettiva presenza sul posto. Non sollecitiamo né pubblichiamo recensioni finte o comprate e, quando rileviamo manipolazioni, interveniamo come spiegato più sotto.",
+    "s1Body": "Ogni voto arriva da chi compila il questionario sui nostri dieci criteri. Distinguiamo tre categorie, tenute sempre separate: recensione anonima; recensione con account registrato (di cui confermiamo l'indirizzo email); e — in futuro — visita verificata, l'unica che attesterà l'effettiva presenza sul posto. Non sollecitiamo né pubblichiamo recensioni finte o comprate e, quando rileviamo manipolazioni, interveniamo come spiegato più sotto.",
     "s2Title": "Punteggio pesato, non media semplice",
     "s2Body": "Il punteggio in classifica non è la media dei voti: usiamo una media pesata di tipo bayesiano. Partiamo da una base prudente pari alla media generale di tutte le recensioni pubblicate sulla piattaforma, con un peso equivalente a circa 8 recensioni: con pochi voti il punteggio resta vicino a questa media, e man mano che le recensioni aumentano riflette sempre più il giudizio reale del singolo lido. Così un lido con una sola recensione entusiasta non scavalca uno con decine di giudizi solidi.",
     "s3Title": "Soglie per entrare in classifica",

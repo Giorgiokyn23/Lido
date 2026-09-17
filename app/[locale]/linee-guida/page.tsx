@@ -28,8 +28,8 @@ const IT: LegalContent = {
     {
       h: "3. Distinzione tra ciò che segnali e ciò che giudichi",
       body: [
-        "I voti sui otto criteri sono opinioni personali. Le informazioni fattuali che segnali (accesso al mare, docce, chip) vanno indicate con onestà: sono tue dichiarazioni, non accertamenti di LidoRank né di un'autorità.",
-        "Anche il criterio «Rispetto Regole» esprime la tua percezione ed esperienza, non una certificazione della legalità dello stabilimento. Non presentare un'opinione come un fatto accertato.",
+        "I voti sui dieci criteri sono opinioni personali. Le informazioni fattuali che segnali (accesso al mare, docce, chip) vanno indicate con onestà: sono tue dichiarazioni, non accertamenti di LidoRank né di un'autorità.",
+        "Tutti i voti esprimono la tua percezione ed esperienza, non una certificazione della legalità o della conformità dello stabilimento. Non presentare un'opinione come un fatto accertato.",
       ],
     },
     {
@@ -69,14 +69,14 @@ const EN: LegalContent = {
     {
       h: "2. Be honest and specific",
       body: [
-        "Base your scores on your real experience. A concrete comment (what you saw, when) is more useful than a generic verdict. Rate all eight criteria consciously, with the score that best reflects your day.",
+        "Base your scores on your real experience. A concrete comment (what you saw, when) is more useful than a generic verdict. Rate all ten criteria consciously, with the score that best reflects your day.",
       ],
     },
     {
       h: "3. What you report vs what you judge",
       body: [
-        "The nine-criteria scores are personal opinions. The factual information you report (sea access, showers, deposit chip) should be reported honestly: it is your statement, not a finding by LidoRank or any authority.",
-        "The “Rule Compliance” criterion, too, expresses your perception and experience, not a certification of the establishment's legality. Don't present an opinion as an established fact.",
+        "The ten-criteria scores are personal opinions. The factual information you report (sea access, showers, deposit chip) should be reported honestly: it is your statement, not a finding by LidoRank or any authority.",
+        "All scores express your perception and experience, not a certification of the establishment's legality or compliance. Don't present an opinion as an established fact.",
       ],
     },
     {

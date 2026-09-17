@@ -7,7 +7,7 @@
     "tagline": "The Trustpilot of beach clubs"
   },
   "home": {
-    "badge": "30,000+ beach clubs & marinas · 8 criteria · worldwide",
+    "badge": "30,000+ beach clubs & marinas · 10 criteria · worldwide",
     "titleA": "LidoRank: a beach club's quality",
     "titleB": "on beach and public-domain criteria",
     "subtitle": "Prices, welcome, families, sea access: see what a beach club is really like from people who've been there — and help keep the beaches, which belong to everyone, accessible and transparent.",
@@ -41,16 +41,18 @@
   },
   "metrics": {
     "space_privacy": "Space & Privacy",
-    "family_services": "Family Services",
+    "family_services": "General Services",
     "accessibility": "Accessibility",
     "seabed_quality": "Seabed & Water",
     "price_transparency": "Price Transparency",
     "sicurezza": "Safety",
-    "rispetto_regole": "Rule Compliance",
-    "atmosfera": "Atmosphere"
+    "atmosfera": "Atmosphere",
+    "eventi_comunita": "Events & Community",
+    "pulizia_igiene": "Cleanliness & Hygiene",
+    "impianti_sportivi": "Sports Facilities"
   },
   "footer": {
-    "desc": "Vertical reviews of beach clubs and marinas worldwide. Structured, transparent data across eight criteria.",
+    "desc": "Vertical reviews of beach clubs and marinas worldwide. Structured, transparent data across ten criteria.",
     "usefulTitle": "Who it's for",
     "usefulText": "For beachgoers to choose, for operators to get known, and for municipalities and maritime-domain authorities as a dataset on rule compliance. LidoRank is an independent project: no affiliation with public bodies unless explicitly stated.",
     "creditsTitle": "Credits",
@@ -144,7 +146,7 @@
     "francescoBio": "Italian Ph.D. researcher in Political Science and International Relations at the University of Southern California, specializing in comparative politics, international relations, and analytical political theory. His research examines the implementation and local consequences of the Bolkestein Directive, focusing more broadly on how local social capital shapes community and institutional responses to market-liberalization policies within the European integration process. Drawing on fieldwork with public officials, beach operators, and beachgoers, he studies strategies of harmonization, adaptation, and institutional change. A native of Livorno, Francesco holds an MA in Legal and Political Theory from University College London and a BA in Economics and Finance from the University of Pisa.",
     "howTitle": "How LidoRank was born",
     "p1": "LidoRank started from a simple question: why is choosing a beach club still so opaque? Prices not always posted, sea access that should be free by law, family services and accessibility hard to compare. In the middle of the debate on concessions (the Bolkestein Directive), a neutral tool was missing.",
-    "p2": "The idea is to combine two worlds: the rigor of public data (maritime-domain concessions) and the real experience of people (vertical reviews across eight criteria). An information base useful to citizens for choosing and to authorities for oversight.",
+    "p2": "The idea is to combine two worlds: the rigor of public data (maritime-domain concessions) and the real experience of people (vertical reviews across ten criteria). An information base useful to citizens for choosing and to authorities for oversight.",
     "p3": "LidoRank was co-founded by Giorgio Menicagli Pirina and Francesco Mancuso. Giorgio leads product and engineering; Francesco leads policy analysis, research and institutional relations. Built also with the help of artificial-intelligence tools, under human supervision.",
     "back": "← Back to home"
   },
@@ -175,7 +177,7 @@
     "commentLabel": "Comment (optional)",
     "commentPlaceholder": "How was your experience at the beach club?",
     "coreTitle": "Rate all criteria",
-    "coreHint": "Tap the stars (half-star allowed). All 8 criteria are required.",
+    "coreHint": "Tap the stars (half-star allowed). All 10 criteria are required.",
     "optionalTitle": "Additional criteria",
     "optionalHint": "If you can't judge them, leave them as “Not rated”.",
     "notRated": "Not rated",
@@ -191,13 +193,15 @@
   },
   "metricHints": {
     "space_privacy": "Distance between umbrellas and privacy",
-    "family_services": "Nursery, playground, kids' area",
+    "family_services": "Dining, family and kids' services, comfort and rentals",
     "accessibility": "Walkways, beach wheelchair, dedicated services",
     "seabed_quality": "Seabed quality and water cleanliness",
     "price_transparency": "Clear price list and value for money",
     "sicurezza": "Surveillance, lifeguards, maintenance and cleanliness",
-    "rispetto_regole": "Umbrella spacing, free shoreline, public-domain rules",
-    "atmosfera": "Vibe and welcome: staff, music, overall feel"
+    "atmosfera": "Vibe and welcome: staff, music, overall feel",
+    "eventi_comunita": "Cultural events, activities for young people, community initiatives",
+    "pulizia_igiene": "Cleanliness of beach, toilets and showers; care of spaces",
+    "impianti_sportivi": "Courts and equipment: beach volley, ping pong, five-a-side, table football"
   },
   "facts": {
     "accesso_mare": {
@@ -241,7 +245,6 @@
   "boolFacts": {
     "battigia_libera": "Shoreline (5 m) free and walkable",
     "chip_richiesto": "Chip / deposit required to enter",
-    "eventi_giovani": "Events/activities for young people & community",
     "fuori_stagione": "Open or active off-season too",
     "ingresso_giornaliero": "Day entry without a seasonal subscription",
     "tariffe_agevolate": "Reduced fees for residents, families or disabled",
@@ -370,7 +373,7 @@
     "title": "How the rankings work",
     "intro": "Transparency first: here's how LidoRank's scores and rankings are built, and why a ranking is sometimes shown as “in progress”.",
     "s1Title": "Where reviews come from",
-    "s1Body": "Every score comes from someone filling in the questionnaire across our eight criteria. We keep three categories clearly distinct: anonymous review; registered-account review (whose email address we confirm); and — in the future — verified visit, the only one that will attest actual presence on site. We do not solicit or publish fake or paid reviews, and when we detect manipulation we act as explained below.",
+    "s1Body": "Every score comes from someone filling in the questionnaire across our ten criteria. We keep three categories clearly distinct: anonymous review; registered-account review (whose email address we confirm); and — in the future — verified visit, the only one that will attest actual presence on site. We do not solicit or publish fake or paid reviews, and when we detect manipulation we act as explained below.",
     "s2Title": "A weighted score, not a plain average",
     "s2Body": "A ranking score isn't the plain average of the votes: we use a Bayesian weighted average. We start from a cautious baseline equal to the overall mean of all reviews published on the platform, with a weight equivalent to about 8 reviews: with few votes the score stays close to this mean, and as reviews grow it increasingly reflects the club's real judgement. This way a club with a single enthusiastic review doesn't leapfrog one with dozens of solid ones.",
     "s3Title": "Thresholds to enter a ranking",

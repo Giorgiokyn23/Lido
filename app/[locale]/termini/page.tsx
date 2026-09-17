@@ -16,7 +16,7 @@ const IT: LegalContent = {
     {
       h: "1. Oggetto del servizio",
       body: [
-        "LidoRank è una piattaforma che consente agli utenti di recensire stabilimenti balneari su otto criteri e di consultare classifiche e dati aggregati. Le informazioni hanno finalità informative e non sostituiscono verifiche ufficiali.",
+        "LidoRank è una piattaforma che consente agli utenti di recensire stabilimenti balneari su dieci criteri e di consultare classifiche e dati aggregati. Le informazioni hanno finalità informative e non sostituiscono verifiche ufficiali.",
       ],
     },
     {
@@ -75,7 +75,7 @@ const EN: LegalContent = {
     {
       h: "1. The service",
       body: [
-        "LidoRank lets users review beach clubs across eight criteria and browse rankings and aggregate data. The information is for informational purposes and does not replace official checks.",
+        "LidoRank lets users review beach clubs across ten criteria and browse rankings and aggregate data. The information is for informational purposes and does not replace official checks.",
       ],
     },
     {
