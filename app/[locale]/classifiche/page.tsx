@@ -38,7 +38,13 @@ export default async function ClassifichePage({
   const comune = searchParams.comune || "Livorno";
 
   const supabase = createClient();
-  let query = supabase.from("beach_rankings").select("*").eq("paese", paese);
+  // Solo strutture balneari: i porti hanno una classifica propria (categoria separata),
+  // non vanno mescolati ai bagni in questa graduatoria.
+  let query = supabase
+    .from("beach_rankings")
+    .select("*")
+    .eq("paese", paese)
+    .in("tipo", ["stabilimento", "spiaggia"]);
 
   if (scope === "regione") {
     query = query.eq("regione", regione).order("rank_regione").limit(50);

@@ -7,7 +7,6 @@ import { ReviewForm } from "@/components/ReviewForm";
 import { SegnalazioneForm } from "@/components/SegnalazioneForm";
 import { FlagButton } from "@/components/FlagButton";
 import {
-  METRICS,
   FACTS,
   BOOL_FACTS,
   CIVIC_FACTS,
@@ -170,7 +169,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
 
   // aggregati dei SOTTO-PUNTI per criterio (dettagli JSONB): % di "sì" tra chi ha
   // risposto sì/no (il "non applicabile" e il "non so" sono esclusi dal conteggio).
-  const subpointGroups = METRICS.map((m) => {
+  const subpointGroups = metricSet.map((m) => {
     const items = (SUBPOINTS[m.key] ?? [])
       .map((sk) => {
         let si = 0;

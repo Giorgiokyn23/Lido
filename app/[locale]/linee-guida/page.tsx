@@ -22,7 +22,7 @@ const IT: LegalContent = {
     {
       h: "2. Sii onesto e specifico",
       body: [
-        "Basa i voti sulla tua esperienza reale. Un commento concreto (cosa hai visto, quando) è più utile di un giudizio generico. Valuta tutti e nove i criteri in modo consapevole, con il voto che meglio riflette la tua giornata.",
+        "Basa i voti sulla tua esperienza reale. Un commento concreto (cosa hai visto, quando) è più utile di un giudizio generico. Valuta tutti e dieci i criteri in modo consapevole, con il voto che meglio riflette la tua giornata.",
       ],
     },
     {

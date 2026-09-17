@@ -161,7 +161,8 @@ export const PORT_METRICS = [
 export type PortMetricKey = (typeof PORT_METRICS)[number]["key"];
 export const PORT_METRIC_KEYS: PortMetricKey[] = PORT_METRICS.map((m) => m.key);
 
-export const isPorto = (tipo: string | null | undefined): boolean => tipo === "porto";
+export const isPorto = (tipo: string | null | undefined): boolean =>
+  tipo === "porto" || tipo === "marina";
 
 // set di criteri per tipo di struttura (spiaggia/stabilimento → 10 balneari; porto → 8 nautici)
 type MetricDef = { key: string; label: string; hint: string };
@@ -191,7 +192,8 @@ export const OPTIONAL_METRIC_KEYS: MetricKey[] = [];
 // Salvate nella recensione in un unico campo JSONB `dettagli` { <subKey>: stato }.
 // Aggregate sulla scheda come percentuali. Etichette nel namespace "subpoints".
 // Config-driven: aggiungere/togliere un punto = una riga qui + la sua etichetta.
-export const SUBPOINTS: Record<MetricKey, string[]> = {
+export const SUBPOINTS: Record<string, string[]> = {
+  // --- bagni (10 criteri) ---
   space_privacy:      ["sp_distanza", "sp_camminamenti", "sp_postazione", "sp_aree_comuni", "sp_densita"],
   family_services:    ["sg_ristorazione", "sg_famiglie", "sg_noleggio", "sg_personale", "sg_accessori"],
   accessibility:      ["ac_passerelle", "ac_job", "ac_servizi", "ac_percorso", "ac_personale"],
@@ -202,6 +204,15 @@ export const SUBPOINTS: Record<MetricKey, string[]> = {
   eventi_comunita:    ["ev_culturali", "ev_giovani", "ev_residenti", "ev_collaborazioni", "ev_fuori_stagione"],
   pulizia_igiene:     ["pu_bagni", "pu_arenile", "pu_differenziata", "pu_cabine", "pu_circostante"],
   impianti_sportivi:  ["is_beachvolley", "is_pingpong", "is_calcetto", "is_biliardino", "is_noleggio"],
+  // --- porti (8 criteri) — ancorati a Bandiera Blu approdi e disciplina rifiuti portuali ---
+  ormeggio:            ["om_disponibilita", "om_assistenza", "om_pontili", "om_transito"],
+  spazio_manovra:      ["sm_distanza", "sm_manovra", "sm_bacino"],
+  canoni:              ["ca_listino", "ca_bando", "ca_occulti", "ca_contratto"],
+  servizi_tecnici:     ["st_acqua_luce", "st_carburante", "st_alaggio", "st_officina"],
+  servizi_terra:       ["se_servizi", "se_parcheggio", "se_ristoro", "se_vigilanza"],
+  sicurezza_ambiente:  ["sa_salvataggio", "sa_rifiuti", "sa_sentina", "sa_emergenza"],
+  accessibilita_porto: ["ap_pontili", "ap_servizi", "ap_assistenza"],
+  governance:          ["go_trasparenza", "go_rendiconto", "go_eventi", "go_info_ambientale"],
 };
 
 // tutte le chiavi dei sotto-punti in ordine di criterio
@@ -210,11 +221,17 @@ export const SUBPOINT_KEYS: string[] = Object.values(SUBPOINTS).flat();
 // sotto-punti che riflettono un OBBLIGO di legge (⚖️): pesano il doppio nel
 // contributo al punteggio. Deve restare allineato alla funzione SQL dettagli_bonus.
 export const OBLIGATORY_SUBPOINTS: string[] = [
+  // bagni
   "sp_densita",
   "ac_passerelle", "ac_job", "ac_servizi",
   "fa_balneazione",
   "pr_listino",
   "si_bagnino", "si_postazione", "si_bandiere",
+  // porti
+  "ca_listino", "ca_bando",
+  "se_servizi",
+  "sa_salvataggio", "sa_rifiuti", "sa_sentina",
+  "ap_pontili", "ap_servizi",
 ];
 
 // stati ammessi salvati (il "non so" = assente/omesso, quindi neutro)
