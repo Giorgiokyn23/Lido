@@ -10,7 +10,7 @@ import {
   FACTS,
   BOOL_FACTS,
   CIVIC_FACTS,
-  CORE_METRIC_KEYS,
+  SUBPOINTS,
 } from "@/lib/types";
 import { StarRating } from "@/components/StarRating";
 import { Turnstile } from "@/components/Turnstile";
@@ -31,7 +31,15 @@ function SubmitButton() {
 
 const initial: SubmitState = { ok: false };
 
-export function ReviewForm({ beachId }: { beachId: string }) {
+export function ReviewForm({
+  beachId,
+  coreKeys,
+  showBeachFacts = true,
+}: {
+  beachId: string;
+  coreKeys: string[];
+  showBeachFacts?: boolean;
+}) {
   const [state, formAction] = useFormState(submitReview, initial);
   // login rilevato lato client, così la scheda resta cache-abile (ISR)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,6 +52,7 @@ export function ReviewForm({ beachId }: { beachId: string }) {
   const th = useTranslations("metricHints");
   const tf = useTranslations("facts");
   const tb = useTranslations("boolFacts");
+  const ts = useTranslations("subpoints");
 
   if (state.ok) {
     return (
@@ -93,14 +102,48 @@ export function ReviewForm({ beachId }: { beachId: string }) {
         <fieldset>
           <legend className="text-sm font-semibold text-sea-800">{tr("coreTitle")}</legend>
           <p className="mb-2 text-xs text-sea-400">{tr("coreHint")}</p>
-          <div className="grid grid-cols-1 gap-x-6 gap-y-1 md:grid-cols-2">
-            {CORE_METRIC_KEYS.map((key) => (
-              <StarRating key={key} name={key} label={tm(key)} hint={th(key)} />
-            ))}
+          <div className="grid grid-cols-1 gap-x-6 gap-y-3 md:grid-cols-2">
+            {coreKeys.map((key) => {
+              const subs = (SUBPOINTS as Record<string, string[]>)[key];
+              return (
+              <div key={key}>
+                <StarRating name={key} label={tm(key)} hint={th(key)} />
+                {subs?.length ? (
+                  <details className="mt-1 rounded-lg bg-sea-50/60 px-3 py-2">
+                    <summary className="cursor-pointer text-[11px] font-medium text-sea-600">
+                      {tr("subpointsToggle")}
+                    </summary>
+                    <p className="mt-1 text-[10px] italic text-sea-400">{tr("subpointsHint")}</p>
+                    <div className="mt-2 space-y-2">
+                      {subs.map((sk) => (
+                        <div key={sk} className="flex items-center justify-between gap-2">
+                          <label htmlFor={sk} className="text-[11px] text-sea-700">
+                            {ts(sk)}
+                          </label>
+                          <select
+                            id={sk}
+                            name={sk}
+                            defaultValue=""
+                            className="shrink-0 rounded-md border border-sea-200 bg-white px-2 py-1 text-[11px] text-sea-900"
+                          >
+                            <option value="">{tr("unknown")}</option>
+                            <option value="si">{tr("yes")}</option>
+                            <option value="no">{tr("no")}</option>
+                            <option value="na">{tr("na")}</option>
+                          </select>
+                        </div>
+                      ))}
+                    </div>
+                  </details>
+                ) : null}
+              </div>
+              );
+            })}
           </div>
         </fieldset>
 
         {/* Fatti oggettivi (facoltativi) */}
+        {showBeachFacts && (
         <fieldset className="rounded-xl bg-sea-50/60 p-4">
           <legend className="px-1 text-sm font-semibold text-sea-800">
             {tr("factsTitle")} <span className="font-normal text-sea-400">{tr("factsOptional")}</span>
@@ -146,8 +189,10 @@ export function ReviewForm({ beachId }: { beachId: string }) {
             ))}
           </div>
         </fieldset>
+        )}
 
         {/* Uso del demanio e valore civico (fatti, non voti) */}
+        {showBeachFacts && (
         <fieldset className="rounded-xl border border-sea-100 bg-white p-4">
           <legend className="px-1 text-sm font-semibold text-sea-800">
             {tr("civicTitle")} <span className="font-normal text-sea-400">{tr("factsOptional")}</span>
@@ -171,6 +216,7 @@ export function ReviewForm({ beachId }: { beachId: string }) {
             ))}
           </div>
         </fieldset>
+        )}
 
         {/* La tua visita: conferma + quando (anti-recensioni fantasma) */}
         <div className="grid grid-cols-1 gap-4 rounded-xl border border-sea-100 p-4 sm:grid-cols-2 sm:items-center">

@@ -143,6 +143,33 @@ export const METRICS = [
 
 export type MetricKey = (typeof METRICS)[number]["key"];
 
+// ---- Vertical PORTI: criteri nautici/demaniali (per beaches.tipo = 'porto') ----
+// Un porto non è una spiaggia: ha 8 criteri propri. Le colonne sono separate su
+// `reviews`; una recensione compila solo il set del suo tipo (le altre restano
+// NULL) e la present-mean nelle viste isola i due mondi da sola.
+export const PORT_METRICS = [
+  { key: "ormeggio",            label: "Ormeggio & Posti barca", hint: "Disponibilità posti, facilità e sicurezza dell'ormeggio, assistenza" },
+  { key: "spazio_manovra",      label: "Spazio & Manovra",       hint: "Distanza tra le barche e ampiezza degli specchi di manovra" },
+  { key: "canoni",              label: "Canoni & Trasparenza",   hint: "Chiarezza e proporzionalità dei canoni, assegnazione trasparente" },
+  { key: "servizi_tecnici",     label: "Servizi tecnici",        hint: "Acqua e corrente in banchina, carburante, scivolo/gru, officina" },
+  { key: "servizi_terra",       label: "Servizi a terra",        hint: "Servizi igienici, docce, parcheggio, wifi, ristorazione, vigilanza" },
+  { key: "sicurezza_ambiente",  label: "Sicurezza & Ambiente",   hint: "Antincendio, sorveglianza, raccolta rifiuti e acque di sentina" },
+  { key: "accessibilita_porto", label: "Accessibilità",          hint: "Pontili e servizi accessibili alle persone con disabilità" },
+  { key: "governance",          label: "Governance & Comunità",  hint: "Trasparenza di amministrazione e assemblee, eventi, apertura alla città" },
+] as const;
+
+export type PortMetricKey = (typeof PORT_METRICS)[number]["key"];
+export const PORT_METRIC_KEYS: PortMetricKey[] = PORT_METRICS.map((m) => m.key);
+
+export const isPorto = (tipo: string | null | undefined): boolean => tipo === "porto";
+
+// set di criteri per tipo di struttura (spiaggia/stabilimento → 10 balneari; porto → 8 nautici)
+type MetricDef = { key: string; label: string; hint: string };
+export const metricsForTipo = (tipo: string | null | undefined): ReadonlyArray<MetricDef> =>
+  isPorto(tipo) ? PORT_METRICS : METRICS;
+export const coreKeysForTipo = (tipo: string | null | undefined): string[] =>
+  isPorto(tipo) ? (PORT_METRIC_KEYS as string[]) : (CORE_METRIC_KEYS as string[]);
+
 // I 10 criteri di qualità: tutti obbligatori (scelta cosciente).
 // - Pet Friendly tolto dai voti (ora fatto "accesso_cani"): non è un asse di
 //   qualità e "pet friendly 3/5" confondeva.
@@ -157,6 +184,42 @@ export const CORE_METRIC_KEYS: MetricKey[] = [
   "eventi_comunita", "pulizia_igiene", "impianti_sportivi",
 ];
 export const OPTIONAL_METRIC_KEYS: MetricKey[] = [];
+
+// Sotto-punti (Fase 2): per ogni criterio, ~5 domande FACOLTATIVE in ottica
+// Bolkestein/demanio. Non sono voti 1..5: sono dichiarazioni a 4 stati
+//   sì (premia) · no (penalizza) · non so (neutro) · non applicabile (escluso).
+// Salvate nella recensione in un unico campo JSONB `dettagli` { <subKey>: stato }.
+// Aggregate sulla scheda come percentuali. Etichette nel namespace "subpoints".
+// Config-driven: aggiungere/togliere un punto = una riga qui + la sua etichetta.
+export const SUBPOINTS: Record<MetricKey, string[]> = {
+  space_privacy:      ["sp_distanza", "sp_camminamenti", "sp_postazione", "sp_aree_comuni", "sp_densita"],
+  family_services:    ["sg_ristorazione", "sg_famiglie", "sg_noleggio", "sg_personale", "sg_accessori"],
+  accessibility:      ["ac_passerelle", "ac_job", "ac_servizi", "ac_percorso", "ac_personale"],
+  seabed_quality:     ["fa_acqua", "fa_fondale", "fa_balneazione", "fa_scarichi", "fa_ambiente"],
+  price_transparency: ["pr_listino", "pr_chiari", "pr_giornaliero", "pr_agevolate", "pr_qualita_prezzo"],
+  sicurezza:          ["si_bagnino", "si_postazione", "si_bandiere", "si_soccorso", "si_manutenzione"],
+  atmosfera:          ["at_accoglienza", "at_clima", "at_decoro", "at_rumore", "at_inclusione"],
+  eventi_comunita:    ["ev_culturali", "ev_giovani", "ev_residenti", "ev_collaborazioni", "ev_fuori_stagione"],
+  pulizia_igiene:     ["pu_bagni", "pu_arenile", "pu_differenziata", "pu_cabine", "pu_circostante"],
+  impianti_sportivi:  ["is_beachvolley", "is_pingpong", "is_calcetto", "is_biliardino", "is_noleggio"],
+};
+
+// tutte le chiavi dei sotto-punti in ordine di criterio
+export const SUBPOINT_KEYS: string[] = Object.values(SUBPOINTS).flat();
+
+// sotto-punti che riflettono un OBBLIGO di legge (⚖️): pesano il doppio nel
+// contributo al punteggio. Deve restare allineato alla funzione SQL dettagli_bonus.
+export const OBLIGATORY_SUBPOINTS: string[] = [
+  "sp_densita",
+  "ac_passerelle", "ac_job", "ac_servizi",
+  "fa_balneazione",
+  "pr_listino",
+  "si_bagnino", "si_postazione", "si_bandiere",
+];
+
+// stati ammessi salvati (il "non so" = assente/omesso, quindi neutro)
+export const SUBPOINT_STATES = ["si", "no", "na"] as const;
+export type SubpointState = (typeof SUBPOINT_STATES)[number];
 
 // Soglie minime di recensioni perché un lido entri in classifica ed esponga il badge di rango.
 // Sotto soglia: nessun rango mostrato ("classifica in costruzione"), per non
@@ -287,6 +350,15 @@ export interface BeachScore extends Beach {
   avg_eventi_comunita: number | null;
   avg_pulizia_igiene: number | null;
   avg_impianti_sportivi: number | null;
+  // criteri porto (null per i bagni)
+  avg_ormeggio: number | null;
+  avg_spazio_manovra: number | null;
+  avg_canoni: number | null;
+  avg_servizi_tecnici: number | null;
+  avg_servizi_terra: number | null;
+  avg_sicurezza_ambiente: number | null;
+  avg_accessibilita_porto: number | null;
+  avg_governance: number | null;
   avg_overall: number | null;
 }
 
@@ -307,10 +379,20 @@ export interface Review {
   eventi_comunita: number | null;
   pulizia_igiene: number | null;
   impianti_sportivi: number | null;
+  // criteri porto (null per i bagni)
+  ormeggio: number | null;
+  spazio_manovra: number | null;
+  canoni: number | null;
+  servizi_tecnici: number | null;
+  servizi_terra: number | null;
+  sicurezza_ambiente: number | null;
+  accessibilita_porto: number | null;
+  governance: number | null;
   accesso_mare: string | null;
   docce: string | null;
   acqua_calda: string | null;
   accesso_cani: string | null;
+  dettagli: Record<string, string> | null; // sotto-punti { subKey: "si"|"no"|"na" }
   battigia_libera: boolean | null;
   chip_richiesto: boolean | null;
   eventi_giovani: boolean | null;

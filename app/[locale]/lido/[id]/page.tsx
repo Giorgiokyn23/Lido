@@ -11,7 +11,11 @@ import {
   FACTS,
   BOOL_FACTS,
   CIVIC_FACTS,
+  SUBPOINTS,
   RANK_MIN,
+  metricsForTipo,
+  coreKeysForTipo,
+  isPorto,
   type BeachScore,
   type Review,
   type BeachRanking,
@@ -84,10 +88,13 @@ export default async function BeachPage({ params }: { params: { id: string; loca
   const th = await getTranslations("metricHints");
   const tf = await getTranslations("facts");
   const tb = await getTranslations("boolFacts");
+  const tsub = await getTranslations("subpoints");
   const locale = params.locale === "en" ? "en-GB" : "it-IT";
 
   if (!beach) notFound();
   const b = beach as BeachScore;
+  const metricSet = metricsForTipo(b.tipo);
+  const porto = isPorto(b.tipo);
   const reviews = (reviewsData ?? []) as Review[];
   const rank = (rankData ?? null) as BeachRanking | null;
   const segnalazioni = (beachRow?.segnalazioni_aperte as number | undefined) ?? 0;
@@ -111,6 +118,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
       .from("beach_rankings")
       .select("id")
       .eq("paese", paese)
+      .in("tipo", porto ? ["porto"] : ["stabilimento", "spiaggia"])
       .gte("reviews_count", opts.threshold)
       .order(opts.orderBy)
       .limit(1000);
@@ -159,6 +167,27 @@ export default async function BeachPage({ params }: { params: { id: string; loca
     const yes = vals.filter(Boolean).length;
     return { key: cf.key, pct: Math.round((yes / vals.length) * 100), total: vals.length };
   }).filter(Boolean) as { key: string; pct: number; total: number }[];
+
+  // aggregati dei SOTTO-PUNTI per criterio (dettagli JSONB): % di "sì" tra chi ha
+  // risposto sì/no (il "non applicabile" e il "non so" sono esclusi dal conteggio).
+  const subpointGroups = METRICS.map((m) => {
+    const items = (SUBPOINTS[m.key] ?? [])
+      .map((sk) => {
+        let si = 0;
+        let no = 0;
+        for (const r of reviews) {
+          const v = r.dettagli?.[sk];
+          if (v === "si") si++;
+          else if (v === "no") no++;
+        }
+        const applicable = si + no;
+        return applicable > 0
+          ? { key: sk, pct: Math.round((si / applicable) * 100), total: applicable }
+          : null;
+      })
+      .filter(Boolean) as { key: string; pct: number; total: number }[];
+    return items.length ? { metric: m.key, items } : null;
+  }).filter(Boolean) as { metric: string; items: { key: string; pct: number; total: number }[] }[];
 
   return (
     <div className="space-y-8">
@@ -254,7 +283,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
 
         {/* Micro-punteggi di categoria */}
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          {METRICS.map((m) => (
+          {metricSet.map((m) => (
             <ScoreBar key={m.key} label={tm(m.key)} hint={th(m.key)} value={scoreValue(b, m.key)} />
           ))}
         </div>
@@ -305,6 +334,32 @@ export default async function BeachPage({ params }: { params: { id: string; loca
           </div>
         )}
 
+        {/* Dettagli per criterio (sotto-punti aggregati dalle recensioni) */}
+        {subpointGroups.length > 0 && (
+          <div className="mt-6 rounded-xl bg-sea-50/60 p-4">
+            <p className="text-sm font-semibold text-sea-800">{td("subpointsTitle")}</p>
+            <p className="mb-3 text-[11px] italic text-sea-400">{td("subpointsNote")}</p>
+            <div className="space-y-3">
+              {subpointGroups.map((g) => (
+                <div key={g.metric}>
+                  <p className="text-xs font-semibold text-sea-700">{tm(g.metric)}</p>
+                  <div className="mt-1 flex flex-wrap gap-2 text-xs">
+                    {g.items.map((it) => (
+                      <span
+                        key={it.key}
+                        className="rounded-full bg-white px-3 py-1 text-sea-700 shadow-sm"
+                      >
+                        {tsub(it.key)}: <b>{it.pct}% {td("yesShort")}</b>{" "}
+                        <span className="text-sea-400">({it.total})</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Segnalazione illeciti */}
         <div className="mt-6 border-t border-sea-100 pt-4">
           <SegnalazioneForm beachId={b.id} />
@@ -314,7 +369,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
       <div className="space-y-8">
         {/* Scrivi la tua recensione — è il cuore del progetto: prominente e a tutta larghezza */}
         <section id="scrivi-recensione" className="scroll-mt-24">
-          <ReviewForm beachId={b.id} />
+          <ReviewForm beachId={b.id} coreKeys={coreKeysForTipo(b.tipo)} showBeachFacts={!porto} />
         </section>
 
         {/* Recensioni esistenti */}
@@ -330,7 +385,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
           ) : (
             <div className="max-h-[640px] space-y-3 overflow-y-auto pr-1">
               {reviews.map((r) => {
-                const vals = METRICS.map(
+                const vals = metricSet.map(
                   (m) => (r as unknown as Record<string, number | null>)[m.key]
                 ).filter((v): v is number => typeof v === "number");
                 const overall = vals.reduce((a, v) => a + v, 0) / (vals.length || 1);
@@ -365,7 +420,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
                       <p className="mt-2 text-sm italic text-sea-400">{td("noComment")}</p>
                     )}
                     <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-sea-500">
-                      {METRICS.map((m) => {
+                      {metricSet.map((m) => {
                         const v = (r as unknown as Record<string, number | null>)[m.key];
                         if (typeof v !== "number") return null;
                         return (

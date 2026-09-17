@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { createHash } from "crypto";
 import { createClient } from "@/lib/supabase/server";
-import { METRICS, FACTS, BOOL_FACTS, CIVIC_FACTS, SEGNALAZIONE_TIPI, CORE_METRIC_KEYS, NOTICE_TIPI } from "@/lib/types";
+import { FACTS, BOOL_FACTS, CIVIC_FACTS, SEGNALAZIONE_TIPI, NOTICE_TIPI, SUBPOINT_KEYS, metricsForTipo, coreKeysForTipo } from "@/lib/types";
 import { cleanComment } from "@/lib/profanity";
 import { hasHighRiskAccusation } from "@/lib/defamation";
 import { sendNoticeAck } from "@/lib/email";
@@ -73,11 +73,20 @@ export async function submitReview(
   const okTs = await verifyTurnstile(String(formData.get("cf-turnstile-response") ?? ""));
   if (!okTs) return { ok: false, error: "Verifica anti-bot non superata. Riprova." };
 
-  // Voti: nessun default. I 6 criteri principali sono obbligatori (scelta cosciente);
-  // i 3 extra sono opzionali → "" o "na" diventano null.
-  const coreSet = new Set<string>(CORE_METRIC_KEYS);
+  // Il set di criteri dipende dal tipo di struttura (bagno = 10 balneari; porto = 8 nautici).
+  const supabase = createClient();
+  const { data: tipoRow } = await supabase
+    .from("beaches")
+    .select("tipo")
+    .eq("id", beach_id)
+    .maybeSingle();
+  const tipo = (tipoRow?.tipo as string | undefined) ?? null;
+  const metricSet = metricsForTipo(tipo);
+  const coreSet = new Set<string>(coreKeysForTipo(tipo));
+
+  // Voti: nessun default. I criteri obbligatori richiedono una scelta cosciente.
   const scores: Record<string, number | null> = {};
-  for (const m of METRICS) {
+  for (const m of metricSet) {
     const raw = String(formData.get(m.key) ?? "").trim();
     if (raw === "" || raw === "na") {
       if (coreSet.has(m.key)) {
@@ -126,7 +135,14 @@ export async function submitReview(
     facts[cf.key] = pickBool(formData.get(cf.key));
   }
 
-  const supabase = createClient();
+  // sotto-punti facoltativi per criterio (4 stati): salviamo solo sì/no/na,
+  // "non so" = chiave assente (neutro). Tutto in un unico oggetto JSONB.
+  const dettagli: Record<string, string> = {};
+  for (const k of SUBPOINT_KEYS) {
+    const v = String(formData.get(k) ?? "");
+    if (v === "si" || v === "no" || v === "na") dettagli[k] = v;
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -139,7 +155,14 @@ export async function submitReview(
     _beach: beach_id,
     _uid: user?.id ?? null,
     _ip: ip_hash,
-    _p: { ...scores, ...facts, commento, visita_periodo, hold },
+    _p: {
+      ...scores,
+      ...facts,
+      commento,
+      visita_periodo,
+      hold,
+      dettagli: Object.keys(dettagli).length ? dettagli : null,
+    },
   });
 
   if (error) {

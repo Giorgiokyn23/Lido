@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { METRICS, COUNTRIES, type BeachScore } from "@/lib/types";
+import { metricsForTipo, COUNTRIES, type BeachScore } from "@/lib/types";
 
 const flagFor = (code: string | null) => COUNTRIES.find((c) => c.code === code)?.flag ?? "";
 const metricValue = (b: BeachScore, key: string) =>
@@ -36,7 +36,7 @@ export function BeachCardClient({ beach }: { beach: BeachScore }) {
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5">
-        {METRICS.map((m) => {
+        {metricsForTipo(beach.tipo).map((m) => {
           const val = metricValue(beach, m.key);
           const pct = Math.round(((val ?? 0) / 5) * 100);
           return (
