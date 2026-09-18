@@ -120,7 +120,7 @@ export default async function LocaleLayout({
                   <strong className="text-sea-700">Giorgio Menicagli Pirina</strong> — Founder.
                 </p>
                 <p className="mt-2 text-sm text-sea-500">
-                  <strong className="text-sea-700">Francesco Mancuso</strong> — Co-founder.
+                  <strong className="text-sea-700">Francesco Mancuso</strong> — Founder.
                 </p>
               </div>
             </div>

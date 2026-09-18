@@ -335,7 +335,15 @@ export function SearchExperience({ locale }: { locale: string }) {
         )}
       </div>
 
-      <CommunityStrip />
+      {/* Prova sociale: globale sulla home "nuda"; con ricerca/filtri attivi la
+          filtro sui bagni dei risultati, così resta in contesto (niente altre città). */}
+      <CommunityStrip
+        beachIds={
+          committedQ.trim() !== "" || paese !== "" || Object.values(filters).some(Boolean)
+            ? rows.map((r) => r.id)
+            : undefined
+        }
+      />
 
       {/* risultati */}
       {err ? (

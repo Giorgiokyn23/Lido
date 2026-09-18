@@ -35,23 +35,29 @@ export function BeachCardClient({ beach }: { beach: BeachScore }) {
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5">
-        {metricsForTipo(beach.tipo).map((m) => {
-          const val = metricValue(beach, m.key);
-          const pct = Math.round(((val ?? 0) / 5) * 100);
-          return (
-            <div key={m.key}>
-              <div className="flex justify-between text-[11px] text-sea-600">
-                <span className="truncate">{tm(m.key)}</span>
-                <span className="tabular-nums">{val == null ? "—" : val.toFixed(1)}</span>
+      {beach.reviews_count > 0 ? (
+        // Con recensioni: griglia completa di tutti i criteri.
+        <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5">
+          {metricsForTipo(beach.tipo).map((m) => {
+            const val = metricValue(beach, m.key);
+            const pct = Math.round(((val ?? 0) / 5) * 100);
+            return (
+              <div key={m.key}>
+                <div className="flex justify-between text-[11px] text-sea-600">
+                  <span className="truncate">{tm(m.key)}</span>
+                  <span className="tabular-nums">{val == null ? "—" : val.toFixed(1)}</span>
+                </div>
+                <div className="mt-0.5 h-1.5 w-full overflow-hidden rounded-full bg-sea-100">
+                  <div className="h-full rounded-full bg-sea-400" style={{ width: `${pct}%` }} />
+                </div>
               </div>
-              <div className="mt-0.5 h-1.5 w-full overflow-hidden rounded-full bg-sea-100">
-                <div className="h-full rounded-full bg-sea-400" style={{ width: `${pct}%` }} />
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      ) : (
+        // Senza recensioni: una riga, non 10 criteri vuoti.
+        <p className="mt-4 text-xs italic text-sea-400">{tc("noReviews")}</p>
+      )}
 
       <div className="mt-4 flex items-center justify-between gap-2 text-xs">
         <span className="text-sea-400">
