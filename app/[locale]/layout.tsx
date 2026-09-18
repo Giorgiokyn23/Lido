@@ -49,8 +49,8 @@ export async function generateMetadata({
       ? "LidoRank — Vertical reviews of beach clubs worldwide"
       : "LidoRank — Le recensioni verticali dei beach club nel mondo",
     description: en
-      ? "Structured, transparent reviews of beach clubs and marinas worldwide across ten criteria — and a channel to report violations to the authorities."
-      : "Recensioni strutturate e trasparenti di lidi e porti in tutto il mondo, su dieci criteri — e un canale per segnalare gli illeciti agli enti.",
+      ? "Structured, transparent reviews of beach clubs and marinas worldwide across up to ten criteria — and a private channel for user reports that may, where appropriate, be forwarded to the authorities."
+      : "Recensioni strutturate e trasparenti di lidi e porti in tutto il mondo, fino a dieci criteri — e un canale privato per le segnalazioni degli utenti, che all'occorrenza possono essere inoltrate agli enti.",
     alternates: {
       canonical: en ? "/en" : "/",
       languages: { it: "/", en: "/en" },

@@ -35,9 +35,11 @@
     "suggestionsHint": "Suggestions"
   },
   "card": {
-    "reviews": "{count} reviews",
+    "reviews": "{count, plural, one {# review} other {# reviews}}",
     "umbrellas": "{m} m between umbrellas",
-    "reviewShort": "Review"
+    "reviewShort": "Review",
+    "noReviews": "No reviews yet",
+    "detailsToggle": "See detailed scores"
   },
   "metrics": {
     "space_privacy": "Space & Privacy",
@@ -60,7 +62,7 @@
     "governance": "Governance & Community"
   },
   "footer": {
-    "desc": "Vertical reviews of beach clubs and marinas worldwide. Structured, transparent data across ten criteria.",
+    "desc": "Vertical reviews of beach clubs and marinas worldwide. Structured, transparent data across up to ten criteria.",
     "usefulTitle": "Who it's for",
     "usefulText": "For beachgoers to choose, for operators to get known, and for municipalities and maritime-domain authorities as a dataset on rule compliance. LidoRank is an independent project: no affiliation with public bodies unless explicitly stated.",
     "creditsTitle": "Credits",
@@ -149,12 +151,12 @@
     "title": "About us",
     "heroText": "LidoRank is an independent civic project: bringing transparency to beaches worldwide with structured reviews and verifiable data, useful to citizens and to the authorities overseeing the maritime public domain.",
     "founderRole": "Founder",
-    "cofounderRole": "Co-founder",
+    "cofounderRole": "Founder",
     "giorgioBio": "Italian engineer specialized in advanced artificial-intelligence systems for the aerospace and defense sector. He holds a BSc in Computer Science and an MSc in Artificial Intelligence (with honors) from Northeastern University London, and has collaborated with DESY researchers on quantum convolutional neural networks. His interests go beyond engineering, touching the social implications of AI — economics, political philosophy, the history of technological change. He is the author of the book AMAKOM: A Perpetual Peace for the Age of Robots.",
     "francescoBio": "Italian Ph.D. researcher in Political Science and International Relations at the University of Southern California, specializing in comparative politics, international relations, and analytical political theory. His research examines the implementation and local consequences of the Bolkestein Directive, focusing more broadly on how local social capital shapes community and institutional responses to market-liberalization policies within the European integration process. Drawing on fieldwork with public officials, beach operators, and beachgoers, he studies strategies of harmonization, adaptation, and institutional change. A native of Livorno, Francesco holds an MA in Legal and Political Theory from University College London and a BA in Economics and Finance from the University of Pisa.",
     "howTitle": "How LidoRank was born",
     "p1": "LidoRank started from a simple question: why is choosing a beach club still so opaque? Prices not always posted, sea access that should be free by law, family services and accessibility hard to compare. In the middle of the debate on concessions (the Bolkestein Directive), a neutral tool was missing.",
-    "p2": "The idea is to combine two worlds: the rigor of public data (maritime-domain concessions) and the real experience of people (vertical reviews across ten criteria). An information base useful to citizens for choosing and to authorities for oversight.",
+    "p2": "The idea is to combine two worlds: the rigor of public data (maritime-domain concessions) and the real experience of people (vertical reviews across up to ten criteria). An information base useful to citizens for choosing and to authorities for oversight.",
     "p3": "LidoRank was co-founded by Giorgio Menicagli Pirina and Francesco Mancuso. Giorgio leads product and engineering; Francesco leads policy analysis, research and institutional relations. Built also with the help of artificial-intelligence tools, under human supervision.",
     "back": "← Back to home"
   },
@@ -208,7 +210,7 @@
     "accessibility": "Walkways, beach wheelchair, dedicated services",
     "seabed_quality": "Seabed quality and water cleanliness",
     "price_transparency": "Clear price list and value for money",
-    "sicurezza": "Surveillance, lifeguards, maintenance and cleanliness",
+    "sicurezza": "Surveillance, lifeguards, emergency equipment, maintenance and safety",
     "atmosfera": "Vibe and welcome: staff, music, overall feel",
     "eventi_comunita": "Cultural events, activities for young people, community initiatives",
     "pulizia_igiene": "Cleanliness of beach, toilets and showers; care of spaces",
@@ -260,6 +262,7 @@
     "at_rumore": "Respectful music and noise",
     "at_inclusione": "Inclusive atmosphere",
     "ev_culturali": "Open cultural/music events",
+    "ev_giochi_carte": "Card/board games: space, gear and active groups",
     "ev_giovani": "Activities and space for young people",
     "ev_residenti": "Local community initiatives",
     "ev_collaborazioni": "Ties with schools/associations",
@@ -273,7 +276,7 @@
     "is_pingpong": "Ping pong",
     "is_calcetto": "Five-a-side / cage pitch",
     "is_biliardino": "Table football and games",
-    "is_noleggio": "Sports/water rentals (SUP, pedalo)",
+    "is_noleggio": "Sports/water rentals (SUP, pedal boat)",
     "om_disponibilita": "Berths available without long waits",
     "om_assistenza": "Mooring staff assistance",
     "om_pontili": "Docks and ground tackle in good shape",
@@ -354,9 +357,9 @@
     "estremi_concessione_esposti": "Concession details displayed to the public"
   },
   "segnalazione": {
-    "openButton": "⚠ Report a violation (sea access, paying minors, loungers on the shoreline…)",
+    "openButton": "⚠ Report a possible irregularity (sea access, paying minors, loungers on the shoreline…)",
     "successBody": "Thank you. Your report has been received and is private: it is not published on the club's profile. Where appropriate, it may be verified and forwarded to the competent authorities.",
-    "title": "Report a violation",
+    "title": "Report a possible irregularity",
     "intro": "Your report is received by LidoRank and is not a formal complaint. It stays private and, where appropriate and in line with our privacy notice, it may be verified and possibly forwarded to the competent authorities. We do not promise inspections. Submit truthful information only.",
     "typeLabel": "Type",
     "typeSelect": "— select —",
@@ -382,7 +385,7 @@
   "detail": {
     "backAll": "← All beach clubs",
     "inPlace": "#{rank} in {place}",
-    "reviewsCount": "{n} reviews",
+    "reviewsCount": "{n, plural, one {# review} other {# reviews}}",
     "umbrellaDistance": "{n} m between umbrellas",
     "concessionLabel": "Concession no. {id}",
     "concessionTitle": "State concession number (source: SID/MIT)",
@@ -403,6 +406,7 @@
     "verified": "✓ Registered account",
     "notVerified": "Anonymous",
     "noComment": "No comment.",
+    "detailsToggle": "See detailed scores",
     "rankBuilding": "Ranked after {n} reviews",
     "writeReview": "✍️ Write a review"
   },
@@ -428,7 +432,7 @@
     "errorLoad": "Error loading the ranking: {msg}",
     "emptyPre": "No places reviewed here yet. Rankings fill up as reviews come in.",
     "emptyLink": "Leave the first →",
-    "reviews": "{n} reviews",
+    "reviews": "{n, plural, one {# review} other {# reviews}}",
     "weightedScore": "weighted score",
     "methodologyLink": "How the rankings work →",
     "buildingTitle": "Rankings in progress",

@@ -201,7 +201,7 @@ export const SUBPOINTS: Record<string, string[]> = {
   price_transparency: ["pr_listino", "pr_chiari", "pr_giornaliero", "pr_agevolate", "pr_qualita_prezzo", "pr_concessione"],
   sicurezza:          ["si_bagnino", "si_postazione", "si_bandiere", "si_soccorso", "si_manutenzione"],
   atmosfera:          ["at_accoglienza", "at_clima", "at_decoro", "at_rumore", "at_inclusione"],
-  eventi_comunita:    ["ev_culturali", "ev_giovani", "ev_residenti", "ev_collaborazioni", "ev_fuori_stagione"],
+  eventi_comunita:    ["ev_culturali", "ev_giochi_carte", "ev_giovani", "ev_residenti", "ev_collaborazioni", "ev_fuori_stagione"],
   pulizia_igiene:     ["pu_bagni", "pu_arenile", "pu_differenziata", "pu_cabine", "pu_circostante"],
   impianti_sportivi:  ["is_beachvolley", "is_pingpong", "is_calcetto", "is_biliardino", "is_noleggio"],
   // --- porti (8 criteri) — ancorati a Bandiera Blu approdi e disciplina rifiuti portuali ---

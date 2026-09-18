@@ -35,9 +35,11 @@
     "suggestionsHint": "Suggerimenti"
   },
   "card": {
-    "reviews": "{count} recensioni",
+    "reviews": "{count, plural, one {# recensione} other {# recensioni}}",
     "umbrellas": "{m} m tra ombrelloni",
-    "reviewShort": "Recensisci"
+    "reviewShort": "Recensisci",
+    "noReviews": "Ancora nessuna recensione",
+    "detailsToggle": "Vedi voti dettagliati"
   },
   "metrics": {
     "space_privacy": "Spazio & Privacy",
@@ -60,7 +62,7 @@
     "governance": "Governance & Comunità"
   },
   "footer": {
-    "desc": "Le recensioni verticali di lidi e beach club nel mondo. Dati strutturati e trasparenti, su dieci criteri.",
+    "desc": "Le recensioni verticali di lidi e beach club nel mondo. Dati strutturati e trasparenti, fino a dieci criteri.",
     "usefulTitle": "A chi è utile",
     "usefulText": "Ai bagnanti per scegliere, ai gestori per farsi conoscere, e a Comuni ed enti di controllo del demanio marittimo come base dati sul rispetto delle regole. LidoRank è un progetto indipendente: nessuna affiliazione con enti pubblici salvo accordi dichiarati.",
     "creditsTitle": "Crediti",
@@ -149,7 +151,7 @@
     "title": "Chi siamo",
     "heroText": "LidoRank è un progetto civico indipendente: portare trasparenza alle spiagge di tutto il mondo con recensioni strutturate e dati verificabili, utili ai cittadini e agli enti che vigilano sul demanio marittimo.",
     "founderRole": "Founder",
-    "cofounderRole": "Co-founder",
+    "cofounderRole": "Founder",
     "giorgioBio": "Ingegnere italiano specializzato in sistemi avanzati di intelligenza artificiale per il settore aerospaziale e della difesa. Ha conseguito una laurea in Informatica e un master in Intelligenza Artificiale (con lode) alla Northeastern University di Londra, e ha collaborato con i ricercatori del DESY su reti neurali convoluzionali quantistiche. I suoi interessi vanno oltre l'ingegneria, toccando le implicazioni sociali dell'IA — economia, filosofia politica, storia del cambiamento tecnologico. È autore del libro AMAKOM: Una pace perpetua per l'età dei robot.",
     "francescoBio": "Ricercatore italiano di dottorato in Scienze Politiche e Relazioni Internazionali alla University of Southern California, specializzato in politica comparata, relazioni internazionali e teoria politica analitica. La sua ricerca esamina l'attuazione e le conseguenze locali della direttiva Bolkestein, con un focus più ampio su come il capitale sociale locale plasmi le risposte delle comunità e delle istituzioni alle politiche di liberalizzazione del mercato nel processo di integrazione europea. Basandosi sul lavoro sul campo con funzionari pubblici, gestori balneari e bagnanti, studia le strategie di armonizzazione, adattamento e cambiamento istituzionale. Nato a Livorno, Francesco ha conseguito un MA in Legal and Political Theory alla University College London e un BA in Economia e Finanza all'Università di Pisa.",
     "howTitle": "Come nasce LidoRank",
@@ -208,7 +210,7 @@
     "accessibility": "Passerelle, sedia JOB, servizi dedicati",
     "seabed_quality": "Qualità del fondale e pulizia dell'acqua",
     "price_transparency": "Chiarezza listino e rapporto qualità/prezzo",
-    "sicurezza": "Sorveglianza, salvataggio, manutenzione e pulizia",
+    "sicurezza": "Sorveglianza, salvataggio, attrezzature d'emergenza, manutenzione e messa in sicurezza",
     "atmosfera": "Clima e accoglienza: personale, musica, vibe generale",
     "eventi_comunita": "Eventi culturali, attività per giovani, iniziative per la comunità",
     "pulizia_igiene": "Pulizia di spiaggia, bagni e docce; cura degli spazi",
@@ -260,6 +262,7 @@
     "at_rumore": "Musica e rumore rispettosi",
     "at_inclusione": "Ambiente inclusivo",
     "ev_culturali": "Eventi culturali/musicali aperti",
+    "ev_giochi_carte": "Giochi di carte/tavolo: spazi, strumenti e gruppi attivi",
     "ev_giovani": "Attività e spazi per i giovani",
     "ev_residenti": "Iniziative per la comunità locale",
     "ev_collaborazioni": "Collaborazioni con scuole/associazioni",
@@ -354,9 +357,9 @@
     "estremi_concessione_esposti": "Estremi della concessione demaniale esposti"
   },
   "segnalazione": {
-    "openButton": "⚠ Segnala un illecito (accesso al mare, minori paganti, lettini sulla battigia…)",
+    "openButton": "⚠ Segnala una possibile irregolarità (accesso al mare, minori paganti, lettini sulla battigia…)",
     "successBody": "Grazie. La segnalazione è stata ricevuta ed è privata: non viene pubblicata sul profilo del bagno. Se opportuno, potrà essere verificata e inoltrata agli enti competenti.",
-    "title": "Segnala un illecito",
+    "title": "Segnala una possibile irregolarità",
     "intro": "La segnalazione è ricevuta da LidoRank e non costituisce una denuncia formale. Resta privata e, ove appropriato e nel rispetto dell'informativa privacy, può essere verificata ed eventualmente trasmessa agli enti competenti. Non promettiamo sopralluoghi. Invia solo informazioni veritiere.",
     "typeLabel": "Tipo",
     "typeSelect": "— seleziona —",
@@ -382,7 +385,7 @@
   "detail": {
     "backAll": "← Tutti i lidi",
     "inPlace": "#{rank} a {place}",
-    "reviewsCount": "{n} recensioni",
+    "reviewsCount": "{n, plural, one {# recensione} other {# recensioni}}",
     "umbrellaDistance": "{n} m tra ombrelloni",
     "concessionLabel": "Concessione n. {id}",
     "concessionTitle": "Numero della concessione demaniale (fonte SID/MIT)",
@@ -403,6 +406,7 @@
     "verified": "✓ Account registrato",
     "notVerified": "Anonima",
     "noComment": "Nessun commento.",
+    "detailsToggle": "Vedi voti dettagliati",
     "rankBuilding": "In classifica dopo {n} recensioni",
     "writeReview": "✍️ Lascia una recensione"
   },
@@ -428,7 +432,7 @@
     "errorLoad": "Errore nel caricamento della classifica: {msg}",
     "emptyPre": "Ancora nessun lido recensito in questo ambito. Le classifiche si popolano man mano che arrivano le recensioni.",
     "emptyLink": "Lascia la prima →",
-    "reviews": "{n} recensioni",
+    "reviews": "{n, plural, one {# recensione} other {# recensioni}}",
     "weightedScore": "punteggio pesato",
     "methodologyLink": "Come funzionano le classifiche →",
     "buildingTitle": "Classifiche in costruzione",
