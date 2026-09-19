@@ -7,6 +7,7 @@ import { routing } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
 import { NavAuth } from "@/components/NavAuth";
 import { Logo } from "@/components/Logo";
+import { Analytics } from "@vercel/analytics/react";
 
 const base = process.env.NEXT_PUBLIC_SITE_URL || "https://lidorank.com";
 
@@ -130,6 +131,7 @@ export default async function LocaleLayout({
               <Link href="/linee-guida" className="hover:text-sea-700 hover:underline">{tl("guidelines")}</Link>
               <Link href="/moderazione" className="hover:text-sea-700 hover:underline">{tl("moderation")}</Link>
               <Link href="/metodologia" className="hover:text-sea-700 hover:underline">{tl("methodology")}</Link>
+              <Link href="/per-i-gestori" className="hover:text-sea-700 hover:underline">{tl("operators")}</Link>
               <Link href="/contatti" className="hover:text-sea-700 hover:underline">{tl("contact")}</Link>
             </nav>
             <div className="border-t border-sea-100 px-4 py-5 text-center text-xs text-sea-500">
@@ -137,6 +139,7 @@ export default async function LocaleLayout({
             </div>
           </footer>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
