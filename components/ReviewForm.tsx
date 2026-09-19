@@ -29,6 +29,83 @@ function SubmitButton() {
   );
 }
 
+// Pannello mostrato dopo l'invio. Per gli anonimi è il momento di massimo
+// coinvolgimento: proponiamo l'accesso senza password (magic-link) così le
+// PROSSIME recensioni saranno verificate e legate al profilo — è questo che
+// rende misurabile il tasso di ritorno.
+function SuccessPanel({ isLoggedIn }: { isLoggedIn: boolean }) {
+  const tr = useTranslations("review");
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [dismissed, setDismissed] = useState(false);
+
+  async function sendLink(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+    });
+    setLoading(false);
+    if (error) {
+      const rate = (error as { status?: number }).status === 429 || /rate/i.test(error.message);
+      setError(rate ? tr("ctaErrRate") : tr("ctaErrGeneric"));
+    } else setSent(true);
+  }
+
+  return (
+    <div className="rounded-2xl border border-sea-100 bg-gradient-to-br from-sea-50 to-white p-8 text-center">
+      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-2xl">
+        ✓
+      </div>
+      <p className="mt-3 text-lg font-semibold text-sea-800">{tr("successTitle")}</p>
+      <p className="mt-1 text-sm text-sea-500">{tr("successBody")}</p>
+
+      {!isLoggedIn && !dismissed && (
+        <div className="mx-auto mt-6 max-w-sm rounded-xl border border-sea-200 bg-white p-5 text-left shadow-sm">
+          {sent ? (
+            <p className="rounded-lg bg-sea-50 px-3 py-2 text-sm text-sea-700">{tr("ctaSent")}</p>
+          ) : (
+            <>
+              <p className="text-sm font-semibold text-sea-800">{tr("ctaTitle")}</p>
+              <p className="mt-1 text-xs text-sea-500">{tr("ctaBody")}</p>
+              <form onSubmit={sendLink} className="mt-3 space-y-2">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={tr("ctaPlaceholder")}
+                  className="w-full rounded-lg border border-sea-200 px-3 py-2 text-sm text-sea-900 focus:border-sea-400 focus:outline-none focus:ring-2 focus:ring-sea-200"
+                />
+                {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">{error}</p>}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full rounded-lg bg-sea-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sea-600 disabled:opacity-60"
+                >
+                  {loading ? tr("ctaSending") : tr("ctaSubmit")}
+                </button>
+              </form>
+              <button
+                type="button"
+                onClick={() => setDismissed(true)}
+                className="mt-2 w-full text-center text-xs text-sea-400 hover:text-sea-600 hover:underline"
+              >
+                {tr("ctaDismiss")}
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 const initial: SubmitState = { ok: false };
 
 export function ReviewForm({
@@ -55,15 +132,7 @@ export function ReviewForm({
   const ts = useTranslations("subpoints");
 
   if (state.ok) {
-    return (
-      <div className="rounded-2xl border border-sea-100 bg-gradient-to-br from-sea-50 to-white p-8 text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-2xl">
-          ✓
-        </div>
-        <p className="mt-3 text-lg font-semibold text-sea-800">{tr("successTitle")}</p>
-        <p className="mt-1 text-sm text-sea-500">{tr("successBody")}</p>
-      </div>
-    );
+    return <SuccessPanel isLoggedIn={isLoggedIn} />;
   }
 
   return (

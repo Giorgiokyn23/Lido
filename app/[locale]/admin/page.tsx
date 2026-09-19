@@ -62,6 +62,34 @@ export default async function AdminPage({ params: { locale } }: { params: { loca
   }
   const ripetutiReg = [...byUser.values()].filter((n) => n > 1).length;
 
+  // --- TASSO DI RITORNO (return rate) ---
+  // Un recensore "ritorna" se è attivo in ≥2 giorni di calendario distinti.
+  // Coorte = chi ha la PRIMA recensione da ≥7 giorni (ha avuto il tempo di tornare):
+  // così non contiamo come "non tornati" quelli iscritti ieri.
+  const DAY = 86_400_000;
+  const nowMs = Date.now();
+  const dayOf = (d: string) => new Date(d).toISOString().slice(0, 10);
+  function returnStats(keyOf: (r: Row) => string | null) {
+    const days = new Map<string, Set<string>>();
+    const firstTs = new Map<string, number>();
+    for (const r of valid) {
+      const k = keyOf(r);
+      if (!k) continue;
+      if (!days.has(k)) days.set(k, new Set());
+      days.get(k)!.add(dayOf(r.created_at));
+      firstTs.set(k, Math.min(firstTs.get(k) ?? Infinity, +new Date(r.created_at)));
+    }
+    let cohort = 0, returned = 0;
+    for (const [k, ds] of days) {
+      if (nowMs - (firstTs.get(k) ?? nowMs) < 7 * DAY) continue; // troppo recente
+      cohort++;
+      if (ds.size >= 2) returned++;
+    }
+    return { cohort, returned, rate: cohort ? Math.round((returned / cohort) * 100) : 0 };
+  }
+  const retReg = returnStats((r) => r.user_id);
+  const retIp = returnStats((r) => (r.user_id ? null : r.ip_hash));
+
   // moderazione
   const shadow = rows.filter((r) => r.stato === "shadow").length;
   const pctQuar = rows.length ? Math.round((shadow / rows.length) * 100) : 0;
@@ -99,10 +127,33 @@ export default async function AdminPage({ params: { locale } }: { params: { loca
         <Tile label="In classifica (≥10)" value={inClassifica.toLocaleString("it-IT")} sub={`${avgPerBeach} recensioni/bagno`} />
         <Tile label="Da account" value={`${pctVer}%`} sub={`${verificate.toLocaleString("it-IT")} verificate`} />
         <Tile label="Con commento" value={`${pctComm}%`} />
-        <Tile label="Recensori ripetuti" value={ripetutiReg.toLocaleString("it-IT")} sub={`registrati con >1 recensione`} />
+        <Tile label="Return rate (reg.)" value={retReg.cohort ? `${retReg.rate}%` : "—"} sub={`${retReg.returned}/${retReg.cohort} coorte ≥7gg`} />
         <Tile label="In quarantena" value={`${pctQuar}%`} sub={`${shadow} recensioni`} />
         <Tile label="Segnalazioni DSA" value={(notices ?? 0).toLocaleString("it-IT")} />
       </div>
+
+      <section className="rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
+        <h2 className="text-sm font-semibold text-sea-800">Tasso di ritorno (return rate)</h2>
+        <p className="mt-1 text-xs text-sea-400">
+          Quota di recensori attivi in ≥2 giorni distinti, sulla coorte che ha la prima recensione da almeno 7 giorni.
+        </p>
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="rounded-xl border border-sea-100 bg-sea-50/40 p-4">
+            <div className="text-xs font-medium uppercase tracking-wide text-sea-400">Registrati (segnale reale)</div>
+            <div className="mt-1 text-2xl font-bold tabular-nums text-sea-900">{retReg.cohort ? `${retReg.rate}%` : "—"}</div>
+            <div className="mt-0.5 text-xs text-sea-500">{retReg.returned} tornati su {retReg.cohort} nella coorte</div>
+          </div>
+          <div className="rounded-xl border border-sea-100 bg-white p-4">
+            <div className="text-xs font-medium uppercase tracking-wide text-sea-400">Anonimi via IP (proxy, non identità)</div>
+            <div className="mt-1 text-2xl font-bold tabular-nums text-sea-700">{retIp.cohort ? `${retIp.rate}%` : "—"}</div>
+            <div className="mt-0.5 text-xs text-sea-500">{retIp.returned} tornati su {retIp.cohort} nella coorte</div>
+          </div>
+        </div>
+        <p className="mt-3 text-xs text-sea-400">
+          Coorte ancora piccola: il dato si stabilizza con l'aumento delle registrazioni. Il ritorno a livello di traffico
+          (visitatori nuovi vs. di ritorno) arriva ora da Vercel Analytics, appena attivato.
+        </p>
+      </section>
 
       <section className="rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
         <h2 className="text-sm font-semibold text-sea-800">Crescita settimanale (recensioni valide)</h2>
