@@ -42,7 +42,7 @@ const IT: LegalContent = {
       ],
     },
     {
-      h: "5. Segnalazioni di illeciti agli enti",
+      h: "5. Segnalazioni importanti agli enti",
       body: [
         "Le segnalazioni di possibili irregolarità restano private e non costituiscono una denuncia formale. Ove appropriato e nel rispetto dell'informativa privacy, possono essere verificate e trasmesse agli enti competenti. Non promettiamo sopralluoghi.",
       ],

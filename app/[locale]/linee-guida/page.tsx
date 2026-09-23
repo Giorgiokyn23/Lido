@@ -39,9 +39,9 @@ const IT: LegalContent = {
       ],
     },
     {
-      h: "5. Le segnalazioni di illeciti vanno nel canale apposito",
+      h: "5. Le segnalazioni importanti vanno nel canale apposito",
       body: [
-        "Se vuoi segnalare una possibile irregolarità (es. accesso al mare bloccato, lettini sulla battigia), usa il modulo di segnalazione riservato, non la recensione pubblica. Le segnalazioni restano private.",
+        "Se vuoi segnalare qualcosa di importante o urgente (aspetti di legge o di qualità del servizio), usa il modulo di segnalazione riservato, non la recensione pubblica. Le segnalazioni restano private.",
       ],
     },
     {

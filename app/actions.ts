@@ -237,7 +237,7 @@ export async function signOut(): Promise<void> {
   revalidatePath("/");
 }
 
-// Server Action: invia una segnalazione di illecito (coda privata per l'ente).
+// Server Action: invia una segnalazione importante/urgente (coda privata per l'ente).
 export async function submitSegnalazione(
   _prev: SubmitState,
   formData: FormData

@@ -328,16 +328,29 @@ export const NOTICE_TIPI = [
 
 export type NoticeTipo = (typeof NOTICE_TIPI)[number]["value"];
 
-// Tipi di segnalazione illeciti (coda privata per l'ente)
+// Tipi di SEGNALAZIONE IMPORTANTE / URGENTE (coda privata per l'ente competente).
+// Sono situazioni — di carattere NORMATIVO (aspetti di legge, da verificare) o
+// QUALITATIVO (qualità del servizio) — che il cittadino vuole rendere esplicite.
+// Non sono accuse né accertamenti: LidoRank le riceve in forma privata e, ove
+// appropriato, può trasmetterle all'ente competente.
+// Le etichette visibili sono tradotte dal namespace "segTipi" (it/en); "natura"
+// serve a raggruppare le voci nel form.
 export const SEGNALAZIONE_TIPI = [
-  { value: "pagamento_minori",    label: "Fatti pagare a minori / bambini" },
-  { value: "lettini_battigia",    label: "Lettini/ombrelloni sulla battigia (fascia dei 5 m)" },
-  { value: "accesso_bloccato",    label: "Accesso al mare bloccato / tornelli senza varco libero" },
-  { value: "no_battigia_libera",  label: "Battigia libera non garantita" },
-  { value: "prezzi_non_esposti",  label: "Prezzi non esposti / non trasparenti" },
-  { value: "occupazione_abusiva", label: "Occupazione oltre i limiti della concessione" },
-  { value: "altro",               label: "Altro" },
+  // — carattere normativo / di legge (situazioni da verificare, non violazioni accertate) —
+  { value: "accesso_mare",     natura: "normativo",   label: "Accesso al mare difficile o a pagamento" },
+  { value: "battigia",         natura: "normativo",   label: "Passaggio sulla battigia ostacolato (fascia dei 5 m)" },
+  { value: "accessibilita",    natura: "normativo",   label: "Accessibilità per persone con disabilità carente" },
+  { value: "prezzi_chiarezza", natura: "normativo",   label: "Prezzi poco chiari o non esposti" },
+  { value: "sicurezza",        natura: "normativo",   label: "Sicurezza, salvamento o primo soccorso insufficienti" },
+  // — carattere qualitativo (qualità del servizio) —
+  { value: "igiene_servizi",   natura: "qualitativo", label: "Igiene o servizi essenziali carenti (docce, bagni, pulizia)" },
+  { value: "manutenzione",     natura: "qualitativo", label: "Manutenzione o sicurezza delle attrezzature (giochi, impianti)" },
+  { value: "ambiente",         natura: "qualitativo", label: "Pulizia dell'arenile, rifiuti o qualità dell'acqua" },
+  { value: "altro",            natura: "qualitativo", label: "Altro (descrivi sotto)" },
 ] as const;
+
+export type SegnalazioneTipo = (typeof SEGNALAZIONE_TIPI)[number]["value"];
+export type SegnalazioneNatura = "normativo" | "qualitativo";
 
 export interface Beach {
   id: string;

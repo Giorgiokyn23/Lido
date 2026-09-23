@@ -359,7 +359,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
           </div>
         )}
 
-        {/* Segnalazione illeciti */}
+        {/* Segnalazione importante/urgente */}
         <div className="mt-6 border-t border-sea-100 pt-4">
           <SegnalazioneForm beachId={b.id} />
         </div>

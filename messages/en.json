@@ -366,12 +366,14 @@
     "estremi_concessione_esposti": "Concession details displayed to the public"
   },
   "segnalazione": {
-    "openButton": "⚠ Report a possible irregularity (sea access, paying minors, loungers on the shoreline…)",
-    "successBody": "Thank you. Your report has been received and is private: it is not published on the club's profile. Where appropriate, it may be verified and forwarded to the competent authorities.",
-    "title": "Report a possible irregularity",
-    "intro": "Your report is received by LidoRank and is not a formal complaint. It stays private and, where appropriate and in line with our privacy notice, it may be verified and possibly forwarded to the competent authorities. We do not promise inspections. Submit truthful information only.",
-    "typeLabel": "Type",
+    "openButton": "Report something important (service quality or legal matters)",
+    "successBody": "Thank you. Your report is private: it is not published on the club's profile. Where appropriate, it may be verified and forwarded to the competent authority.",
+    "title": "Important or urgent report",
+    "intro": "Use this form to report something important or urgent you want to make explicit — of a quality nature (service quality) or a regulatory nature (legal matters). It is not an accusation or a formal complaint: it is information LidoRank receives privately and, where appropriate and in line with our privacy notice, may verify and possibly forward to the competent authority. Submit truthful information only.",
+    "typeLabel": "Report type",
     "typeSelect": "— select —",
+    "groupNormativo": "Legal matters (to verify)",
+    "groupQualitativo": "Service quality",
     "descLabel": "Description (optional)",
     "descPlaceholder": "What you observed, when…",
     "emailLabel": "Contact email (optional)",
@@ -383,13 +385,15 @@
     "emailPrivacyNote": "Your email is not shared with third parties without a legal basis and without informing you."
   },
   "segTipi": {
-    "pagamento_minori": "Charging minors / children",
-    "lettini_battigia": "Loungers/umbrellas on the shoreline (5 m strip)",
-    "accesso_bloccato": "Sea access blocked / turnstiles with no free passage",
-    "no_battigia_libera": "Free shoreline not guaranteed",
-    "prezzi_non_esposti": "Prices not displayed / not transparent",
-    "occupazione_abusiva": "Occupation beyond the concession limits",
-    "altro": "Other"
+    "accesso_mare": "Sea access difficult or paid",
+    "battigia": "Passage on the shoreline obstructed (5 m strip)",
+    "accessibilita": "Poor accessibility for people with disabilities",
+    "prezzi_chiarezza": "Prices unclear or not displayed",
+    "sicurezza": "Inadequate safety, lifeguard or first aid",
+    "igiene_servizi": "Poor hygiene or essential services (showers, toilets, cleaning)",
+    "manutenzione": "Maintenance or safety of equipment (play areas, facilities)",
+    "ambiente": "Beach cleanliness, litter or water quality",
+    "altro": "Other (describe below)"
   },
   "detail": {
     "backAll": "← All beach clubs",
@@ -503,7 +507,7 @@
     "s4Title": "How much a review counts, and anti-fraud defences",
     "s4Body": "Not all reviews count the same. A registered-account review carries full weight; an anonymous one counts about a quarter: it stays visible but moves the score less. A review that is quarantined or rejected drops out of the calculation entirely (zero weight) while remaining on record. On top of this, rate limits and an anti-surge damper temporarily hold suspicious spikes. We don't publish the exact anti-fraud parameters here, as that would make them easier to game.",
     "s5Title": "User-reported information, kept separate from ratings",
-    "s5Body": "On the profile we keep subjective ratings (your experience) separate from the factual information users report (sea access, showers, deposit chip). The latter is shown as aggregate percentages, is made up of reviewers' statements rather than findings by LidoRank or any authority, and does not, on its own, turn a club into “non-compliant”: any reports of violations follow a separate, private path.",
+    "s5Body": "On the profile we keep subjective ratings (your experience) separate from the factual information users report (sea access, showers, deposit chip). The latter is shown as aggregate percentages, is made up of reviewers' statements rather than findings by LidoRank or any authority, and does not, on its own, turn a club into “non-compliant”: any important reports follow a separate, private path.",
     "disclaimer": "LidoRank is a pilot-stage platform: thresholds and criteria may be refined as the community grows.",
     "back": "← Back to rankings"
   },

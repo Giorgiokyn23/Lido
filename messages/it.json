@@ -366,12 +366,14 @@
     "estremi_concessione_esposti": "Estremi della concessione demaniale esposti"
   },
   "segnalazione": {
-    "openButton": "⚠ Segnala una possibile irregolarità (accesso al mare, minori paganti, lettini sulla battigia…)",
-    "successBody": "Grazie. La segnalazione è stata ricevuta ed è privata: non viene pubblicata sul profilo del bagno. Se opportuno, potrà essere verificata e inoltrata agli enti competenti.",
-    "title": "Segnala una possibile irregolarità",
-    "intro": "La segnalazione è ricevuta da LidoRank e non costituisce una denuncia formale. Resta privata e, ove appropriato e nel rispetto dell'informativa privacy, può essere verificata ed eventualmente trasmessa agli enti competenti. Non promettiamo sopralluoghi. Invia solo informazioni veritiere.",
-    "typeLabel": "Tipo",
+    "openButton": "Segnala qualcosa di importante (qualità del servizio o aspetti di legge)",
+    "successBody": "Grazie. La segnalazione è privata: non viene pubblicata sul profilo del bagno. Ove appropriato, potrà essere verificata e trasmessa all'ente competente.",
+    "title": "Segnalazione importante o urgente",
+    "intro": "Usa questo modulo per segnalare qualcosa di importante o urgente che vuoi rendere esplicito — di carattere qualitativo (qualità del servizio) o normativo (aspetti di legge). Non è un'accusa né una denuncia formale: è un'informazione che LidoRank riceve in forma privata e che, ove appropriato e nel rispetto dell'informativa privacy, può verificare ed eventualmente trasmettere all'ente competente. Invia solo informazioni veritiere.",
+    "typeLabel": "Tipo di segnalazione",
     "typeSelect": "— seleziona —",
+    "groupNormativo": "Aspetti di legge (da verificare)",
+    "groupQualitativo": "Qualità del servizio",
     "descLabel": "Descrizione (opzionale)",
     "descPlaceholder": "Cosa hai osservato, quando…",
     "emailLabel": "Email di contatto (opzionale)",
@@ -383,13 +385,15 @@
     "emailPrivacyNote": "La tua email non viene trasmessa a terzi senza una base legale e senza informarti."
   },
   "segTipi": {
-    "pagamento_minori": "Fatti pagare a minori / bambini",
-    "lettini_battigia": "Lettini/ombrelloni sulla battigia (fascia dei 5 m)",
-    "accesso_bloccato": "Accesso al mare bloccato / tornelli senza varco libero",
-    "no_battigia_libera": "Battigia libera non garantita",
-    "prezzi_non_esposti": "Prezzi non esposti / non trasparenti",
-    "occupazione_abusiva": "Occupazione oltre i limiti della concessione",
-    "altro": "Altro"
+    "accesso_mare": "Accesso al mare difficile o a pagamento",
+    "battigia": "Passaggio sulla battigia ostacolato (fascia dei 5 m)",
+    "accessibilita": "Accessibilità per persone con disabilità carente",
+    "prezzi_chiarezza": "Prezzi poco chiari o non esposti",
+    "sicurezza": "Sicurezza, salvamento o primo soccorso insufficienti",
+    "igiene_servizi": "Igiene o servizi essenziali carenti (docce, bagni, pulizia)",
+    "manutenzione": "Manutenzione o sicurezza delle attrezzature (giochi, impianti)",
+    "ambiente": "Pulizia dell'arenile, rifiuti o qualità dell'acqua",
+    "altro": "Altro (descrivi sotto)"
   },
   "detail": {
     "backAll": "← Tutti i lidi",
@@ -503,7 +507,7 @@
     "s4Title": "Quanto pesa una recensione e difese anti-frode",
     "s4Body": "Non tutte le recensioni pesano uguale. Una recensione da account registrato ha peso pieno; una anonima pesa circa un quarto: resta visibile, ma sposta meno il punteggio. Una recensione messa in quarantena o rifiutata esce del tutto dal calcolo (peso azzerato) pur restando tracciata. A questo si aggiungono limiti di frequenza e un freno anti-ondata che mette temporaneamente in sospeso i picchi sospetti. Non pubblichiamo qui i parametri esatti anti-frode, che renderebbero più facile aggirarli.",
     "s5Title": "Informazioni segnalate dagli utenti, separate dai voti",
-    "s5Body": "Nella scheda teniamo distinti i voti soggettivi (la tua esperienza) dalle informazioni fattuali che gli utenti dichiarano (accesso al mare, docce, chip). Queste ultime sono mostrate come percentuali aggregate, sono dichiarazioni dei recensori e non accertamenti di LidoRank né di un'autorità, e non trasformano da sole un lido in «irregolare»: le eventuali segnalazioni di illeciti seguono un percorso separato e privato.",
+    "s5Body": "Nella scheda teniamo distinti i voti soggettivi (la tua esperienza) dalle informazioni fattuali che gli utenti dichiarano (accesso al mare, docce, chip). Queste ultime sono mostrate come percentuali aggregate, sono dichiarazioni dei recensori e non accertamenti di LidoRank né di un'autorità, e non trasformano da sole un lido in «irregolare»: le eventuali segnalazioni importanti seguono un percorso separato e privato.",
     "disclaimer": "LidoRank è una piattaforma in fase pilota: soglie e criteri possono essere affinati man mano che la community cresce.",
     "back": "← Torna alle classifiche"
   },

@@ -26,7 +26,7 @@ const IT: LegalContent = {
       body: [
         "Dati dell'account (se ti registri): indirizzo email e credenziali di accesso gestite dal nostro fornitore di autenticazione.",
         "Recensioni: i voti sui dieci criteri, l'eventuale commento, le informazioni fattuali che indichi e il periodo di visita dichiarato.",
-        "Segnalazioni di illeciti (condotta di un bagno) e segnalazioni di recensioni come contenuto illecito (DSA art. 16): motivo, descrizione ed eventuale email di contatto che scegli di fornire, oltre alla dichiarazione di buona fede.",
+        "Segnalazioni importanti su un bagno (qualità o aspetti di legge) e segnalazioni di recensioni come contenuto illecito (DSA art. 16): motivo, descrizione ed eventuale email di contatto che scegli di fornire, oltre alla dichiarazione di buona fede.",
         "Dati tecnici: per limitare gli abusi conserviamo un hash dell'indirizzo IP (con salt), non l'IP in chiaro, oltre a log tecnici essenziali.",
       ],
     },
@@ -50,7 +50,7 @@ const IT: LegalContent = {
       body: [
         "Ci avvaliamo di fornitori che trattano i dati per nostro conto (responsabili del trattamento): hosting e database (Supabase), hosting dell'applicazione (Vercel) e protezione anti-bot (Cloudflare Turnstile).",
         "Alcuni di questi fornitori possono trattare dati anche al di fuori dell'UE/SEE (ad es. negli Stati Uniti). In tal caso i trasferimenti avvengono sulla base delle Clausole Contrattuali Tipo (SCC) adottate dalla Commissione europea e/o dell'adesione del fornitore all'EU-US Data Privacy Framework; puoi chiederci maggiori dettagli scrivendo a info@lidorank.com.",
-        "Le segnalazioni di illeciti restano private e possono essere trasmesse agli enti competenti solo ove appropriato, secondo questa informativa. Non vendiamo i tuoi dati a terzi.",
+        "Le segnalazioni importanti restano private e possono essere trasmesse agli enti competenti solo ove appropriato, secondo questa informativa. Non vendiamo i tuoi dati a terzi.",
       ],
     },
     {
@@ -58,7 +58,7 @@ const IT: LegalContent = {
       body: [
         "Dati dell'account: finché l'account è attivo; dopo una richiesta di cancellazione vengono rimossi entro 30 giorni, salvo obblighi di legge.",
         "Recensioni: restano pubbliche finché non ne chiedi la rimozione o chiudi l'account; le recensioni rifiutate o messe in quarantena sono conservate per tracciabilità non oltre 24 mesi.",
-        "Segnalazioni (di illeciti e di contenuti): conservate per il tempo necessario alla gestione e comunque non oltre 24 mesi.",
+        "Segnalazioni (importanti e di contenuti): conservate per il tempo necessario alla gestione e comunque non oltre 24 mesi.",
         "Hash dell'IP: conservato al massimo 12 mesi ai soli fini anti-abuso, poi eliminato o ulteriormente anonimizzato.",
       ],
     },

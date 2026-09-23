@@ -64,8 +64,15 @@ export function SegnalazioneForm({ beachId }: { beachId: string }) {
           className="mt-1 w-full rounded-lg border border-amber-300 bg-white px-2 py-2 text-sm"
         >
           <option value="" disabled>{ts("typeSelect")}</option>
-          {SEGNALAZIONE_TIPI.map((t) => (
-            <option key={t.value} value={t.value}>{tt(t.value)}</option>
+          {(["normativo", "qualitativo"] as const).map((nat) => (
+            <optgroup
+              key={nat}
+              label={ts(nat === "normativo" ? "groupNormativo" : "groupQualitativo")}
+            >
+              {SEGNALAZIONE_TIPI.filter((t) => t.natura === nat).map((t) => (
+                <option key={t.value} value={t.value}>{tt(t.value)}</option>
+              ))}
+            </optgroup>
           ))}
         </select>
       </div>
