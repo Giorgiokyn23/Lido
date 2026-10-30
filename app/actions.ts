@@ -420,3 +420,55 @@ export async function salvaProfiloStabilimento(
   revalidatePath("/area-gestore");
   return { ok: true };
 }
+
+// Server Action (solo amministratori): revoca una rivendica GIÀ APPROVATA.
+// La scheda torna non rivendicata e il gestore perde il ruolo se non ha altro.
+// I dati del profilo restano salvati ma smettono di essere pubblici.
+export async function revocaRivendicazione(formData: FormData): Promise<void> {
+  const rid = String(formData.get("rid") ?? "");
+  if (!rid) return;
+  const motivo = String(formData.get("motivo") ?? "").trim().slice(0, 500) || null;
+
+  const supabase = createClient();
+  const { error } = await supabase.rpc("revoca_rivendicazione", { _rid: rid, _motivo: motivo });
+
+  if (error) {
+    const m = error.message || "";
+    if (m.includes("non_autorizzato")) {
+      throw new Error(
+        "Non sei amministratore nella tabella profili: esegui il blocco BOOTSTRAP della migrazione 0071."
+      );
+    }
+    if (m.includes("rivendicazione_non_approvata")) {
+      throw new Error("Questa rivendica non è in stato «approvata»: forse è già stata revocata.");
+    }
+    throw new Error(m || "Revoca non riuscita.");
+  }
+
+  revalidatePath("/admin/rivendicazioni");
+  revalidatePath("/area-gestore");
+}
+
+// Server Action: il gestore ritira una richiesta in attesa o rinuncia a una
+// scheda che gestisce. Funziona solo sulle proprie righe (controllo nel DB).
+export async function rinunciaRivendicazione(formData: FormData): Promise<void> {
+  const rid = String(formData.get("rid") ?? "");
+  if (!rid) return;
+
+  const supabase = createClient();
+  const { error } = await supabase.rpc("rinuncia_rivendicazione", { _rid: rid });
+
+  if (error) {
+    const m = error.message || "";
+    if (m.includes("rivendicazione_non_trovata")) {
+      throw new Error("Richiesta non trovata fra le tue.");
+    }
+    if (m.includes("stato_non_annullabile")) {
+      throw new Error("Questa richiesta non si può annullare: è già stata chiusa.");
+    }
+    throw new Error(m || "Operazione non riuscita.");
+  }
+
+  revalidatePath("/area-gestore");
+  revalidatePath("/admin/rivendicazioni");
+}
