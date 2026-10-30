@@ -270,3 +270,199 @@ export async function submitSegnalazione(
   revalidatePath(`/lido/${beach_id}`);
   return { ok: true };
 }
+
+// ---------------------------------------------------------------------------
+// LATO GESTORI — rivendicazione della scheda
+//
+// Nota di metodo: nulla di quanto segue tocca punteggi, pesi o posizione in
+// classifica. Rivendicare una scheda dà al gestore il controllo dei dati
+// descrittivi, mai un vantaggio nel ranking.
+// ---------------------------------------------------------------------------
+
+// Server Action: il gestore chiede di rivendicare uno stabilimento.
+// La richiesta nasce sempre "in_attesa": l'approvazione è manuale.
+export async function submitRivendicazione(
+  _prev: SubmitState,
+  formData: FormData
+): Promise<SubmitState> {
+  const beach_id = String(formData.get("beach_id") ?? "");
+  if (!beach_id) return { ok: false, error: "Seleziona lo stabilimento da rivendicare." };
+
+  const okTs = await verifyTurnstile(String(formData.get("cf-turnstile-response") ?? ""));
+  if (!okTs) return { ok: false, error: "Verifica anti-bot non superata. Riprova." };
+
+  const nome = String(formData.get("nome") ?? "").trim().slice(0, 120);
+  if (nome.length < 2) return { ok: false, error: "Indica il tuo nome e cognome." };
+
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return { ok: false, error: "Accedi con la tua email prima di inviare la richiesta." };
+  }
+
+  const { error } = await supabase.from("rivendicazioni").insert({
+    user_id: user.id,
+    beach_id,
+    nome,
+    ruolo_dichiarato: String(formData.get("ruolo_dichiarato") ?? "").trim().slice(0, 120) || null,
+    telefono: String(formData.get("telefono") ?? "").trim().slice(0, 40) || null,
+    email_contatto:
+      String(formData.get("email_contatto") ?? "").trim().slice(0, 200) || user.email || null,
+    nota: String(formData.get("nota") ?? "").trim().slice(0, 1000) || null,
+  });
+
+  if (error) {
+    // indice unico: richiesta già aperta, oppure stabilimento già assegnato
+    if (error.code === "23505") {
+      return {
+        ok: false,
+        error:
+          "Esiste già una richiesta per questo stabilimento, oppure è stato assegnato a un altro gestore. Scrivici se pensi sia un errore.",
+      };
+    }
+    return { ok: false, error: error.message || "Invio non riuscito." };
+  }
+
+  revalidatePath("/area-gestore");
+  return { ok: true };
+}
+
+// Server Action (solo amministratori): approva o respinge una rivendicazione.
+// Il controllo dei permessi è nel database, dentro decidi_rivendicazione.
+export async function decidiRivendicazione(formData: FormData): Promise<void> {
+  const rid = String(formData.get("rid") ?? "");
+  const azione = String(formData.get("azione") ?? "");
+  if (!rid || (azione !== "approva" && azione !== "respingi")) return;
+
+  const motivo = String(formData.get("motivo") ?? "").trim().slice(0, 500) || null;
+
+  const supabase = createClient();
+  const { error } = await supabase.rpc("decidi_rivendicazione", {
+    _rid: rid,
+    _approva: azione === "approva",
+    _motivo: motivo,
+  });
+
+  if (error) {
+    if ((error.message || "").includes("non_autorizzato")) {
+      throw new Error(
+        "Non sei amministratore nella tabella profili: esegui il blocco BOOTSTRAP della migrazione 0071."
+      );
+    }
+    throw new Error(error.message || "Operazione non riuscita.");
+  }
+
+  revalidatePath("/admin/rivendicazioni");
+  revalidatePath("/area-gestore");
+}
+
+// Server Action: il gestore salva il profilo pubblico del proprio stabilimento.
+// I permessi veri stanno nella RLS (policy e_gestore_di): qui si controlla solo
+// per poter dare un messaggio d'errore comprensibile invece di un rifiuto secco.
+export async function salvaProfiloStabilimento(
+  _prev: SubmitState,
+  formData: FormData
+): Promise<SubmitState> {
+  const beach_id = String(formData.get("beach_id") ?? "");
+  if (!beach_id) return { ok: false, error: "Stabilimento non valido." };
+
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "Accedi per modificare il profilo." };
+
+  const { data: autorizzato } = await supabase.rpc("e_gestore_di", { _beach: beach_id });
+  if (!autorizzato) {
+    return { ok: false, error: "Non risulti gestore approvato di questo stabilimento." };
+  }
+
+  const testo = (campo: string, max: number) =>
+    String(formData.get(campo) ?? "").trim().slice(0, max) || null;
+
+  // I link accettano solo http/https: evita javascript: e simili.
+  const link = (campo: string) => {
+    const v = testo(campo, 300);
+    if (!v) return null;
+    const conProtocollo = /^https?:\/\//i.test(v) ? v : `https://${v}`;
+    try {
+      const u = new URL(conProtocollo);
+      return u.protocol === "http:" || u.protocol === "https:" ? u.toString() : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const { error } = await supabase.from("profilo_stabilimento").upsert(
+    {
+      beach_id,
+      descrizione: testo("descrizione", 2000),
+      orari: testo("orari", 500),
+      telefono: testo("telefono", 40),
+      email_pubblica: testo("email_pubblica", 200),
+      sito: link("sito"),
+      link_prenotazione: link("link_prenotazione"),
+    },
+    { onConflict: "beach_id" }
+  );
+
+  if (error) return { ok: false, error: error.message || "Salvataggio non riuscito." };
+
+  revalidatePath(`/lido/${beach_id}`);
+  revalidatePath("/area-gestore");
+  return { ok: true };
+}
+
+// Server Action (solo amministratori): revoca una rivendica GIÀ APPROVATA.
+// La scheda torna non rivendicata e il gestore perde il ruolo se non ha altro.
+// I dati del profilo restano salvati ma smettono di essere pubblici.
+export async function revocaRivendicazione(formData: FormData): Promise<void> {
+  const rid = String(formData.get("rid") ?? "");
+  if (!rid) return;
+  const motivo = String(formData.get("motivo") ?? "").trim().slice(0, 500) || null;
+
+  const supabase = createClient();
+  const { error } = await supabase.rpc("revoca_rivendicazione", { _rid: rid, _motivo: motivo });
+
+  if (error) {
+    const m = error.message || "";
+    if (m.includes("non_autorizzato")) {
+      throw new Error(
+        "Non sei amministratore nella tabella profili: esegui il blocco BOOTSTRAP della migrazione 0071."
+      );
+    }
+    if (m.includes("rivendicazione_non_approvata")) {
+      throw new Error("Questa rivendica non è in stato «approvata»: forse è già stata revocata.");
+    }
+    throw new Error(m || "Revoca non riuscita.");
+  }
+
+  revalidatePath("/admin/rivendicazioni");
+  revalidatePath("/area-gestore");
+}
+
+// Server Action: il gestore ritira una richiesta in attesa o rinuncia a una
+// scheda che gestisce. Funziona solo sulle proprie righe (controllo nel DB).
+export async function rinunciaRivendicazione(formData: FormData): Promise<void> {
+  const rid = String(formData.get("rid") ?? "");
+  if (!rid) return;
+
+  const supabase = createClient();
+  const { error } = await supabase.rpc("rinuncia_rivendicazione", { _rid: rid });
+
+  if (error) {
+    const m = error.message || "";
+    if (m.includes("rivendicazione_non_trovata")) {
+      throw new Error("Richiesta non trovata fra le tue.");
+    }
+    if (m.includes("stato_non_annullabile")) {
+      throw new Error("Questa richiesta non si può annullare: è già stata chiusa.");
+    }
+    throw new Error(m || "Operazione non riuscita.");
+  }
+
+  revalidatePath("/area-gestore");
+  revalidatePath("/admin/rivendicazioni");
+}

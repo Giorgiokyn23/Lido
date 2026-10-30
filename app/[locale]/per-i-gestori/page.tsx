@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LegalPage, type LegalContent } from "@/components/LegalPage";
+import { Link } from "@/i18n/navigation";
 import { setRequestLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 const IT: LegalContent = {
   title: "Per i gestori",
-  updated: "Ultimo aggiornamento: settembre 2026",
+  updated: "Ultimo aggiornamento: ottobre 2026",
   backLabel: "← Torna alla home",
   intro:
     "Gestisci uno stabilimento presente su LidoRank? Ecco perché ci sei, come partecipare e come segnalare un contenuto. L'obiettivo non è danneggiare nessuno, ma dare a bagnanti, cittadini ed enti uno strumento trasparente.",
@@ -22,9 +23,11 @@ const IT: LegalContent = {
       ],
     },
     {
-      h: "Rispondi e fatti conoscere",
+      h: "Rivendica la tua scheda",
       body: [
-        "A breve potrai rivendicare il profilo del tuo stabilimento e rispondere pubblicamente alle recensioni, aggiungere foto, orari e listino. Nel frattempo, per correzioni o per essere ricontattato quando aprirà la funzione, scrivici a info@lidorank.com.",
+        "Puoi chiedere di essere riconosciuto come gestore dello stabilimento. Verifichiamo la richiesta a mano e, una volta approvata, la scheda compare nella tua area riservata.",
+        "La rivendica è gratuita e non cambia nulla su voti, punteggio e posizione in classifica: quelli dipendono solo dalle recensioni dei cittadini e non sono in vendita, per nessuno.",
+        "Per correzioni o domande puoi sempre scriverci a info@lidorank.com.",
       ],
     },
     {
@@ -49,7 +52,7 @@ const IT: LegalContent = {
 
 const EN: LegalContent = {
   title: "For operators",
-  updated: "Last updated: September 2026",
+  updated: "Last updated: October 2026",
   backLabel: "← Back to home",
   intro:
     "Do you run an establishment listed on LidoRank? Here's why you're listed, how to take part and how to report content. The goal is not to harm anyone, but to give beachgoers, citizens and authorities a transparent tool.",
@@ -62,9 +65,11 @@ const EN: LegalContent = {
       ],
     },
     {
-      h: "Respond and get known",
+      h: "Claim your page",
       body: [
-        "Soon you'll be able to claim your establishment's profile and respond publicly to reviews, add photos, opening hours and prices. In the meantime, for corrections or to be contacted when the feature opens, email us at info@lidorank.com.",
+        "You can ask to be recognised as the operator of the establishment. We verify every request by hand and, once approved, the page appears in your operator area.",
+        "Claiming is free and changes nothing about ratings, scores or ranking position: those depend only on citizens' reviews and are not for sale, to anyone.",
+        "For corrections or questions you can always write to info@lidorank.com.",
       ],
     },
     {
@@ -89,5 +94,23 @@ const EN: LegalContent = {
 
 export default function Page({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale);
-  return <LegalPage c={locale === "en" ? EN : IT} />;
+  const en = locale === "en";
+  return (
+    <div className="space-y-5">
+      <LegalPage c={en ? EN : IT} />
+      <div className="mx-auto max-w-2xl rounded-2xl border border-sea-100 bg-white p-5 text-center shadow-sm">
+        <p className="text-sm text-sea-600">
+          {en
+            ? "Ready to take control of your page?"
+            : "Vuoi prendere in gestione la tua scheda?"}
+        </p>
+        <Link
+          href="/area-gestore/rivendica"
+          className="mt-3 inline-block rounded-full bg-sea-500 px-5 py-2 font-medium text-white hover:bg-sea-600"
+        >
+          {en ? "Claim your establishment" : "Rivendica il tuo stabilimento"}
+        </Link>
+      </div>
+    </div>
+  );
 }

@@ -6,6 +6,8 @@ import { ScoreBar } from "@/components/ScoreBar";
 import { ReviewForm } from "@/components/ReviewForm";
 import { SegnalazioneForm } from "@/components/SegnalazioneForm";
 import { FlagButton } from "@/components/FlagButton";
+import { ProfiloGestore, type ProfiloPubblico } from "@/components/ProfiloGestore";
+import { SigilloProfilo, RivendicaCta } from "@/components/StatoProfilo";
 import {
   FACTS,
   BOOL_FACTS,
@@ -76,10 +78,19 @@ export default async function BeachPage({ params }: { params: { id: string; loca
       supabase.from("beach_rankings").select("*").eq("id", params.id).maybeSingle(),
       supabase
         .from("beaches")
-        .select("segnalazioni_aperte, id_concessione, categoria")
+        .select("segnalazioni_aperte, id_concessione, categoria, profile_status")
         .eq("id", params.id)
         .maybeSingle(),
     ]);
+
+  // Informazioni dichiarate dal gestore (solo se la scheda è verificata: lo
+  // impone la RLS, quindi qui non serve filtrare di nuovo). Query separata per
+  // non toccare il Promise.all esistente e non alterare i tipi già in uso.
+  const { data: profiloData } = await supabase
+    .from("profilo_stabilimento")
+    .select("descrizione,orari,telefono,email_pubblica,sito,link_prenotazione")
+    .eq("beach_id", params.id)
+    .maybeSingle();
 
   const tcy = await getTranslations("countries");
   const td = await getTranslations("detail");
@@ -97,6 +108,10 @@ export default async function BeachPage({ params }: { params: { id: string; loca
   const reviews = (reviewsData ?? []) as Review[];
   const rank = (rankData ?? null) as BeachRanking | null;
   const segnalazioni = (beachRow?.segnalazioni_aperte as number | undefined) ?? 0;
+  // Stato della scheda: chi ne controlla i dati. Non è un giudizio di qualità
+  // e non entra in nessun modo nel punteggio o nella classifica.
+  const statoProfilo = (beachRow?.profile_status as string | undefined) ?? "non_rivendicato";
+  const tg = await getTranslations("gestore");
   const idConcessione = (beachRow?.id_concessione as string | undefined) ?? null;
   const categoria = (beachRow?.categoria as string | undefined) ?? null;
 
@@ -198,7 +213,15 @@ export default async function BeachPage({ params }: { params: { id: string; loca
       <section className="rounded-2xl border border-sea-100 bg-white p-6 shadow-sm">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-sea-900">{b.nome}</h1>
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-2xl font-bold text-sea-900">{b.nome}</h1>
+              <SigilloProfilo
+                stato={statoProfilo}
+                etichetta={
+                  statoProfilo === "verificato" ? tg("sigilloVerificato") : tg("sigilloNonRivendicato")
+                }
+              />
+            </div>
             <p className="text-sea-500">
               {b.localita} · {b.regione}
             </p>
@@ -364,6 +387,12 @@ export default async function BeachPage({ params }: { params: { id: string; loca
           <SegnalazioneForm beachId={b.id} />
         </div>
       </section>
+
+      {/* Informazioni dal gestore: dati descrittivi, nessun effetto su punteggi o classifica */}
+      <ProfiloGestore profilo={(profiloData as ProfiloPubblico | null) ?? null} />
+
+      {/* Ingresso gratuito per il gestore, solo sulle schede non ancora rivendicate */}
+      <RivendicaCta beachId={b.id} stato={statoProfilo} />
 
       <div className="space-y-8">
         {/* Scrivi la tua recensione — è il cuore del progetto: prominente e a tutta larghezza */}
