@@ -120,6 +120,14 @@ export function ReviewForm({
   const [state, formAction] = useFormState(submitReview, initial);
   // login rilevato lato client, così la scheda resta cache-abile (ISR)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Da dove arriva chi sta scrivendo: il link del gestore porta ?via=qr|wa|mail.
+  // Leggo da window invece che con useSearchParams per non forzare il rendering
+  // dinamico della scheda, che è servita da cache.
+  const [fonte, setFonte] = useState("");
+  useEffect(() => {
+    const v = new URLSearchParams(window.location.search).get("via") ?? "";
+    if (["qr", "wa", "mail", "link"].includes(v)) setFonte(v);
+  }, []);
   useEffect(() => {
     const supabase = createClient();
     supabase.auth.getUser().then(({ data }) => setIsLoggedIn(!!data.user));
@@ -141,6 +149,7 @@ export function ReviewForm({
       className="overflow-hidden rounded-2xl border border-sea-100 bg-white shadow-sm"
     >
       <input type="hidden" name="beach_id" value={beachId} />
+      <input type="hidden" name="fonte" value={fonte} />
       {/* honeypot anti-bot: invisibile agli umani */}
       <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
         <label htmlFor="website">Non compilare</label>
