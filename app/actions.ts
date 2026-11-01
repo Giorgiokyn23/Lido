@@ -7,9 +7,19 @@ import { createClient } from "@/lib/supabase/server";
 import { FACTS, BOOL_FACTS, CIVIC_FACTS, SEGNALAZIONE_TIPI, NOTICE_TIPI, SUBPOINT_KEYS, metricsForTipo, coreKeysForTipo } from "@/lib/types";
 import { cleanComment } from "@/lib/profanity";
 import { hasHighRiskAccusation } from "@/lib/defamation";
-import { sendNoticeAck } from "@/lib/email";
+import { sendNoticeAck, sendRivendicaAlert } from "@/lib/email";
 
 export type SubmitState = { ok: boolean; error?: string };
+
+// Una scheda è pubblicata in DUE indirizzi: /lido/<id> in italiano (senza
+// prefisso) e /en/lido/<id> in inglese. La pagina è in cache per un'ora, quindi
+// ogni cambiamento di stato deve invalidarle entrambe: altrimenti il database
+// dice "verificato" e il sito continua a mostrare "non rivendicato".
+function revalidaScheda(beachId: string | null | undefined): void {
+  if (!beachId) return;
+  revalidatePath(`/lido/${beachId}`);
+  revalidatePath(`/en/lido/${beachId}`);
+}
 
 // hash dell'IP (con salt) per rate-limit senza salvare l'IP in chiaro
 function clientIpHash(): string {
@@ -182,7 +192,7 @@ export async function submitReview(
     return { ok: false, error: msg || "Errore nell'invio." };
   }
 
-  revalidatePath(`/lido/${beach_id}`);
+  revalidaScheda(beach_id);
   revalidatePath("/");
   return { ok: true };
 }
@@ -273,7 +283,7 @@ export async function submitSegnalazione(
 
   if (error) return { ok: false, error: error.message };
 
-  revalidatePath(`/lido/${beach_id}`);
+  revalidaScheda(beach_id);
   return { ok: true };
 }
 
@@ -308,15 +318,20 @@ export async function submitRivendicazione(
     return { ok: false, error: "Accedi con la tua email prima di inviare la richiesta." };
   }
 
+  const ruolo_dichiarato = String(formData.get("ruolo_dichiarato") ?? "").trim().slice(0, 120) || null;
+  const telefono = String(formData.get("telefono") ?? "").trim().slice(0, 40) || null;
+  const email_contatto =
+    String(formData.get("email_contatto") ?? "").trim().slice(0, 200) || user.email || null;
+  const nota = String(formData.get("nota") ?? "").trim().slice(0, 1000) || null;
+
   const { error } = await supabase.from("rivendicazioni").insert({
     user_id: user.id,
     beach_id,
     nome,
-    ruolo_dichiarato: String(formData.get("ruolo_dichiarato") ?? "").trim().slice(0, 120) || null,
-    telefono: String(formData.get("telefono") ?? "").trim().slice(0, 40) || null,
-    email_contatto:
-      String(formData.get("email_contatto") ?? "").trim().slice(0, 200) || user.email || null,
-    nota: String(formData.get("nota") ?? "").trim().slice(0, 1000) || null,
+    ruolo_dichiarato,
+    telefono,
+    email_contatto,
+    nota,
   });
 
   if (error) {
@@ -331,6 +346,28 @@ export async function submitRivendicazione(
     return { ok: false, error: error.message || "Invio non riuscito." };
   }
 
+  // Avviso agli amministratori. Non blocca mai: se Resend non è configurato
+  // o l'invio fallisce, la richiesta resta comunque salvata e visibile in
+  // /admin/rivendicazioni. La risposta al gestore la scrive una persona.
+  try {
+    const { data: b } = await supabase
+      .from("beaches")
+      .select("nome,localita")
+      .eq("id", beach_id)
+      .maybeSingle();
+    await sendRivendicaAlert({
+      stabilimento: b ? `${b.nome} — ${b.localita}` : beach_id,
+      nome,
+      ruolo: ruolo_dichiarato,
+      telefono,
+      email: email_contatto,
+      nota,
+    });
+  } catch {
+    // ignorata di proposito: l'avviso è un di più, non una condizione
+  }
+
+  revalidaScheda(beach_id);
   revalidatePath("/area-gestore");
   return { ok: true };
 }
@@ -345,6 +382,12 @@ export async function decidiRivendicazione(formData: FormData): Promise<void> {
   const motivo = String(formData.get("motivo") ?? "").trim().slice(0, 500) || null;
 
   const supabase = createClient();
+  // Serve l'id della scheda per invalidarne la cache dopo il cambiamento.
+  const { data: riga } = await supabase
+    .from("rivendicazioni")
+    .select("beach_id")
+    .eq("id", rid)
+    .maybeSingle();
   const { error } = await supabase.rpc("decidi_rivendicazione", {
     _rid: rid,
     _approva: azione === "approva",
@@ -360,6 +403,7 @@ export async function decidiRivendicazione(formData: FormData): Promise<void> {
     throw new Error(error.message || "Operazione non riuscita.");
   }
 
+  revalidaScheda(riga?.beach_id as string | undefined);
   revalidatePath("/admin/rivendicazioni");
   revalidatePath("/area-gestore");
 }
@@ -416,7 +460,7 @@ export async function salvaProfiloStabilimento(
 
   if (error) return { ok: false, error: error.message || "Salvataggio non riuscito." };
 
-  revalidatePath(`/lido/${beach_id}`);
+  revalidaScheda(beach_id);
   revalidatePath("/area-gestore");
   return { ok: true };
 }
@@ -430,6 +474,12 @@ export async function revocaRivendicazione(formData: FormData): Promise<void> {
   const motivo = String(formData.get("motivo") ?? "").trim().slice(0, 500) || null;
 
   const supabase = createClient();
+  // Serve l'id della scheda per invalidarne la cache dopo il cambiamento.
+  const { data: riga } = await supabase
+    .from("rivendicazioni")
+    .select("beach_id")
+    .eq("id", rid)
+    .maybeSingle();
   const { error } = await supabase.rpc("revoca_rivendicazione", { _rid: rid, _motivo: motivo });
 
   if (error) {
@@ -445,6 +495,7 @@ export async function revocaRivendicazione(formData: FormData): Promise<void> {
     throw new Error(m || "Revoca non riuscita.");
   }
 
+  revalidaScheda(riga?.beach_id as string | undefined);
   revalidatePath("/admin/rivendicazioni");
   revalidatePath("/area-gestore");
 }
@@ -456,6 +507,12 @@ export async function rinunciaRivendicazione(formData: FormData): Promise<void> 
   if (!rid) return;
 
   const supabase = createClient();
+  // Serve l'id della scheda per invalidarne la cache dopo il cambiamento.
+  const { data: riga } = await supabase
+    .from("rivendicazioni")
+    .select("beach_id")
+    .eq("id", rid)
+    .maybeSingle();
   const { error } = await supabase.rpc("rinuncia_rivendicazione", { _rid: rid });
 
   if (error) {
@@ -469,6 +526,7 @@ export async function rinunciaRivendicazione(formData: FormData): Promise<void> 
     throw new Error(m || "Operazione non riuscita.");
   }
 
+  revalidaScheda(riga?.beach_id as string | undefined);
   revalidatePath("/area-gestore");
   revalidatePath("/admin/rivendicazioni");
 }

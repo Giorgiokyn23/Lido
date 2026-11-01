@@ -68,7 +68,8 @@ export default async function AdminRivendicazioniPage({
         <h1 className="text-2xl font-bold text-sea-900">Rivendicazioni da verificare</h1>
         <p className="text-sm text-sea-500">
           {righe.length} in attesa · approva solo dopo aver verificato che la persona gestisca davvero
-          lo stabilimento.
+          lo stabilimento. Le risposte al gestore le scrivi tu da info@lidorank.com: il sito non gli
+          manda nessuna email automatica.
         </p>
       </div>
 
@@ -105,6 +106,17 @@ export default async function AdminRivendicazioniPage({
               <p className="mt-2 text-xs text-sea-400">
                 Richiesta del {new Date(r.creata_il).toLocaleString("it-IT")}
               </p>
+
+              {r.email_contatto ? (
+                <a
+                  href={`mailto:${r.email_contatto}?subject=${encodeURIComponent(
+                    `La tua richiesta per ${nomi.get(r.beach_id) ?? "il tuo stabilimento"} — LidoRank`
+                  )}`}
+                  className="mt-2 inline-block text-sm font-medium text-sea-600 underline underline-offset-2"
+                >
+                  Rispondi a {r.email_contatto}
+                </a>
+              ) : null}
 
               <form action={decidiRivendicazione} className="mt-3 flex flex-wrap items-center gap-2">
                 <input type="hidden" name="rid" value={r.id} />

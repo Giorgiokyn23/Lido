@@ -103,3 +103,87 @@ export async function sendNoticeDecision(
     text: `La tua segnalazione (rif. ${noticeId}) è stata ${esitoLabel}. ${motivazione} Puoi contestare la decisione scrivendo a info@lidorank.com.`,
   });
 }
+
+// ============================================================
+// AVVISO INTERNO: nuova richiesta di rivendica di una scheda.
+//
+// Va agli indirizzi in ADMIN_EMAILS, non al gestore: la risposta al gestore
+// la scrive una persona, a mano, da info@lidorank.com. Per questo l'email
+// contiene tutto il necessario per rispondere in due clic.
+// ============================================================
+
+function esc(s: string | null | undefined): string {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+export async function sendRivendicaAlert(d: {
+  stabilimento: string;
+  nome: string;
+  ruolo?: string | null;
+  telefono?: string | null;
+  email?: string | null;
+  nota?: string | null;
+}): Promise<SendResult[]> {
+  const destinatari = (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (destinatari.length === 0) return [{ ok: true, skipped: true }];
+
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://lidorank.com";
+  const riga = (etichetta: string, valore: string | null | undefined) =>
+    valore
+      ? `<tr><td style="padding:4px 12px 4px 0;color:#6b8793;font-size:13px">${etichetta}</td><td style="padding:4px 0;font-size:13px"><b>${esc(valore)}</b></td></tr>`
+      : "";
+
+  // Risposta già pronta: si apre il client di posta con destinatario e oggetto.
+  const rispondi = d.email
+    ? `mailto:${encodeURIComponent(d.email)}?subject=${encodeURIComponent(
+        `La tua richiesta per ${d.stabilimento} — LidoRank`
+      )}`
+    : null;
+
+  const html = `<!doctype html><html><body style="margin:0;background:#f5f7f8;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0b2e3b">
+  <div style="max-width:560px;margin:0 auto;padding:24px">
+    <div style="font-weight:700;font-size:18px;color:#0b4f6c;margin-bottom:12px">LidoRank · avviso interno</div>
+    <div style="background:#fff;border:1px solid #e3edf0;border-radius:14px;padding:20px">
+      <h1 style="font-size:17px;margin:0 0 4px">Nuova richiesta di rivendica</h1>
+      <p style="font-size:15px;margin:0 0 14px"><b>${esc(d.stabilimento)}</b></p>
+      <table style="border-collapse:collapse">
+        ${riga("Richiedente", d.nome)}
+        ${riga("Ruolo dichiarato", d.ruolo)}
+        ${riga("Telefono", d.telefono)}
+        ${riga("Email", d.email)}
+      </table>
+      ${d.nota ? `<p style="font-size:13px;line-height:1.5;background:#f3f8fa;border-radius:8px;padding:10px;margin:14px 0 0">${esc(d.nota)}</p>` : ""}
+      <p style="margin:18px 0 0">
+        <a href="${base}/admin/rivendicazioni" style="display:inline-block;background:#0b4f6c;color:#fff;text-decoration:none;padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600">Apri e verifica</a>
+        ${rispondi ? `<a href="${rispondi}" style="display:inline-block;margin-left:8px;color:#0b4f6c;text-decoration:none;padding:10px 16px;border:1px solid #cfe0e6;border-radius:999px;font-size:14px;font-weight:600">Rispondi al gestore</a>` : ""}
+      </p>
+      <p style="font-size:12px;color:#8aa2ab;margin:14px 0 0">Approva solo dopo aver verificato che la persona gestisca davvero lo stabilimento.</p>
+    </div>
+  </div></body></html>`;
+
+  const text = [
+    `Nuova richiesta di rivendica — ${d.stabilimento}`,
+    `Richiedente: ${d.nome}`,
+    d.ruolo ? `Ruolo: ${d.ruolo}` : "",
+    d.telefono ? `Telefono: ${d.telefono}` : "",
+    d.email ? `Email: ${d.email}` : "",
+    d.nota ? `Nota: ${d.nota}` : "",
+    `Verifica: ${base}/admin/rivendicazioni`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  return Promise.all(
+    destinatari.map((to) =>
+      sendEmail({ to, subject: `Nuova rivendica: ${d.stabilimento} — LidoRank`, html, text })
+    )
+  );
+}
