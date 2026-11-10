@@ -25,6 +25,7 @@ declare
   b_test     uuid;
   r1 uuid; r2 uuid; r3 uuid;
   v_txt text; v_n int; v_rec_prima int; v_rec_dopo int;
+  ev_id uuid;
   res text[] := '{}';            -- 'gruppo|controllo|atteso|ottenuto'
   riga text; parti text[];
   n_pass int := 0; n_fail int := 0;
@@ -190,6 +191,71 @@ begin
   select r.stato || ' / ' || b.profile_status into v_txt
     from public.rivendicazioni r, public.beaches b where r.id = r3 and b.id = b_test;
   res := res || format('D revoca|l admin revoca e la scheda si libera|revocata / non_rivendicato|%s', v_txt);
+
+  -- ─── F · eventi del gestore ─────────────────────────────
+  -- La scheda qui è tornata non rivendicata dopo la revoca: la rivendico di
+  -- nuovo, perché pubblicare eventi richiede una scheda verificata.
+  insert into public.rivendicazioni (user_id, beach_id, nome)
+  values (u_gestore, b_test, 'Gestore di Prova') returning id into r3;
+  perform set_config('request.jwt.claims', json_build_object('sub', u_admin)::text, true);
+  perform public.decidi_rivendicazione(r3, true);
+
+  perform set_config('request.jwt.claims', json_build_object('sub', u_gestore)::text, true);
+  begin
+    insert into public.eventi_gestore (beach_id, titolo, data_inizio, creato_da)
+    values (b_test, 'Evento di prova automatica', current_date + 3, u_gestore)
+    returning id into ev_id;
+    v_txt := 'pubblicato';
+  exception when others then
+    v_txt := 'errore: ' || sqlerrm;
+  end;
+  res := res || format('F eventi|il gestore pubblica un evento|pubblicato|%s', v_txt);
+
+  begin
+    execute 'set local role anon';
+    select count(*)::text into v_txt from public.calendario_eventi where beach_id = b_test;
+    execute 'reset role';
+  exception when others then
+    execute 'reset role'; v_txt := 'errore: ' || sqlerrm;
+  end;
+  res := res || format('F eventi|l evento e visibile nel calendario|1|%s', v_txt);
+
+  begin
+    perform set_config('request.jwt.claims', json_build_object('sub', u_estraneo)::text, true);
+    execute 'set local role authenticated';
+    insert into public.eventi_gestore (beach_id, titolo, data_inizio)
+    values (b_test, 'Evento abusivo', current_date + 1);
+    execute 'reset role';
+    v_txt := 'NON rifiutato';
+  exception when others then
+    execute 'reset role'; v_txt := 'rifiutato';
+  end;
+  res := res || format('F eventi|un estraneo NON puo pubblicare sulla scheda altrui|rifiutato|%s', v_txt);
+
+  -- un evento gia' concluso non deve comparire
+  perform set_config('request.jwt.claims', json_build_object('sub', u_gestore)::text, true);
+  insert into public.eventi_gestore (beach_id, titolo, data_inizio, creato_da)
+  values (b_test, 'Evento concluso di prova', current_date - 30, u_gestore);
+  begin
+    execute 'set local role anon';
+    select count(*)::text into v_txt from public.calendario_eventi where beach_id = b_test;
+    execute 'reset role';
+  exception when others then
+    execute 'reset role'; v_txt := 'errore: ' || sqlerrm;
+  end;
+  res := res || format('F eventi|gli eventi conclusi spariscono dal calendario|1|%s', v_txt);
+
+  -- revocando la scheda, gli eventi non sono piu' pubblici
+  perform set_config('request.jwt.claims', json_build_object('sub', u_admin)::text, true);
+  perform public.revoca_rivendicazione(r3, 'prova eventi');
+  begin
+    execute 'set local role anon';
+    select count(*)::text into v_txt from public.calendario_eventi where beach_id = b_test;
+    execute 'reset role';
+  exception when others then
+    execute 'reset role'; v_txt := 'errore: ' || sqlerrm;
+  end;
+  res := res || format('F eventi|revocando la scheda gli eventi spariscono|0|%s', v_txt);
 
   -- ─── E · integrità ──────────────────────────────────────
   select count(*)::text into v_txt from public.beaches b

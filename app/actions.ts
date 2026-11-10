@@ -15,10 +15,22 @@ export type SubmitState = { ok: boolean; error?: string };
 // prefisso) e /en/lido/<id> in inglese. La pagina è in cache per un'ora, quindi
 // ogni cambiamento di stato deve invalidarle entrambe: altrimenti il database
 // dice "verificato" e il sito continua a mostrare "non rivendicato".
-function revalidaScheda(beachId: string | null | undefined): void {
+function revalidaScheda(beachId: string | null | undefined, completo = false): void {
   if (!beachId) return;
+
+  // Il middleware di next-intl RISCRIVE /lido/x nell'indirizzo interno
+  // /it/lido/x. A seconda dei casi la pagina in cache è registrata sotto l'uno
+  // o sotto l'altro: il comportamento è noto per essere incoerente (issue 846
+  // di next-intl, confermata dal manutentore). Le invalidiamo tutte e tre.
   revalidatePath(`/lido/${beachId}`);
+  revalidatePath(`/it/lido/${beachId}`);
   revalidatePath(`/en/lido/${beachId}`);
+
+  // Per i cambi di stato della rivendica — rari, ma che DEVONO vedersi subito —
+  // invalidiamo l'intera rotta dinamica: è la forma documentata come affidabile
+  // quando il path singolo non basta. Le pagine si rigenerano una alla volta,
+  // solo quando qualcuno le visita, quindi non c'è un costo immediato.
+  if (completo) revalidatePath("/[locale]/lido/[id]", "page");
 }
 
 // hash dell'IP (con salt) per rate-limit senza salvare l'IP in chiaro
@@ -367,7 +379,7 @@ export async function submitRivendicazione(
     // ignorata di proposito: l'avviso è un di più, non una condizione
   }
 
-  revalidaScheda(beach_id);
+  revalidaScheda(beach_id, true);
   revalidatePath("/area-gestore");
   return { ok: true };
 }
@@ -403,7 +415,7 @@ export async function decidiRivendicazione(formData: FormData): Promise<void> {
     throw new Error(error.message || "Operazione non riuscita.");
   }
 
-  revalidaScheda(riga?.beach_id as string | undefined);
+  revalidaScheda(riga?.beach_id as string | undefined, true);
   revalidatePath("/admin/rivendicazioni");
   revalidatePath("/area-gestore");
 }
@@ -460,7 +472,7 @@ export async function salvaProfiloStabilimento(
 
   if (error) return { ok: false, error: error.message || "Salvataggio non riuscito." };
 
-  revalidaScheda(beach_id);
+  revalidaScheda(beach_id, true);
   revalidatePath("/area-gestore");
   return { ok: true };
 }
@@ -495,7 +507,7 @@ export async function revocaRivendicazione(formData: FormData): Promise<void> {
     throw new Error(m || "Revoca non riuscita.");
   }
 
-  revalidaScheda(riga?.beach_id as string | undefined);
+  revalidaScheda(riga?.beach_id as string | undefined, true);
   revalidatePath("/admin/rivendicazioni");
   revalidatePath("/area-gestore");
 }
@@ -526,7 +538,87 @@ export async function rinunciaRivendicazione(formData: FormData): Promise<void> 
     throw new Error(m || "Operazione non riuscita.");
   }
 
-  revalidaScheda(riga?.beach_id as string | undefined);
+  revalidaScheda(riga?.beach_id as string | undefined, true);
   revalidatePath("/area-gestore");
   revalidatePath("/admin/rivendicazioni");
+}
+
+// ---------------------------------------------------------------------------
+// EVENTI PUBBLICATI DAL GESTORE
+//
+// Un evento è contenuto dichiarato dal gestore sulla propria scheda. Non entra
+// in alcun modo nel punteggio o nella classifica: il calendario pubblico è
+// ordinato per data, mai per piano o pagamento.
+// ---------------------------------------------------------------------------
+
+// Server Action: crea o aggiorna un evento. Se arriva un id, aggiorna.
+export async function salvaEvento(
+  _prev: SubmitState,
+  formData: FormData
+): Promise<SubmitState> {
+  const beach_id = String(formData.get("beach_id") ?? "");
+  const id = String(formData.get("id") ?? "").trim() || null;
+  if (!beach_id) return { ok: false, error: "Stabilimento non valido." };
+
+  const titolo = String(formData.get("titolo") ?? "").trim().slice(0, 120);
+  if (titolo.length < 3) return { ok: false, error: "Dai un titolo all'evento (almeno 3 caratteri)." };
+
+  const descrizione = String(formData.get("descrizione") ?? "").trim().slice(0, 1000) || null;
+
+  const data_inizio = String(formData.get("data_inizio") ?? "").trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data_inizio)) {
+    return { ok: false, error: "Indica la data di inizio." };
+  }
+  const fineRaw = String(formData.get("data_fine") ?? "").trim();
+  const data_fine = /^\d{4}-\d{2}-\d{2}$/.test(fineRaw) ? fineRaw : null;
+  if (data_fine && data_fine < data_inizio) {
+    return { ok: false, error: "La data di fine non può venire prima dell'inizio." };
+  }
+
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "Accedi per pubblicare un evento." };
+
+  const riga = { beach_id, titolo, descrizione, data_inizio, data_fine, creato_da: user.id };
+  const { error } = id
+    ? await supabase.from("eventi_gestore").update(riga).eq("id", id)
+    : await supabase.from("eventi_gestore").insert(riga);
+
+  if (error) {
+    const m = error.message || "";
+    if (m.includes("troppi_eventi")) {
+      return { ok: false, error: "Hai già dieci eventi in programma: elimina o concludi i vecchi prima di aggiungerne altri." };
+    }
+    if (m.includes("eventi_date_coerenti")) {
+      return { ok: false, error: "La data di fine non può venire prima dell'inizio." };
+    }
+    if (m.includes("row-level security")) {
+      return { ok: false, error: "Puoi pubblicare eventi solo sugli stabilimenti che gestisci, e solo dopo l'approvazione." };
+    }
+    return { ok: false, error: m || "Salvataggio non riuscito." };
+  }
+
+  revalidaScheda(beach_id, true);
+  revalidatePath("/eventi");
+  revalidatePath("/en/eventi");
+  revalidatePath(`/area-gestore/${beach_id}/eventi`);
+  return { ok: true };
+}
+
+// Server Action: elimina un evento. La RLS consente solo i propri.
+export async function eliminaEvento(formData: FormData): Promise<void> {
+  const id = String(formData.get("id") ?? "");
+  const beach_id = String(formData.get("beach_id") ?? "");
+  if (!id) return;
+
+  const supabase = createClient();
+  const { error } = await supabase.from("eventi_gestore").delete().eq("id", id);
+  if (error) throw new Error(error.message || "Eliminazione non riuscita.");
+
+  revalidaScheda(beach_id, true);
+  revalidatePath("/eventi");
+  revalidatePath("/en/eventi");
+  revalidatePath(`/area-gestore/${beach_id}/eventi`);
 }

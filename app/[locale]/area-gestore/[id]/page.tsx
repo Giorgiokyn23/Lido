@@ -123,6 +123,12 @@ export default async function HubGestorePage({
           {t("editCta")}
         </Link>
         <Link
+          href={`/area-gestore/${id}/eventi`}
+          className="rounded-full border border-sea-300 px-4 py-2 text-sm font-medium text-sea-700 hover:bg-sea-50"
+        >
+          {t("evGestisci")}
+        </Link>
+        <Link
           href={`/lido/${id}`}
           className="rounded-full border border-sea-300 px-4 py-2 text-sm font-medium text-sea-700 hover:bg-sea-50"
         >

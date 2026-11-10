@@ -41,6 +41,10 @@ export default async function AdminRivendicazioniPage({
   if (!email || allow.length === 0 || !allow.includes(email)) notFound();
 
   // Due code distinte: da decidere e già attive (queste ultime si possono revocare).
+  // Secondo lucchetto: il ruolo nel database. Senza, Approva e Revoca
+  // falliscono. Invece di farti scoprire l'errore al clic, te lo dico qui.
+  const { data: isAdminDb } = await supabase.rpc("e_admin");
+
   const { data } = await supabase
     .from("rivendicazioni")
     .select("id,beach_id,user_id,nome,ruolo_dichiarato,telefono,email_contatto,nota,stato,creata_il")
@@ -72,6 +76,22 @@ export default async function AdminRivendicazioniPage({
           manda nessuna email automatica.
         </p>
       </div>
+
+      {isAdminDb === false ? (
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 p-5 text-sm text-amber-900">
+          <p className="font-semibold">Manca il ruolo amministratore nel database.</p>
+          <p className="mt-1">
+            La tua email è fra quelle autorizzate, ma nella tabella <code>profili</code> non risulti
+            amministratore: puoi vedere questa pagina, non approvare o revocare. Esegui una volta
+            sola, nel SQL editor di Supabase:
+          </p>
+          <pre className="mt-2 overflow-x-auto rounded-lg bg-white p-3 text-xs">
+{`insert into public.profili (user_id, ruolo)
+select id, 'admin' from auth.users where email = '${email}'
+on conflict (user_id) do update set ruolo = 'admin';`}
+          </pre>
+        </div>
+      ) : null}
 
       {righe.length === 0 ? (
         <p className="rounded-2xl border border-sea-100 bg-white p-5 text-sm text-sea-500 shadow-sm">

@@ -1,4 +1,7 @@
-import Link from "next/link";
+// Link di next-intl: mantiene la lingua corrente nell'URL. Con il Link
+// normale di Next il prefisso si perde e il middleware ricalcola la lingua
+// dal browser, facendo saltare la pagina in inglese.
+import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { createPublicClient } from "@/lib/supabase/public";
@@ -8,6 +11,7 @@ import { SegnalazioneForm } from "@/components/SegnalazioneForm";
 import { FlagButton } from "@/components/FlagButton";
 import { ProfiloGestore, type ProfiloPubblico } from "@/components/ProfiloGestore";
 import { SigilloProfilo, RivendicaCta } from "@/components/StatoProfilo";
+import { EventiBagno, type EventoPubblico } from "@/components/EventiBagno";
 import {
   FACTS,
   BOOL_FACTS,
@@ -86,6 +90,15 @@ export default async function BeachPage({ params }: { params: { id: string; loca
   // Informazioni dichiarate dal gestore (solo se la scheda è verificata: lo
   // impone la RLS, quindi qui non serve filtrare di nuovo). Query separata per
   // non toccare il Promise.all esistente e non alterare i tipi già in uso.
+  // Eventi in programma. La RLS mostra solo quelli pubblicati e non conclusi
+  // di schede verificate, quindi qui non serve filtrare di nuovo.
+  const { data: eventiData } = await supabase
+    .from("eventi_gestore")
+    .select("id,titolo,descrizione,data_inizio,data_fine")
+    .eq("beach_id", params.id)
+    .order("data_inizio", { ascending: true })
+    .limit(5);
+
   const { data: profiloData } = await supabase
     .from("profilo_stabilimento")
     .select("descrizione,orari,telefono,email_pubblica,sito,link_prenotazione")
@@ -392,6 +405,8 @@ export default async function BeachPage({ params }: { params: { id: string; loca
       <ProfiloGestore profilo={(profiloData as ProfiloPubblico | null) ?? null} />
 
       {/* Ingresso gratuito per il gestore, solo sulle schede non ancora rivendicate */}
+      <EventiBagno eventi={(eventiData ?? []) as EventoPubblico[]} locale={params.locale} />
+
       <RivendicaCta beachId={b.id} stato={statoProfilo} />
 
       <div className="space-y-8">
