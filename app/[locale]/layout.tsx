@@ -91,6 +91,9 @@ export default async function LocaleLayout({
                 <Link href="/eventi" className="font-medium text-sea-700 hover:underline">
                   {t("events")}
                 </Link>
+                <Link href="/per-i-gestori" className="font-medium text-sea-700 hover:underline">
+                  {t("operators")}
+                </Link>
                 <Link href="/chi-siamo" className="hidden font-medium text-sea-700 hover:underline sm:inline">
                   {t("about")}
                 </Link>

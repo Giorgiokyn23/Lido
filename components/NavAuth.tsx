@@ -31,6 +31,13 @@ export function NavAuth() {
   if (email) {
     return (
       <div className="flex items-center gap-2">
+        {/* Chi è loggato deve poter tornare al proprio pannello da ogni pagina. */}
+        <Link
+          href="/area-gestore"
+          className="rounded-full bg-sea-50 px-3 py-1 font-medium text-sea-700 hover:bg-sea-100"
+        >
+          {t("myArea")}
+        </Link>
         <span className="hidden max-w-[140px] truncate text-xs text-sea-500 sm:inline">{email}</span>
         <button
           onClick={logout}

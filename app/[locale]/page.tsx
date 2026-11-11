@@ -1,7 +1,9 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SearchExperience } from "@/components/SearchExperience";
+import { PortaGestori } from "@/components/PortaGestori";
 
-// Statica: il guscio non cambia; i dati li carica il componente client.
+// Dinamica: la porta gestori in fondo cambia a seconda di chi guarda.
+export const dynamic = "force-dynamic";
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale);
   const t = await getTranslations("home");
@@ -39,6 +41,10 @@ export default async function HomePage({ params: { locale } }: { params: { local
       </section>
 
       <SearchExperience locale={locale} />
+
+      {/* Porta d'ingresso dei gestori: senza, l'area gestore era raggiungibile
+          solo digitando l'indirizzo a memoria. */}
+      <PortaGestori />
     </div>
   );
 }

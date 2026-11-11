@@ -5,7 +5,9 @@
     "login": "Accedi",
     "logout": "Esci",
     "tagline": "Il Trustpilot dei bagni",
-    "events": "Eventi"
+    "events": "Eventi",
+    "myArea": "Area gestore",
+    "operators": "Per i gestori"
   },
   "home": {
     "badge": "30.000+ lidi e porti · 10 criteri · nel mondo",
@@ -651,6 +653,12 @@
     "evPubblicaPrimo": "Pubblica il primo evento",
     "evVuotoPannello": "Non hai ancora pubblicato eventi. Serate, tornei, corsi: bastano un titolo e una data.",
     "azionePrimoEvento": "Pubblica il tuo primo evento: comparirà sulla scheda e nel calendario del litorale.",
-    "azioneVaiEventi": "Pubblica"
+    "azioneVaiEventi": "Pubblica",
+    "portaTitolo": "Gestisci uno stabilimento balneare?",
+    "portaTesto": "Rivendica la tua scheda e raccontala tu: descrizione, orari, contatti ed eventi. I voti restano dei cittadini, la scheda diventa tua.",
+    "portaGratis": "Gratuito · bastano pochi minuti",
+    "portaRivendica": "Rivendica la tua scheda",
+    "portaEntra": "Vai alla tua area gestore",
+    "portaScopri": "Scopri come funziona →"
   }
 }

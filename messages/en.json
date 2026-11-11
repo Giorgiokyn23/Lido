@@ -5,7 +5,9 @@
     "login": "Sign in",
     "logout": "Sign out",
     "tagline": "The Trustpilot of beach clubs",
-    "events": "Events"
+    "events": "Events",
+    "myArea": "My area",
+    "operators": "For operators"
   },
   "home": {
     "badge": "30,000+ beach clubs & marinas · 10 criteria · worldwide",
@@ -651,6 +653,12 @@
     "evPubblicaPrimo": "Publish your first event",
     "evVuotoPannello": "You have not published any events yet. Evenings, tournaments, courses: a title and a date are enough.",
     "azionePrimoEvento": "Publish your first event: it will appear on your page and in the coastline calendar.",
-    "azioneVaiEventi": "Publish"
+    "azioneVaiEventi": "Publish",
+    "portaTitolo": "Do you run a beach establishment?",
+    "portaTesto": "Claim your page and tell its story yourself: description, hours, contacts and events. Ratings stay with citizens, the page becomes yours.",
+    "portaGratis": "Free · it only takes a few minutes",
+    "portaRivendica": "Claim your page",
+    "portaEntra": "Go to your operator area",
+    "portaScopri": "See how it works →"
   }
 }

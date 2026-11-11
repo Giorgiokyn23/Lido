@@ -97,6 +97,32 @@ export default function Page({ params: { locale } }: { params: { locale: string 
   const en = locale === "en";
   return (
     <div className="space-y-5">
+      {/* I due ingressi in cima: chi arriva qui vuole fare, non leggere. */}
+      <div className="mx-auto max-w-2xl rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
+        <p className="text-sm font-semibold text-sea-900">
+          {en ? "Do you run an establishment?" : "Gestisci uno stabilimento?"}
+        </p>
+        <p className="mt-1 text-sm text-sea-600">
+          {en
+            ? "Claim your page for free, then manage it from your own area."
+            : "Rivendica la tua scheda gratuitamente, poi gestiscila dalla tua area."}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-3">
+          <Link
+            href="/area-gestore/rivendica"
+            className="rounded-full bg-sea-500 px-5 py-2 text-sm font-semibold text-white hover:bg-sea-600"
+          >
+            {en ? "Claim your establishment" : "Rivendica il tuo stabilimento"}
+          </Link>
+          <Link
+            href="/area-gestore"
+            className="rounded-full border border-sea-300 px-5 py-2 text-sm font-semibold text-sea-700 hover:bg-sea-50"
+          >
+            {en ? "Go to my area" : "Vai alla mia area"}
+          </Link>
+        </div>
+      </div>
+
       <LegalPage c={en ? EN : IT} />
       <div className="mx-auto max-w-2xl rounded-2xl border border-sea-100 bg-white p-5 text-center shadow-sm">
         <p className="text-sm text-sea-600">
