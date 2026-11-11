@@ -63,6 +63,17 @@ export default async function HubGestorePage({
     .maybeSingle();
   const profilo = (profiloData as CampiProfilo | null) ?? null;
 
+  // Eventi futuri: servono sia per il riquadro sia per l'azione consigliata.
+  const oggi = new Date().toISOString().slice(0, 10);
+  const { data: evData } = await supabase
+    .from("eventi_gestore")
+    .select("id,titolo,data_inizio")
+    .eq("beach_id", id)
+    .gte("data_inizio", oggi)
+    .order("data_inizio", { ascending: true })
+    .limit(3);
+  const eventiProssimi = (evData ?? []) as { id: string; titolo: string; data_inizio: string }[];
+
   const pub = createPublicClient();
   const [{ data: beachRow }, { data: scoreRow }] = await Promise.all([
     pub.from("beaches").select("profile_status").eq("id", id).maybeSingle(),
@@ -97,6 +108,7 @@ export default async function HubGestorePage({
         recensioni={recensioni}
         sogliaClassifica={soglia}
         verificato={verificato}
+        eventi={eventiProssimi.length}
       />
 
       {/* Risultati gratuiti: numeri veri, con la soglia dichiarata */}
@@ -113,6 +125,38 @@ export default async function HubGestorePage({
         />
       </div>
 
+      {/* Eventi: sezione a sé, con l'invito a pubblicare in evidenza.
+          Prima era un pulsante in fondo e non si capiva che servisse a quello. */}
+      <section className="rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-sm font-semibold text-sea-800">{t("evInProgramma")}</h2>
+          <Link
+            href={`/area-gestore/${id}/eventi`}
+            className="rounded-full bg-sea-500 px-4 py-1.5 text-sm font-medium text-white hover:bg-sea-600"
+          >
+            {eventiProssimi.length === 0 ? t("evPubblicaPrimo") : t("evNuovo")}
+          </Link>
+        </div>
+
+        {eventiProssimi.length === 0 ? (
+          <p className="mt-2 text-sm text-sea-500">{t("evVuotoPannello")}</p>
+        ) : (
+          <ul className="mt-3 space-y-2">
+            {eventiProssimi.map((e) => (
+              <li key={e.id} className="flex items-center gap-3 text-sm">
+                <span className="w-24 shrink-0 text-xs text-sea-400">
+                  {new Date(e.data_inizio).toLocaleDateString(locale === "en" ? "en-GB" : "it-IT", {
+                    day: "numeric",
+                    month: "short",
+                  })}
+                </span>
+                <span className="truncate text-sea-800">{e.titolo}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
       <CentroInviti beachId={id} nomeBagno={mio.nome} />
 
       <div className="flex flex-wrap gap-3">
@@ -121,12 +165,6 @@ export default async function HubGestorePage({
           className="rounded-full bg-sea-500 px-4 py-2 text-sm font-medium text-white hover:bg-sea-600"
         >
           {t("editCta")}
-        </Link>
-        <Link
-          href={`/area-gestore/${id}/eventi`}
-          className="rounded-full border border-sea-300 px-4 py-2 text-sm font-medium text-sea-700 hover:bg-sea-50"
-        >
-          {t("evGestisci")}
         </Link>
         <Link
           href={`/lido/${id}`}

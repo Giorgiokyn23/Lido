@@ -88,6 +88,9 @@ export default async function LocaleLayout({
                 <Link href="/classifiche" className="font-medium text-sea-700 hover:underline">
                   🏆 {t("rankings")}
                 </Link>
+                <Link href="/eventi" className="font-medium text-sea-700 hover:underline">
+                  {t("events")}
+                </Link>
                 <Link href="/chi-siamo" className="hidden font-medium text-sea-700 hover:underline sm:inline">
                   {t("about")}
                 </Link>
@@ -131,6 +134,7 @@ export default async function LocaleLayout({
               <Link href="/linee-guida" className="hover:text-sea-700 hover:underline">{tl("guidelines")}</Link>
               <Link href="/moderazione" className="hover:text-sea-700 hover:underline">{tl("moderation")}</Link>
               <Link href="/metodologia" className="hover:text-sea-700 hover:underline">{tl("methodology")}</Link>
+              <Link href="/eventi" className="hover:text-sea-700 hover:underline">{t("events")}</Link>
               <Link href="/per-i-gestori" className="hover:text-sea-700 hover:underline">{tl("operators")}</Link>
               <Link href="/contatti" className="hover:text-sea-700 hover:underline">{tl("contact")}</Link>
             </nav>

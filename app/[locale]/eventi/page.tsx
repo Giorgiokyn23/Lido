@@ -8,8 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/eventi" },
 };
 
-// Si aggiorna ogni mezz'ora: un calendario non ha bisogno di essere al secondo,
-// e le azioni del gestore lo invalidano comunque subito.
 export const revalidate = 1800;
 
 type Riga = {
@@ -23,6 +21,17 @@ type Riga = {
   data_fine: string | null;
 };
 
+// Iniziali dello stabilimento: fanno le veci dell'immagine che non abbiamo.
+function iniziali(nome: string): string {
+  return nome
+    .replace(/[^\p{L}\s]/gu, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]!.toUpperCase())
+    .join("");
+}
+
 export default async function EventiPage({
   params: { locale },
   searchParams,
@@ -35,35 +44,40 @@ export default async function EventiPage({
   const fmt = locale === "en" ? "en-GB" : "it-IT";
 
   const supabase = createPublicClient();
-  // La vista è già ordinata per data e filtra gli eventi conclusi.
   const { data } = await supabase.from("calendario_eventi").select("*").limit(300);
   const tutti = (data ?? []) as Riga[];
 
   const localita = (searchParams.localita ?? "").trim();
   const elenco = localita ? tutti.filter((r) => r.localita === localita) : tutti;
 
-  // Località disponibili, con quanti eventi ciascuna.
   const perLocalita = new Map<string, number>();
   for (const r of tutti) perLocalita.set(r.localita, (perLocalita.get(r.localita) ?? 0) + 1);
   const luoghi = [...perLocalita.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 
-  // Raggruppo per giorno per dare al calendario una forma leggibile.
-  const perGiorno = new Map<string, Riga[]>();
-  for (const r of elenco) {
-    if (!perGiorno.has(r.data_inizio)) perGiorno.set(r.data_inizio, []);
-    perGiorno.get(r.data_inizio)!.push(r);
-  }
+  const oggi = new Date();
+  oggi.setHours(0, 0, 0, 0);
 
-  const giornoLungo = (iso: string) =>
-    new Date(iso).toLocaleDateString(fmt, { weekday: "long", day: "numeric", month: "long" });
+  const quando = (r: Riga) => {
+    const base = new Date(r.data_inizio).toLocaleDateString(fmt, {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    });
+    if (!r.data_fine || r.data_fine === r.data_inizio) return base;
+    const f = new Date(r.data_fine).toLocaleDateString(fmt, { day: "numeric", month: "long" });
+    return `${base} – ${f}`;
+  };
 
-  const durata = (r: Riga) =>
-    r.data_fine && r.data_fine !== r.data_inizio
-      ? ` – ${new Date(r.data_fine).toLocaleDateString(fmt, { day: "numeric", month: "long" })}`
-      : "";
+  const fraQuanto = (iso: string) => {
+    const d = Math.round((new Date(iso).getTime() - oggi.getTime()) / 86_400_000);
+    if (d <= 0) return t("evOggi");
+    if (d === 1) return t("evDomani");
+    if (d <= 14) return t("evFraGiorni", { giorni: d });
+    return null;
+  };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 py-6">
+    <div className="mx-auto max-w-2xl space-y-6 py-6">
       <div>
         <h1 className="text-3xl font-bold text-sea-900">{t("calTitolo")}</h1>
         <p className="mt-1 text-sea-600">{t("calIntro")}</p>
@@ -74,7 +88,9 @@ export default async function EventiPage({
           <Link
             href="/eventi"
             className={`rounded-full border px-3 py-1 text-sm ${
-              localita ? "border-sea-200 text-sea-600 hover:bg-sea-50" : "border-sea-500 bg-sea-500 text-white"
+              localita
+                ? "border-sea-200 text-sea-600 hover:bg-sea-50"
+                : "border-sea-500 bg-sea-500 text-white"
             }`}
           >
             {t("calTutte")}
@@ -100,32 +116,47 @@ export default async function EventiPage({
           {t("calVuoto")}
         </p>
       ) : (
-        <div className="space-y-5">
-          {[...perGiorno.entries()].map(([giorno, righe]) => (
-            <section key={giorno}>
-              <h2 className="text-sm font-semibold capitalize text-sea-700">{giornoLungo(giorno)}</h2>
-              <ul className="mt-2 space-y-2">
-                {righe.map((r) => (
-                  <li
-                    key={r.id}
-                    className="rounded-2xl border border-sea-100 bg-white p-4 shadow-sm"
-                  >
-                    <div className="font-semibold text-sea-900">{r.titolo}</div>
-                    <div className="text-sm text-sea-500">
-                      <Link href={`/lido/${r.beach_id}`} className="hover:underline">
-                        {r.stabilimento}
-                      </Link>{" "}
-                      · {r.localita}
-                      {durata(r)}
-                    </div>
-                    {r.descrizione ? (
-                      <p className="mt-2 text-sm text-sea-600">{r.descrizione}</p>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ))}
+        /* Un flusso di schede, come i commenti: in alto chi parla, sotto che cosa dice. */
+        <div className="space-y-3">
+          {elenco.map((r) => {
+            const manca = fraQuanto(r.data_inizio);
+            return (
+              <article
+                key={r.id}
+                className="rounded-2xl border border-sea-100 bg-white p-4 shadow-sm"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sea-100 text-sm font-bold text-sea-700">
+                    {iniziali(r.stabilimento)}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <Link
+                      href={`/lido/${r.beach_id}`}
+                      className="font-semibold text-sea-900 hover:underline"
+                    >
+                      {r.stabilimento}
+                    </Link>
+                    <div className="text-xs text-sea-400">{r.localita}</div>
+                  </div>
+                  {manca ? (
+                    <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800">
+                      {manca}
+                    </span>
+                  ) : null}
+                </div>
+
+                <div className="mt-3 border-l-2 border-sea-100 pl-3">
+                  <h2 className="font-semibold text-sea-900">{r.titolo}</h2>
+                  <p className="mt-0.5 text-xs capitalize text-sea-500">{quando(r)}</p>
+                  {r.descrizione ? (
+                    <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-sea-700">
+                      {r.descrizione}
+                    </p>
+                  ) : null}
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
 

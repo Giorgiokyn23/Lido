@@ -4,7 +4,8 @@
     "about": "About",
     "login": "Sign in",
     "logout": "Sign out",
-    "tagline": "The Trustpilot of beach clubs"
+    "tagline": "The Trustpilot of beach clubs",
+    "events": "Events"
   },
   "home": {
     "badge": "30,000+ beach clubs & marinas · 10 criteria · worldwide",
@@ -643,6 +644,13 @@
     "calTutte": "All locations",
     "calVuoto": "No upcoming events right now. Check back soon.",
     "calVediTutti": "See the calendar →",
-    "calNota": "Events are published by the establishments' operators and ordered by date. Their presence does not affect scores or rankings."
+    "calNota": "Events are published by the establishments' operators and ordered by date. Their presence does not affect scores or rankings.",
+    "evOggi": "today",
+    "evDomani": "tomorrow",
+    "evFraGiorni": "in {giorni} days",
+    "evPubblicaPrimo": "Publish your first event",
+    "evVuotoPannello": "You have not published any events yet. Evenings, tournaments, courses: a title and a date are enough.",
+    "azionePrimoEvento": "Publish your first event: it will appear on your page and in the coastline calendar.",
+    "azioneVaiEventi": "Publish"
   }
 }

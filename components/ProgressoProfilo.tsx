@@ -35,12 +35,14 @@ export async function ProgressoProfilo({
   recensioni,
   sogliaClassifica,
   verificato,
+  eventi,
 }: {
   beachId: string;
   profilo: CampiProfilo | null;
   recensioni: number;
   sogliaClassifica: number;
   verificato: boolean;
+  eventi: number;
 }) {
   const t = await getTranslations("gestore");
   const { fatti, totale, pct } = completezza(profilo);
@@ -55,6 +57,12 @@ export async function ProgressoProfilo({
     azione = { testo: t("azioneOrari"), href: `/area-gestore/${beachId}/profilo`, cta: t("azioneVaiProfilo") };
   } else if (!profilo?.telefono && !profilo?.email_pubblica) {
     azione = { testo: t("azioneContatti"), href: `/area-gestore/${beachId}/profilo`, cta: t("azioneVaiProfilo") };
+  } else if (eventi === 0) {
+    azione = {
+      testo: t("azionePrimoEvento"),
+      href: `/area-gestore/${beachId}/eventi`,
+      cta: t("azioneVaiEventi"),
+    };
   } else if (recensioni < sogliaClassifica) {
     azione = { testo: t("azioneInvita", { mancanti: sogliaClassifica - recensioni }) };
   } else {
