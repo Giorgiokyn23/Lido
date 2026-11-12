@@ -4,7 +4,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { EventoForm } from "@/components/EventoForm";
-import { eliminaEvento } from "@/app/actions";
+import { BottoneElimina } from "@/components/BottoneElimina";
 
 export const metadata: Metadata = {
   title: "LidoRank — Eventi",
@@ -82,13 +82,13 @@ export default async function EventiGestorePage({
             <p className="mt-1 text-sm text-sea-600">{e.descrizione}</p>
           ) : null}
         </div>
-        <form action={eliminaEvento} className="shrink-0">
-          <input type="hidden" name="id" value={e.id} />
-          <input type="hidden" name="beach_id" value={id} />
-          <button className="text-xs text-sea-400 underline underline-offset-2 hover:text-red-700">
-            {t("evElimina")}
-          </button>
-        </form>
+        <BottoneElimina
+          eventoId={e.id}
+          beachId={id}
+          titolo={e.titolo}
+          etichetta={t("evElimina")}
+          conferma={t("evConfermaElimina", { titolo: e.titolo })}
+        />
       </div>
     </li>
   );

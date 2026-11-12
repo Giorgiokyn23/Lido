@@ -467,7 +467,20 @@
     "submitting": "Sending…",
     "anonNote": "You can also review anonymously from a place's page: those reviews stay visible but weigh less in the rankings.",
     "errRate": "Too many sign-in requests in a short time. Try again in a few minutes — if you already requested the link, check your inbox (and spam).",
-    "errGeneric": "We couldn't send the sign-in link. Check the email address and try again."
+    "errGeneric": "We couldn't send the sign-in link. Check the email address and try again.",
+    "introCodice": "We will email you a six-digit code. No password to remember.",
+    "submitCodice": "Send me the code",
+    "codiceIntro": "We sent a code to {email}. Type it below.",
+    "codiceLabel": "Six-digit code",
+    "verifica": "Sign in",
+    "cambiaEmail": "Change address",
+    "reinvia": "Didn't arrive? Send again",
+    "reinviaFra": "You can ask again in {secondi}s",
+    "ancheLink": "The email also contains a link: you can click that instead if you prefer.",
+    "errCodice": "Wrong or expired code. Request a new one.",
+    "giaCodice": "I already have a code",
+    "errLink": "That link didn't work: it may have expired, been used already, or been opened on a different device. Ask for a code and type it below — that always works.",
+    "errEmailPrima": "Enter your email address first, then the code."
   },
   "flag": {
     "tooltip": "Report this review as unlawful content",
@@ -659,6 +672,7 @@
     "portaGratis": "Free · it only takes a few minutes",
     "portaRivendica": "Claim your page",
     "portaEntra": "Go to your operator area",
-    "portaScopri": "See how it works →"
+    "portaScopri": "See how it works →",
+    "evConfermaElimina": "Delete the event “{titolo}”? This cannot be undone."
   }
 }
