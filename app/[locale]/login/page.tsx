@@ -27,6 +27,18 @@ import { createClient } from "@/lib/supabase/client";
 // nessuna casella dove scriverlo.
 const CHIAVE = "lidorank_accesso";
 
+// Quante cifre ha il codice. Supabase lo genera fra 6 e 10 a seconda di come
+// è configurato il progetto (impostazione `otp_length`), e il nostro ne manda
+// 8. Il numero sta scritto QUI UNA VOLTA SOLA invece che sparso fra
+// maxLength, slice e il controllo del pulsante: se un giorno cambia
+// l'impostazione su Supabase, si corregge una riga e non si va a caccia.
+// Fuori dall'intervallo consentito il valore viene riportato dentro, così un
+// errore di battitura nella variabile d'ambiente non blocca l'accesso a tutti.
+const LUNGHEZZA = Math.min(
+  10,
+  Math.max(6, Number(process.env.NEXT_PUBLIC_LUNGHEZZA_CODICE) || 8)
+);
+
 export default function LoginPage() {
   const t = useTranslations("login");
   const router = useRouter();
@@ -192,19 +204,19 @@ export default function LoginPage() {
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 required
-                maxLength={6}
+                maxLength={LUNGHEZZA}
                 value={codice}
-                onChange={(e) => setCodice(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                placeholder="000000"
+                onChange={(e) => setCodice(e.target.value.replace(/\D/g, "").slice(0, LUNGHEZZA))}
+                placeholder={"0".repeat(LUNGHEZZA)}
                 aria-label={t("codiceLabel")}
-                className={`${campo} text-center text-2xl font-bold tracking-[0.4em]`}
+                className={`${campo} text-center text-2xl font-bold tracking-[0.25em]`}
               />
               {error ? (
                 <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
               ) : null}
               <button
                 type="submit"
-                disabled={loading || codice.length < 6}
+                disabled={loading || codice.length < LUNGHEZZA}
                 className="w-full rounded-xl bg-sea-500 px-5 py-3 font-semibold text-white transition hover:bg-sea-600 disabled:opacity-60"
               >
                 {loading ? t("submitting") : t("verifica")}
