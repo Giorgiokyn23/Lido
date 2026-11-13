@@ -457,6 +457,38 @@ export async function salvaProfiloStabilimento(
     }
   };
 
+  // Un numero, oppure null se la casella è vuota. Lo ZERO va conservato:
+  // "gruppi_max = 0" significa «non accettiamo gruppi», che è una risposta,
+  // mentre null significa «non ho risposto». Confonderle falserebbe i conteggi.
+  const numero = (campo: string, max: number): number | null => {
+    const grezzo = String(formData.get(campo) ?? "").trim();
+    if (grezzo === "") return null;
+    const n = Number.parseInt(grezzo, 10);
+    if (!Number.isInteger(n) || n < 0) return null;
+    return Math.min(n, max);
+  };
+
+  // Scelta da un insieme chiuso: qualunque altra cosa diventa null invece di
+  // arrivare al database e far fallire il CHECK con un errore incomprensibile.
+  const scelta = (campo: string, ammessi: readonly string[]): string | null => {
+    const v = String(formData.get(campo) ?? "").trim();
+    return ammessi.includes(v) ? v : null;
+  };
+
+  // Tre stati: "1" sì, "0" no, vuoto non dichiarato. Non è pignoleria: su
+  // accessibilità un "no" messo al posto di un "non so" toglie clienti al
+  // gestore, e un "sì" sbagliato fa viaggiare per niente chi ne ha bisogno.
+  const triStato = (campo: string): boolean | null => {
+    const v = String(formData.get(campo) ?? "");
+    return v === "1" ? true : v === "0" ? false : null;
+  };
+
+  const LINGUE_AMMESSE = ["en", "fr", "de", "es", "ru", "nl"] as const;
+  const lingueScelte = formData
+    .getAll("lingue")
+    .map((v) => String(v))
+    .filter((v) => (LINGUE_AMMESSE as readonly string[]).includes(v));
+
   const { error } = await supabase.from("profilo_stabilimento").upsert(
     {
       beach_id,
@@ -466,6 +498,19 @@ export async function salvaProfiloStabilimento(
       email_pubblica: testo("email_pubblica", 200),
       sito: link("sito"),
       link_prenotazione: link("link_prenotazione"),
+      gruppi_max: numero("gruppi_max", 2000),
+      gruppi_preavviso_giorni: numero("gruppi_preavviso_giorni", 60),
+      pranzo_gruppi: scelta("pranzo_gruppi", ["no", "su_prenotazione", "sempre"]),
+      discesa_pullman: scelta("discesa_pullman", ["no", "nei_paraggi", "al_cancello"]),
+      accesso_senza_scalini: triStato("accesso_senza_scalini"),
+      passerella_fino_al_mare: triStato("passerella_fino_al_mare"),
+      sedia_mare: triStato("sedia_mare"),
+      bagno_accessibile: triStato("bagno_accessibile"),
+      // Nessuna lingua spuntata resta null, non un array vuoto: "non ho
+      // dichiarato le lingue" non è "al banco non si parla nulla".
+      lingue: lingueScelte.length ? lingueScelte : null,
+      pagamenti_carte: triStato("pagamenti_carte"),
+      ombra_garantita: triStato("ombra_garantita"),
     },
     { onConflict: "beach_id" }
   );
@@ -616,6 +661,69 @@ export async function eliminaEvento(formData: FormData): Promise<void> {
   const supabase = createClient();
   const { error } = await supabase.from("eventi_gestore").delete().eq("id", id);
   if (error) throw new Error(error.message || "Eliminazione non riuscita.");
+
+  revalidaScheda(beach_id, true);
+  revalidatePath("/eventi");
+  revalidatePath("/en/eventi");
+  revalidatePath(`/area-gestore/${beach_id}/eventi`);
+}
+
+// ---------------------------------------------------------------------------
+// Moderazione degli eventi (solo amministratore)
+//
+// Non usano una update o una delete dirette, ma le due funzioni security
+// definer della migrazione 0079. Il motivo è che ogni intervento deve finire
+// in eventi_audit, che è append-only: se un gestore chiede «perché avete
+// tolto il mio evento?», la risposta è scritta da qualche parte e non va
+// ricostruita a memoria. È lo stesso schema di decidi_rivendicazione.
+// ---------------------------------------------------------------------------
+
+function erroreModerazione(messaggio: string): string {
+  if (messaggio.includes("non_autorizzato")) {
+    return "Serve il ruolo amministratore nel database: esegui il blocco BOOTSTRAP della migrazione 0071.";
+  }
+  if (messaggio.includes("evento_non_trovato")) {
+    return "Questo evento non esiste più: forse l'hai già eliminato in un'altra scheda del browser.";
+  }
+  return messaggio || "Operazione non riuscita.";
+}
+
+/** Nasconde un evento dal calendario pubblico, o lo ripubblica. Reversibile. */
+export async function moderaEvento(formData: FormData): Promise<void> {
+  const id = String(formData.get("id") ?? "");
+  const beach_id = String(formData.get("beach_id") ?? "");
+  const nascondi = String(formData.get("nascondi") ?? "") === "1";
+  const motivo = String(formData.get("motivo") ?? "").trim().slice(0, 300) || null;
+  if (!id) return;
+
+  const supabase = createClient();
+  const { error } = await supabase.rpc("modera_evento", {
+    _id: id,
+    _nascondi: nascondi,
+    _motivo: motivo,
+  });
+  if (error) throw new Error(erroreModerazione(error.message || ""));
+
+  revalidaScheda(beach_id, true);
+  revalidatePath("/eventi");
+  revalidatePath("/en/eventi");
+  revalidatePath(`/area-gestore/${beach_id}/eventi`);
+}
+
+/**
+ * Elimina un evento di chiunque, conservandone il contenuto nel registro.
+ * Distinta da eliminaEvento, che è la via del gestore sui propri e si affida
+ * alla RLS: qui l'autorizzazione e la traccia stanno nella funzione.
+ */
+export async function eliminaEventoAdmin(formData: FormData): Promise<void> {
+  const id = String(formData.get("id") ?? "");
+  const beach_id = String(formData.get("beach_id") ?? "");
+  const motivo = String(formData.get("motivo") ?? "").trim().slice(0, 300) || null;
+  if (!id) return;
+
+  const supabase = createClient();
+  const { error } = await supabase.rpc("elimina_evento_admin", { _id: id, _motivo: motivo });
+  if (error) throw new Error(erroreModerazione(error.message || ""));
 
   revalidaScheda(beach_id, true);
   revalidatePath("/eventi");

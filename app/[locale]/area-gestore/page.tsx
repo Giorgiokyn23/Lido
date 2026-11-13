@@ -72,12 +72,21 @@ export default async function AreaGestorePage({
   const { data: mieiData } = await supabase.rpc("miei_stabilimenti");
   const miei = (mieiData ?? []) as Mio[];
 
-  // Tutte le richieste dell'utente (la RLS limita già alle proprie).
+  // Le richieste dell'utente. Il filtro su user_id è ESPLICITO e non delegato
+  // alla RLS: la policy della 0071 è «user_id = auth.uid() or e_admin()», quindi
+  // a un amministratore restituirebbe anche le richieste di tutti gli altri,
+  // che in un'area personale non c'entrano nulla. Due lucchetti, non uno.
   const { data: rivData } = await supabase
     .from("rivendicazioni")
     .select("id,beach_id,stato,motivo_rifiuto,creata_il")
+    .eq("user_id", user.id)
     .order("creata_il", { ascending: false });
   const richieste = (rivData ?? []) as Riv[];
+
+  // Solo per gli amministratori: la coda di verifica sta altrove, e l'indirizzo
+  // non è scritto da nessuna parte. Qui c'è il collegamento, così non va ricordato.
+  const { data: eAdmin } = await supabase.rpc("e_admin");
+  const en = locale === "en";
 
   // Nomi degli stabilimenti citati nelle richieste non ancora approvate.
   const idsDaRisolvere = richieste.filter((r) => r.stato !== "approvata").map((r) => r.beach_id);
@@ -180,6 +189,39 @@ export default async function AreaGestorePage({
           {t("claimCta")}
         </Link>
       </section>
+
+      {eAdmin ? (
+        <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5">
+          <h2 className="text-sm font-semibold text-amber-900">
+            {en ? "Administration" : "Amministrazione"}
+          </h2>
+          <p className="mt-1 text-xs text-amber-800">
+            {en
+              ? "You are an administrator. Other people's claims are not shown here: they are in the verification queue."
+              : "Sei amministratore. Le richieste degli altri non compaiono qui sopra: stanno nella coda di verifica."}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-3">
+            <Link
+              href="/admin/rivendicazioni"
+              className="rounded-full bg-amber-500 px-4 py-1.5 text-sm font-semibold text-white hover:bg-amber-600"
+            >
+              {en ? "Verification queue" : "Coda di verifica"}
+            </Link>
+            <Link
+              href="/admin/eventi"
+              className="rounded-full border border-amber-400 px-4 py-1.5 text-sm font-semibold text-amber-900 hover:bg-amber-100"
+            >
+              {en ? "Moderate events" : "Modera eventi"}
+            </Link>
+            <Link
+              href="/admin"
+              className="rounded-full border border-amber-400 px-4 py-1.5 text-sm font-semibold text-amber-900 hover:bg-amber-100"
+            >
+              {en ? "Statistics" : "Statistiche"}
+            </Link>
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }

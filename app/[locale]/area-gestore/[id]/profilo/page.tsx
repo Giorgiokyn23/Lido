@@ -52,7 +52,9 @@ export default async function ModificaProfiloPage({
 
   const { data: profiloData } = await supabase
     .from("profilo_stabilimento")
-    .select("descrizione,orari,telefono,email_pubblica,sito,link_prenotazione")
+    .select(
+      "descrizione,orari,telefono,email_pubblica,sito,link_prenotazione,gruppi_max,gruppi_preavviso_giorni,pranzo_gruppi,discesa_pullman,accesso_senza_scalini,passerella_fino_al_mare,sedia_mare,bagno_accessibile,lingue,pagamenti_carte,ombra_garantita"
+    )
     .eq("beach_id", id)
     .maybeSingle();
 

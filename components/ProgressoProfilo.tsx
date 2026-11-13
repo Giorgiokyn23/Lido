@@ -8,11 +8,46 @@ export type CampiProfilo = {
   email_pubblica: string | null;
   sito: string | null;
   link_prenotazione: string | null;
+  gruppi_max: number | null;
+  pranzo_gruppi: string | null;
+  discesa_pullman: string | null;
+  accesso_senza_scalini: boolean | null;
+  passerella_fino_al_mare: boolean | null;
+  sedia_mare: boolean | null;
+  bagno_accessibile: boolean | null;
+  lingue: string[] | null;
+  pagamenti_carte: boolean | null;
+  ombra_garantita: boolean | null;
 };
 
-/** Quanti campi del profilo sono compilati, su sei. */
+export const gruppiDichiarati = (p: CampiProfilo | null): boolean =>
+  p?.gruppi_max != null || p?.pranzo_gruppi != null || p?.discesa_pullman != null;
+
+export const accessibilitaDichiarata = (p: CampiProfilo | null): boolean =>
+  p?.accesso_senza_scalini != null ||
+  p?.passerella_fino_al_mare != null ||
+  p?.sedia_mare != null ||
+  p?.bagno_accessibile != null;
+
+const servizioDichiarato = (p: CampiProfilo | null): boolean =>
+  (p?.lingue != null && p.lingue.length > 0) ||
+  p?.pagamenti_carte != null ||
+  p?.ombra_garantita != null;
+
+/**
+ * Quanto è completo il profilo, su nove voci.
+ *
+ * Gruppi, accessibilità e servizio contano UNA voce ciascuno e non undici:
+ * se ogni singola casella valesse un punto, un gestore che ha scritto
+ * descrizione, orari e contatti si vedrebbe crollare la percentuale dal
+ * giorno in cui abbiamo aggiunto i campi nuovi, e la barra sembrerebbe una
+ * punizione invece di un invito.
+ *
+ * Si contano i valori DICHIARATI, non quelli veri: un «no» dato di proposito
+ * è una risposta e vale come un «sì». Solo il silenzio non conta.
+ */
 export function completezza(p: CampiProfilo | null): { fatti: number; totale: number; pct: number } {
-  const campi = [
+  const testi = [
     p?.descrizione,
     p?.orari,
     p?.telefono,
@@ -20,8 +55,14 @@ export function completezza(p: CampiProfilo | null): { fatti: number; totale: nu
     p?.sito,
     p?.link_prenotazione,
   ];
-  const fatti = campi.filter((c) => c && c.trim().length > 0).length;
-  return { fatti, totale: campi.length, pct: Math.round((fatti / campi.length) * 100) };
+  const voci: boolean[] = [
+    ...testi.map((c) => !!c && c.trim().length > 0),
+    gruppiDichiarati(p),
+    accessibilitaDichiarata(p),
+    servizioDichiarato(p),
+  ];
+  const fatti = voci.filter(Boolean).length;
+  return { fatti, totale: voci.length, pct: Math.round((fatti / voci.length) * 100) };
 }
 
 /**
@@ -57,6 +98,12 @@ export async function ProgressoProfilo({
     azione = { testo: t("azioneOrari"), href: `/area-gestore/${beachId}/profilo`, cta: t("azioneVaiProfilo") };
   } else if (!profilo?.telefono && !profilo?.email_pubblica) {
     azione = { testo: t("azioneContatti"), href: `/area-gestore/${beachId}/profilo`, cta: t("azioneVaiProfilo") };
+  } else if (!gruppiDichiarati(profilo) || !accessibilitaDichiarata(profilo)) {
+    azione = {
+      testo: t("azioneGruppi"),
+      href: `/area-gestore/${beachId}/profilo`,
+      cta: t("azioneVaiProfilo"),
+    };
   } else if (eventi === 0) {
     azione = {
       testo: t("azionePrimoEvento"),
