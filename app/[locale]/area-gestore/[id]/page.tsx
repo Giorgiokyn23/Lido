@@ -7,6 +7,7 @@ import { createPublicClient } from "@/lib/supabase/public";
 import { ProgressoProfilo, type CampiProfilo } from "@/components/ProgressoProfilo";
 import { CentroInviti } from "@/components/CentroInviti";
 import { RANK_MIN } from "@/lib/types";
+import { COLONNE_PROFILO } from "@/lib/profilo";
 
 export const metadata: Metadata = {
   title: "LidoRank — Area gestore",
@@ -58,12 +59,7 @@ export default async function HubGestorePage({
 
   const { data: profiloData } = await supabase
     .from("profilo_stabilimento")
-    .select(
-      "descrizione,orari,telefono,email_pubblica,sito,link_prenotazione," +
-      "gruppi_max,pranzo_gruppi,discesa_pullman,accesso_senza_scalini," +
-      "passerella_fino_al_mare,sedia_mare,bagno_accessibile,lingue," +
-      "pagamenti_carte,ombra_garantita"
-    )
+    .select(COLONNE_PROFILO)
     .eq("beach_id", id)
     .maybeSingle();
   const profilo = (profiloData as CampiProfilo | null) ?? null;

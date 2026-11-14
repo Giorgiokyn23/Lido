@@ -436,8 +436,13 @@ export async function salvaProfiloStabilimento(
   } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "Accedi per modificare il profilo." };
 
-  const { data: autorizzato } = await supabase.rpc("e_gestore_di", { _beach: beach_id });
-  if (!autorizzato) {
+  // Il gestore approvato di questa scheda, oppure un amministratore: è lui a
+  // riempire le schede dei bagni che conosce finché i gestori non arrivano.
+  const [{ data: gestore }, { data: admin }] = await Promise.all([
+    supabase.rpc("e_gestore_di", { _beach: beach_id }),
+    supabase.rpc("e_admin"),
+  ]);
+  if (!gestore && !admin) {
     return { ok: false, error: "Non risulti gestore approvato di questo stabilimento." };
   }
 
@@ -457,15 +462,25 @@ export async function salvaProfiloStabilimento(
     }
   };
 
-  // Un numero, oppure null se la casella è vuota. Lo ZERO va conservato:
-  // "gruppi_max = 0" significa «non accettiamo gruppi», che è una risposta,
-  // mentre null significa «non ho risposto». Confonderle falserebbe i conteggi.
-  const numero = (campo: string, max: number): number | null => {
+  // Un intero, o null se la casella è vuota. Lo ZERO si conserva: "gruppi_max
+  // = 0" significa «non accettiamo gruppi», che è una risposta, mentre null
+  // significa «non ho risposto». Confonderle falserebbe i conteggi.
+  const intero = (campo: string, min: number, max: number): number | null => {
     const grezzo = String(formData.get(campo) ?? "").trim();
     if (grezzo === "") return null;
     const n = Number.parseInt(grezzo, 10);
-    if (!Number.isInteger(n) || n < 0) return null;
-    return Math.min(n, max);
+    if (!Number.isInteger(n) || n < min || n > max) return null;
+    return n;
+  };
+
+  // I prezzi arrivano con la virgola o col punto secondo la tastiera e la
+  // lingua del telefono: "12,50" e "12.50" devono valere lo stesso.
+  const prezzo = (campo: string, max: number): number | null => {
+    const grezzo = String(formData.get(campo) ?? "").trim().replace(",", ".");
+    if (grezzo === "") return null;
+    const n = Number.parseFloat(grezzo);
+    if (!Number.isFinite(n) || n < 0 || n > max) return null;
+    return Math.round(n * 100) / 100;
   };
 
   // Scelta da un insieme chiuso: qualunque altra cosa diventa null invece di
@@ -483,6 +498,26 @@ export async function salvaProfiloStabilimento(
     return v === "1" ? true : v === "0" ? false : null;
   };
 
+  // Instagram: si accetta @nome, nome, o l'indirizzo completo incollato dal
+  // browser; si conserva il solo nome utente, così il collegamento lo
+  // costruiamo noi e non dipende da cosa ha incollato il gestore.
+  const instagram = (): string | null => {
+    let v = String(formData.get("instagram") ?? "").trim();
+    if (!v) return null;
+    v = v.replace(/^https?:\/\/(www\.)?instagram\.com\//i, "").replace(/^@/, "");
+    v = v.split(/[/?#]/)[0];
+    return /^[A-Za-z0-9._]{1,60}$/.test(v) ? v : null;
+  };
+
+  // WhatsApp: si conservano solo le cifre e l'eventuale +, perché il numero
+  // finisce in un collegamento wa.me e spazi o parentesi lo romperebbero.
+  const whatsapp = (): string | null => {
+    const v = String(formData.get("whatsapp") ?? "").trim().replace(/[^\d+]/g, "");
+    if (!v) return null;
+    const cifre = v.replace(/\D/g, "");
+    return cifre.length >= 8 && cifre.length <= 15 ? v.slice(0, 20) : null;
+  };
+
   const LINGUE_AMMESSE = ["en", "fr", "de", "es", "ru", "nl"] as const;
   const lingueScelte = formData
     .getAll("lingue")
@@ -492,25 +527,75 @@ export async function salvaProfiloStabilimento(
   const { error } = await supabase.from("profilo_stabilimento").upsert(
     {
       beach_id,
+      // presentazione
       descrizione: testo("descrizione", 2000),
       orari: testo("orari", 500),
       telefono: testo("telefono", 40),
       email_pubblica: testo("email_pubblica", 200),
       sito: link("sito"),
       link_prenotazione: link("link_prenotazione"),
-      gruppi_max: numero("gruppi_max", 2000),
-      gruppi_preavviso_giorni: numero("gruppi_preavviso_giorni", 60),
+      instagram: instagram(),
+      whatsapp: whatsapp(),
+      // spiaggia e capienza
+      ombrelloni_totali: intero("ombrelloni_totali", 0, 5000),
+      tipo_fondo: scelta("tipo_fondo", ["sabbia", "ghiaia", "sassi", "scogli", "misto"]),
+      spiaggia_libera_adiacente: triStato("spiaggia_libera_adiacente"),
+      piscina: triStato("piscina"),
+      // prezzi
+      prezzo_ombrellone_bassa: prezzo("prezzo_ombrellone_bassa", 2000),
+      prezzo_ombrellone_alta: prezzo("prezzo_ombrellone_alta", 2000),
+      prezzo_lettino: prezzo("prezzo_lettino", 500),
+      prezzo_ingresso: prezzo("prezzo_ingresso", 500),
+      prezzo_stagionale_da: prezzo("prezzo_stagionale_da", 50000),
+      // stagione
+      mese_apertura: intero("mese_apertura", 1, 12),
+      mese_chiusura: intero("mese_chiusura", 1, 12),
+      aperto_tutto_anno: triStato("aperto_tutto_anno"),
+      // servizi
+      bar: triStato("bar"),
+      ristorante: triStato("ristorante"),
+      docce: triStato("docce"),
+      cabine: triStato("cabine"),
+      wifi: triStato("wifi"),
+      parcheggio: scelta("parcheggio", [
+        "no",
+        "pubblico_vicino",
+        "privato_gratuito",
+        "privato_pagamento",
+      ]),
+      parcheggio_posti: intero("parcheggio_posti", 0, 5000),
+      noleggio_attrezzature: triStato("noleggio_attrezzature"),
+      campi_sportivi: triStato("campi_sportivi"),
+      animazione: triStato("animazione"),
+      area_bimbi: triStato("area_bimbi"),
+      menu_bambini: triStato("menu_bambini"),
+      pagamenti_carte: triStato("pagamenti_carte"),
+      ombra_garantita: triStato("ombra_garantita"),
+      // Nessuna lingua spuntata resta null, non un array vuoto: "non ho
+      // dichiarato le lingue" non è "al banco non si parla nulla".
+      lingue: lingueScelte.length ? lingueScelte : null,
+      // sicurezza
+      bagnino: triStato("bagnino"),
+      bagnino_orario: testo("bagnino_orario", 120),
+      defibrillatore: triStato("defibrillatore"),
+      // gruppi
+      gruppi_max: intero("gruppi_max", 0, 2000),
+      gruppi_preavviso_giorni: intero("gruppi_preavviso_giorni", 0, 60),
       pranzo_gruppi: scelta("pranzo_gruppi", ["no", "su_prenotazione", "sempre"]),
       discesa_pullman: scelta("discesa_pullman", ["no", "nei_paraggi", "al_cancello"]),
+      // accessibilità
       accesso_senza_scalini: triStato("accesso_senza_scalini"),
       passerella_fino_al_mare: triStato("passerella_fino_al_mare"),
       sedia_mare: triStato("sedia_mare"),
       bagno_accessibile: triStato("bagno_accessibile"),
-      // Nessuna lingua spuntata resta null, non un array vuoto: "non ho
-      // dichiarato le lingue" non è "al banco non si parla nulla".
-      lingue: lingueScelte.length ? lingueScelte : null,
-      pagamenti_carte: triStato("pagamenti_carte"),
-      ombra_garantita: triStato("ombra_garantita"),
+      // eventi privati
+      eventi_privati: triStato("eventi_privati"),
+      eventi_capienza: intero("eventi_capienza", 0, 5000),
+      musica_serale: triStato("musica_serale"),
+      // sostenibilità
+      raccolta_differenziata: triStato("raccolta_differenziata"),
+      plastic_free: triStato("plastic_free"),
+      fontanella_acqua: triStato("fontanella_acqua"),
     },
     { onConflict: "beach_id" }
   );
@@ -519,6 +604,7 @@ export async function salvaProfiloStabilimento(
 
   revalidaScheda(beach_id, true);
   revalidatePath("/area-gestore");
+  revalidatePath(`/area-gestore/${beach_id}`);
   return { ok: true };
 }
 

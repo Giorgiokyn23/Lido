@@ -1,6 +1,7 @@
 // Link di next-intl: mantiene la lingua corrente nell'URL. Con il Link
 // normale di Next il prefisso si perde e il middleware ricalcola la lingua
 // dal browser, facendo saltare la pagina in inglese.
+import { COLONNE_PROFILO } from "@/lib/profilo";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -101,9 +102,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
 
   const { data: profiloData } = await supabase
     .from("profilo_stabilimento")
-    .select(
-      "descrizione,orari,telefono,email_pubblica,sito,link_prenotazione,gruppi_max,gruppi_preavviso_giorni,pranzo_gruppi,discesa_pullman,accesso_senza_scalini,passerella_fino_al_mare,sedia_mare,bagno_accessibile,lingue,pagamenti_carte,ombra_garantita"
-    )
+    .select(COLONNE_PROFILO)
     .eq("beach_id", params.id)
     .maybeSingle();
 
