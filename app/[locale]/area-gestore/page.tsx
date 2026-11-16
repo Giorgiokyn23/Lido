@@ -1,3 +1,4 @@
+import { ConfermaSubmit } from "@/components/ConfermaSubmit";
 import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -141,9 +142,11 @@ export default async function AreaGestorePage({
                   {idApprovata.get(m.beach_id) ? (
                     <form action={rinunciaRivendicazione}>
                       <input type="hidden" name="rid" value={idApprovata.get(m.beach_id)} />
-                      <button className="text-sm text-sea-400 underline underline-offset-2 hover:text-red-700">
-                        {t("rinuncia")}
-                      </button>
+                      <ConfermaSubmit
+                        tono="link"
+                        etichetta={t("rinuncia")}
+                        conferma={t("rinunciaConferma", { nome: m.nome })}
+                      />
                     </form>
                   ) : null}
                 </div>
@@ -173,9 +176,12 @@ export default async function AreaGestorePage({
                 {r.stato === "in_attesa" ? (
                   <form action={rinunciaRivendicazione} className="mt-1">
                     <input type="hidden" name="rid" value={r.id} />
-                    <button className="text-xs text-sea-500 underline underline-offset-2 hover:text-red-700">
-                      {t("annullaRichiesta")}
-                    </button>
+                    <ConfermaSubmit
+                      tono="link"
+                      classe="text-xs text-sea-500 underline underline-offset-2 transition hover:text-red-700 disabled:opacity-60"
+                      etichetta={t("annullaRichiesta")}
+                      conferma={t("annullaConferma")}
+                    />
                   </form>
                 ) : null}
               </li>
@@ -206,12 +212,6 @@ export default async function AreaGestorePage({
               className="rounded-full bg-amber-500 px-4 py-1.5 text-sm font-semibold text-white hover:bg-amber-600"
             >
               {en ? "Verification queue" : "Coda di verifica"}
-            </Link>
-            <Link
-              href="/admin/eventi"
-              className="rounded-full border border-amber-400 px-4 py-1.5 text-sm font-semibold text-amber-900 hover:bg-amber-100"
-            >
-              {en ? "Moderate events" : "Modera eventi"}
             </Link>
             <Link
               href="/admin"

@@ -894,6 +894,8 @@
     "sport_calcetto": "Five-a-side",
     "sport_bocce": "Bowls",
     "sport_padel": "Padel",
-    "sport_fitness": "Fitness"
+    "sport_fitness": "Fitness",
+    "rinunciaConferma": "Give up managing {nome}?\n\nThe profile is WIPED: description, prices, facilities, hours and contacts go, and events are hidden. Taking the page back later won't restore them — you'd have to type everything again.\n\nThe establishment page, the reviews and the score stay: those were never yours.",
+    "annullaConferma": "Withdraw this request?\n\nYou can always claim the page again later."
   }
 }

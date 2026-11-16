@@ -894,6 +894,8 @@
     "sport_calcetto": "Calcetto",
     "sport_bocce": "Bocce",
     "sport_padel": "Padel",
-    "sport_fitness": "Fitness"
+    "sport_fitness": "Fitness",
+    "rinunciaConferma": "Rinunciare alla gestione di {nome}?\n\nIl profilo viene AZZERATO: descrizione, prezzi, servizi, orari e contatti spariscono, e gli eventi vengono nascosti. Non torna indietro riprendendo la scheda: i dati andrebbero riscritti da capo.\n\nLa scheda dello stabilimento, le recensioni e il punteggio restano: quelli non sono mai stati tuoi.",
+    "annullaConferma": "Ritirare questa richiesta?\n\nPuoi sempre rivendicare di nuovo la scheda più avanti."
   }
 }

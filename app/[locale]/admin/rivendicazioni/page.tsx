@@ -1,3 +1,4 @@
+import { ConfermaSubmit } from "@/components/ConfermaSubmit";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
@@ -201,9 +202,10 @@ on conflict (user_id) do update set ruolo = 'admin';`}
                     placeholder="Motivo della revoca (consigliato)"
                     className="min-w-[200px] flex-1 rounded-lg border border-sea-200 px-3 py-1.5 text-sm"
                   />
-                  <button className="rounded-lg border border-red-300 px-4 py-1.5 text-sm font-medium text-red-700 hover:bg-red-50">
-                    Revoca
-                  </button>
+                  <ConfermaSubmit
+                    etichetta="Revoca"
+                    conferma={`Revocare la rivendicazione di ${nomi.get(r.beach_id) ?? "questa scheda"}?\n\nIl profilo viene AZZERATO: descrizione, prezzi, servizi, orari e contatti spariscono, e gli eventi vengono nascosti. Non si recupera riapprovando: i dati andrebbero riscritti.\n\nSi fa così di proposito, perché un nuovo gestore non deve ereditare i dati del precedente.`}
+                  />
                 </form>
               </li>
             ))}
