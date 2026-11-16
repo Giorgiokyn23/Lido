@@ -74,6 +74,14 @@ export type Profilo = {
   raccolta_differenziata: boolean | null;
   plastic_free: boolean | null;
   fontanella_acqua: boolean | null;
+  // capienza coperta, eventi, gruppi, sport, destagionalizzazione (0082)
+  posti_ristorante: number | null;
+  tipi_evento: string[] | null;
+  tipi_gruppi: string[] | null;
+  sport: string[] | null;
+  tornei_organizzati: boolean | null;
+  mesi_attivita: number[] | null;
+  destagionalizzazione: string | null;
 };
 
 /** Le colonne da chiedere a Supabase. Derivate dal tipo: non possono divergere. */
@@ -131,6 +139,13 @@ export const COLONNE_PROFILO = [
   "raccolta_differenziata",
   "plastic_free",
   "fontanella_acqua",
+  "posti_ristorante",
+  "tipi_evento",
+  "tipi_gruppi",
+  "sport",
+  "tornei_organizzati",
+  "mesi_attivita",
+  "destagionalizzazione",
 ].join(",");
 
 export const TIPI_FONDO = ["sabbia", "ghiaia", "sassi", "scogli", "misto"] as const;
@@ -138,6 +153,35 @@ export const PARCHEGGI = ["no", "pubblico_vicino", "privato_gratuito", "privato_
 export const PRANZI = ["sempre", "su_prenotazione", "no"] as const;
 export const PULLMAN = ["al_cancello", "nei_paraggi", "no"] as const;
 export const LINGUE = ["en", "fr", "de", "es", "ru", "nl"] as const;
+
+export const TIPI_EVENTO = [
+  "dj_set", "musica_dal_vivo", "degustazioni", "cene_a_tema",
+  "matrimoni", "eventi_aziendali", "cinema", "tornei_sportivi",
+  "corsi_sport", "feste_private", "mercatini", "convegni",
+] as const;
+
+export const TIPI_GRUPPI = [
+  "croceristi", "tour_privati", "scolaresche", "centri_estivi",
+  "gruppi_sportivi", "terza_eta", "aziende", "associazioni",
+] as const;
+
+export const SPORT = [
+  "beach_volley", "beach_tennis", "racchettoni", "sup", "canoa",
+  "vela", "windsurf", "kitesurf", "nuoto", "snorkeling",
+  "calcetto", "bocce", "padel", "fitness",
+] as const;
+
+export const MESI = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const;
+
+/**
+ * Fuori stagione: da ottobre a marzo.
+ * La stessa definizione vive in attivo_fuori_stagione() nella migrazione
+ * 0082, che è l'autorità per i conteggi. Qui serve solo a disegnare la
+ * pagina: se cambia il periodo, va cambiato in tutti e due i posti.
+ */
+export const FUORI_STAGIONE = [10, 11, 12, 1, 2, 3];
+export const attivoFuoriStagione = (mesi: number[] | null | undefined): boolean =>
+  !!mesi && mesi.some((m) => FUORI_STAGIONE.includes(m));
 
 /** I campi liberi del profilo, con la loro lunghezza massima. */
 export const TESTI_PROFILO: Record<string, number> = {
@@ -215,6 +259,10 @@ export function completezza(p: Profilo | null): { fatti: number; totale: number;
     dichiarato(p?.bagnino) || dichiarato(p?.defibrillatore),
     gruppiDichiarati(p),
     accessibilitaDichiarata(p),
+    (p?.tipi_evento?.length ?? 0) > 0 ||
+      (p?.sport?.length ?? 0) > 0 ||
+      (p?.mesi_attivita?.length ?? 0) > 0 ||
+      pieno(p?.destagionalizzazione),
   ];
   const fatti = gruppi.filter(Boolean).length;
   return { fatti, totale: gruppi.length, pct: Math.round((fatti / gruppi.length) * 100) };

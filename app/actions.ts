@@ -8,8 +8,20 @@ import { FACTS, BOOL_FACTS, CIVIC_FACTS, SEGNALAZIONE_TIPI, NOTICE_TIPI, SUBPOIN
 import { cleanComment } from "@/lib/profanity";
 import { hasHighRiskAccusation } from "@/lib/defamation";
 import { sendNoticeAck, sendRivendicaAlert } from "@/lib/email";
+import { mancantiMinimo, type Profilo } from "@/lib/profilo";
 
-export type SubmitState = { ok: boolean; error?: string };
+/**
+ * `prossimo` è il passo successivo suggerito dopo un salvataggio riuscito.
+ * Non è un testo ma un codice: la traduzione la sceglie la pagina, l'azione
+ * sa solo a che punto è il profilo. Serve a non lasciare il gestore fermo su
+ * un modulo salvato, costretto a risalire in cima e cercare da solo dove
+ * andare — era la prima cosa che non funzionava nelle prove di Francesco.
+ */
+export type SubmitState = {
+  ok: boolean;
+  error?: string;
+  prossimo?: "eventi" | "pannello";
+};
 
 // Una scheda è pubblicata in DUE indirizzi: /lido/<id> in italiano (senza
 // prefisso) e /en/lido/<id> in inglese. La pagina è in cache per un'ora, quindi
@@ -518,6 +530,43 @@ export async function salvaProfiloStabilimento(
     return cifre.length >= 8 && cifre.length <= 15 ? v.slice(0, 20) : null;
   };
 
+  // Caselle multiple: si tiene solo ciò che è previsto, si tagliano i doppioni
+  // e si rispetta il tetto del vincolo. Un array vuoto diventa null, perché
+  // "non ho segnato niente" non è "non si fa niente".
+  const multi = (campo: string, ammessi: readonly string[], max: number): string[] | null => {
+    const v = Array.from(
+      new Set(formData.getAll(campo).map((x) => String(x)).filter((x) => ammessi.includes(x)))
+    ).slice(0, max);
+    return v.length ? v : null;
+  };
+
+  const mesiAttivita = (): number[] | null => {
+    const v = Array.from(
+      new Set(
+        formData
+          .getAll("mesi_attivita")
+          .map((x) => Number.parseInt(String(x), 10))
+          .filter((n) => Number.isInteger(n) && n >= 1 && n <= 12)
+      )
+    ).sort((a, b) => a - b);
+    return v.length ? v : null;
+  };
+
+  const TIPI_EVENTO_AMMESSI = [
+    "dj_set", "musica_dal_vivo", "degustazioni", "cene_a_tema",
+    "matrimoni", "eventi_aziendali", "cinema", "tornei_sportivi",
+    "corsi_sport", "feste_private", "mercatini", "convegni",
+  ];
+  const TIPI_GRUPPI_AMMESSI = [
+    "croceristi", "tour_privati", "scolaresche", "centri_estivi",
+    "gruppi_sportivi", "terza_eta", "aziende", "associazioni",
+  ];
+  const SPORT_AMMESSI = [
+    "beach_volley", "beach_tennis", "racchettoni", "sup", "canoa",
+    "vela", "windsurf", "kitesurf", "nuoto", "snorkeling",
+    "calcetto", "bocce", "padel", "fitness",
+  ];
+
   const LINGUE_AMMESSE = ["en", "fr", "de", "es", "ru", "nl"] as const;
   const lingueScelte = formData
     .getAll("lingue")
@@ -596,6 +645,14 @@ export async function salvaProfiloStabilimento(
       raccolta_differenziata: triStato("raccolta_differenziata"),
       plastic_free: triStato("plastic_free"),
       fontanella_acqua: triStato("fontanella_acqua"),
+      // capienza coperta, eventi, gruppi, sport, destagionalizzazione
+      posti_ristorante: intero("posti_ristorante", 0, 2000),
+      tipi_evento: multi("tipi_evento", TIPI_EVENTO_AMMESSI, 12),
+      tipi_gruppi: multi("tipi_gruppi", TIPI_GRUPPI_AMMESSI, 8),
+      sport: multi("sport", SPORT_AMMESSI, 14),
+      tornei_organizzati: triStato("tornei_organizzati"),
+      mesi_attivita: mesiAttivita(),
+      destagionalizzazione: testo("destagionalizzazione", 1000),
     },
     { onConflict: "beach_id" }
   );
@@ -605,7 +662,22 @@ export async function salvaProfiloStabilimento(
   revalidaScheda(beach_id, true);
   revalidatePath("/area-gestore");
   revalidatePath(`/area-gestore/${beach_id}`);
-  return { ok: true };
+
+  // Dove conviene andare adesso. Rileggiamo dal database invece di fidarci
+  // di quello che credevamo di aver scritto: se un valore è stato scartato
+  // da un vincolo, il gestore deve saperlo subito e non scoprirlo dopo.
+  const { data: salvato } = await supabase
+    .from("profilo_stabilimento")
+    .select(
+      "descrizione,orari,telefono,email_pubblica,ombrelloni_totali,tipo_fondo," +
+        "prezzo_ombrellone_alta,bagnino,parcheggio,gruppi_max," +
+        "accesso_senza_scalini,passerella_fino_al_mare,sedia_mare,bagno_accessibile"
+    )
+    .eq("beach_id", beach_id)
+    .maybeSingle();
+
+  const mancano = mancantiMinimo((salvato as Profilo | null) ?? null);
+  return { ok: true, prossimo: mancano.length === 0 ? "eventi" : "pannello" };
 }
 
 // Server Action (solo amministratori): revoca una rivendica GIÀ APPROVATA.

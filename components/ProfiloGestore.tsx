@@ -1,6 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Profilo } from "@/lib/profilo";
-import { accessibilitaDichiarata, gruppiDichiarati } from "@/lib/profilo";
+import { accessibilitaDichiarata, attivoFuoriStagione, gruppiDichiarati } from "@/lib/profilo";
 
 export type ProfiloPubblico = Profilo;
 
@@ -56,6 +56,13 @@ const dati = (p: Profilo) =>
   c(p.plastic_free) ||
   c(p.fontanella_acqua) ||
   (p.lingue != null && p.lingue.length > 0) ||
+  (p.tipi_evento != null && p.tipi_evento.length > 0) ||
+  (p.tipi_gruppi != null && p.tipi_gruppi.length > 0) ||
+  (p.sport != null && p.sport.length > 0) ||
+  c(p.tornei_organizzati) ||
+  c(p.posti_ristorante) ||
+  (p.mesi_attivita != null && p.mesi_attivita.length > 0) ||
+  !!p.destagionalizzazione ||
   gruppiDichiarati(p) ||
   accessibilitaDichiarata(p);
 
@@ -245,6 +252,7 @@ export async function ProfiloGestore({ profilo }: { profilo: ProfiloPubblico | n
       c(p.menu_bambini) ||
       c(p.pagamenti_carte) ||
       c(p.ombra_garantita) ||
+      c(p.posti_ristorante) ||
       (p.lingue != null && p.lingue.length > 0) ? (
         <Gruppo titolo={t("sezServizi")}>
           {tri("bar")}
@@ -270,6 +278,9 @@ export async function ProfiloGestore({ profilo }: { profilo: ProfiloPubblico | n
               ok={p.parcheggio !== "no"}
             />
           ) : null}
+          {c(p.posti_ristorante) ? (
+            <Info testo={t("postiRistoranteN", { n: p.posti_ristorante as number })} />
+          ) : null}
           {p.lingue && p.lingue.length > 0 ? (
             <Info
               testo={t("lingueParlate", {
@@ -294,7 +305,9 @@ export async function ProfiloGestore({ profilo }: { profilo: ProfiloPubblico | n
         </Gruppo>
       ) : null}
 
-      {gruppiDichiarati(p) || accessibilitaDichiarata(p) ? (
+      {gruppiDichiarati(p) ||
+      accessibilitaDichiarata(p) ||
+      (p.tipi_gruppi != null && p.tipi_gruppi.length > 0) ? (
         <Gruppo titolo={t("praticheTitolo")}>
           {c(p.gruppi_max) ? (
             (p.gruppi_max as number) > 0 ? (
@@ -318,6 +331,7 @@ export async function ProfiloGestore({ profilo }: { profilo: ProfiloPubblico | n
               ok={p.discesa_pullman !== "no"}
             />
           ) : null}
+          {p.tipi_gruppi?.map((g) => <Info key={g} testo={t(`gruppo_${g}`)} />)}
           {tri("accesso_senza_scalini")}
           {tri("passerella_fino_al_mare")}
           {tri("sedia_mare")}
@@ -325,14 +339,52 @@ export async function ProfiloGestore({ profilo }: { profilo: ProfiloPubblico | n
         </Gruppo>
       ) : null}
 
-      {c(p.eventi_privati) ? (
+      {c(p.eventi_privati) || (p.tipi_evento != null && p.tipi_evento.length > 0) ? (
         <Gruppo titolo={t("sezEventiPrivati")}>
-          <Fatto testo={t("campo_eventi_privati")} ok={p.eventi_privati === true} />
-          {p.eventi_privati && c(p.eventi_capienza) ? (
+          {c(p.eventi_privati) ? (
+            <Fatto testo={t("campo_eventi_privati")} ok={p.eventi_privati === true} />
+          ) : null}
+          {c(p.eventi_capienza) && p.eventi_privati !== false ? (
             <Info testo={t("capienzaN", { n: p.eventi_capienza as number })} />
           ) : null}
+          {p.tipi_evento?.map((e) => <Info key={e} testo={t(`evento_${e}`)} />)}
           {tri("musica_serale")}
         </Gruppo>
+      ) : null}
+
+      {(p.sport != null && p.sport.length > 0) || c(p.tornei_organizzati) ? (
+        <Gruppo titolo={t("sezSport")}>
+          {p.sport?.map((sp) => <Info key={sp} testo={t(`sport_${sp}`)} />)}
+          {tri("tornei_organizzati")}
+        </Gruppo>
+      ) : null}
+
+      {/* Fuori stagione: è il dato che interessa a un Comune, non al
+          bagnante. Si mostra lo stesso, perché è anche la risposta alla
+          domanda «d'inverno è aperto?» che si fanno in tanti. */}
+      {(p.mesi_attivita != null && p.mesi_attivita.length > 0) || p.destagionalizzazione ? (
+        <div className="mt-4">
+          <div className="text-xs font-medium uppercase tracking-wide text-sea-400">
+            {t("sezFuoriStagione")}
+          </div>
+          {p.mesi_attivita && p.mesi_attivita.length > 0 ? (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {attivoFuoriStagione(p.mesi_attivita) ? (
+                <Fatto testo={t("attivoFuoriStagione")} ok />
+              ) : null}
+              <Info
+                testo={t("attivoNeiMesi", {
+                  mesi: p.mesi_attivita.map((m) => t(`mese_${m}`)).join(", "),
+                })}
+              />
+            </div>
+          ) : null}
+          {p.destagionalizzazione ? (
+            <p className="mt-2 whitespace-pre-line text-sm text-sea-700">
+              {p.destagionalizzazione}
+            </p>
+          ) : null}
+        </div>
       ) : null}
 
       {c(p.raccolta_differenziata) || c(p.plastic_free) || c(p.fontanella_acqua) ? (

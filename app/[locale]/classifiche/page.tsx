@@ -13,7 +13,12 @@ const REGIONI = [
 
 type Scope = "nazionale" | "regione" | "comune";
 
-const medal = (n: number) => (n === 1 ? "🥇" : n === 2 ? "🥈" : n === 3 ? "🥉" : `#${n}`);
+// Le medaglie si mostrano solo quando c'è una gara vera. Un podio con un
+// solo concorrente non è un primo posto: è l'unico posto, e farlo passare per
+// un trionfo è il modo più rapido di perdere la fiducia di chi legge — che è
+// l'unica cosa che abbiamo da vendere.
+const medal = (n: number, qualificati: number) =>
+  qualificati >= 3 ? (n === 1 ? "🥇" : n === 2 ? "🥈" : n === 3 ? "🥉" : `#${n}`) : `#${n}`;
 
 export default async function ClassifichePage({
   searchParams,
@@ -29,10 +34,16 @@ export default async function ClassifichePage({
   const flag = COUNTRIES.find((c) => c.code === paese)?.flag ?? "";
 
   // Solo l'Italia ha comunale/regionale (regioni + comuni curati).
+  //
+  // Si apre sul COMUNE, non sulla nazionale. Con i dati di oggi la vista
+  // nazionale è la più vuota che abbiamo: un paese intero e una manciata di
+  // schede sopra soglia. Mostrare per primo l'ambito dove i dati esistono non
+  // è una furbizia, è dire la verità nell'ordine giusto — e chi cerca un bagno
+  // lo cerca dove va al mare, non in Italia.
   const scope: Scope = isIT
-    ? searchParams.scope === "regione" || searchParams.scope === "comune"
+    ? searchParams.scope === "regione" || searchParams.scope === "nazionale"
       ? (searchParams.scope as Scope)
-      : "nazionale"
+      : "comune"
     : "nazionale";
   const regione = searchParams.regione || "Toscana";
   const comune = searchParams.comune || "Livorno";
@@ -67,6 +78,12 @@ export default async function ClassifichePage({
   // non il rango grezzo del DB (che conta anche i lido nascosti sotto soglia).
   // Così niente buchi: la lista è numerata 1,2,3… senza "#2 senza #1".
   const rows = allRows.filter((r) => (r.reviews_count ?? 0) >= minReviews);
+  // Quante schede esistono in questo ambito e quante hanno abbastanza
+  // recensioni per entrare. Dirlo apertamente vale più che nasconderlo: chi
+  // legge capisce che la classifica è giovane, invece di pensare che il mare
+  // italiano abbia cinque stabilimenti.
+  const idonei = rows.length;
+  const totali = allRows.length;
 
   const withCat = (sp: URLSearchParams) => {
     if (porti) sp.set("cat", "porti");
@@ -181,6 +198,15 @@ export default async function ClassifichePage({
 
       <p className="text-sm text-sea-500">{caption}</p>
 
+      {/* Quante schede ce la fanno e quante no. È la riga che trasforma una
+          classifica povera in una classifica onesta: senza, cinque risultati
+          sembrano tutto il mare italiano. */}
+      {!error && totali > 0 ? (
+        <p className="text-xs text-sea-400">
+          {tr("idoneiSuTotali", { idonei, totali, soglia: minReviews })}
+        </p>
+      ) : null}
+
       {error && (
         <p className="rounded-lg bg-amber-50 p-4 text-sm text-amber-800">
           {tr("errorLoad", { msg: error.message })}
@@ -207,7 +233,7 @@ export default async function ClassifichePage({
               <li key={b.id}>
                 <Link href={`/lido/${b.id}`}
                   className="flex items-center gap-4 rounded-xl border border-sea-100 bg-white p-4 shadow-sm transition hover:border-sea-300">
-                  <span className="w-10 shrink-0 text-center text-lg font-bold text-sea-700">{medal(pos)}</span>
+                  <span className="w-10 shrink-0 text-center text-lg font-bold text-sea-700">{medal(pos, rows.length)}</span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-semibold text-sea-900">{b.nome}</span>
                     <span className="block truncate text-sm text-sea-500">

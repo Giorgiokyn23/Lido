@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { salvaProfiloStabilimento, type SubmitState } from "@/app/actions";
 import {
   type Profilo,
@@ -10,6 +12,10 @@ import {
   PRANZI,
   PULLMAN,
   TIPI_FONDO,
+  TIPI_EVENTO,
+  TIPI_GRUPPI,
+  SPORT,
+  MESI as MESI_ANNO,
   mancantiMinimo,
   completezza,
 } from "@/lib/profilo";
@@ -50,6 +56,14 @@ export function ProfiloStabilimentoForm({
 
   const mancano = mancantiMinimo(valori);
   const { fatti, totale, pct } = completezza(valori);
+
+  // Dopo il salvataggio la barra in cima e l'elenco di ciò che manca sono
+  // cambiati: li riportiamo sotto gli occhi invece di lasciare il gestore a
+  // fondo pagina a chiedersi se è andata bene.
+  const cima = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (state.ok) cima.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [state.ok]);
 
   // Un accordion con i <details> nativi: nessun JavaScript, apre e chiude
   // anche se lo script non parte, e il browser lo rende usabile da tastiera
@@ -174,6 +188,39 @@ export function ProfiloStabilimentoForm({
     </div>
   );
 
+  // Caselle multiple con lo stesso `name`: il browser le manda tutte e
+  // formData.getAll() le raccoglie. Nessun JavaScript, nessuno stato.
+  const Caselle = ({
+    nome,
+    valoriAmmessi,
+    prefisso,
+  }: {
+    nome: keyof Profilo;
+    valoriAmmessi: readonly string[];
+    prefisso: string;
+  }) => {
+    const scelti = (valori?.[nome] as string[] | null) ?? [];
+    return (
+      <fieldset className="sm:col-span-2">
+        <legend className={etichetta}>{t(`campo_${nome}`)}</legend>
+        <div className="mt-2 grid grid-cols-1 gap-x-5 gap-y-2 sm:grid-cols-2">
+          {valoriAmmessi.map((v) => (
+            <label key={v} className="flex items-center gap-2 text-sm text-sea-800">
+              <input
+                type="checkbox"
+                name={nome}
+                value={v}
+                defaultChecked={scelti.includes(v)}
+                className="h-4 w-4 rounded border-sea-300"
+              />
+              {t(`${prefisso}_${v}`)}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    );
+  };
+
   const Testo = ({
     nome,
     max,
@@ -222,7 +269,7 @@ export function ProfiloStabilimentoForm({
       {/* Avanzamento e, soprattutto, che cosa manca per pubblicare eventi.
           Un pulsante spento senza spiegazioni è il modo migliore per far
           scappare un gestore. */}
-      <div className="rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
+      <div ref={cima} className="scroll-mt-4 rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <span className="text-sm font-semibold text-sea-800">{t("progressoTitolo")}</span>
           <span className="text-sm font-bold tabular-nums text-sea-700">{pct}%</span>
@@ -427,6 +474,52 @@ export function ProfiloStabilimentoForm({
         </Griglia>
       </Sezione>
 
+      {/* --------------------------------------------- eventi e comitive */}
+      <Sezione titolo={t("sezEventiGruppi")} intro={t("sezEventiGruppiIntro")}>
+        <Griglia>
+          <Numero nome="posti_ristorante" max={2000} segnaposto="80" nota={t("postiRistoranteNota")} />
+          <Numero nome="eventi_capienza" max={5000} segnaposto="120" />
+          <Caselle nome="tipi_evento" valoriAmmessi={TIPI_EVENTO} prefisso="evento" />
+          <Caselle nome="tipi_gruppi" valoriAmmessi={TIPI_GRUPPI} prefisso="gruppo" />
+        </Griglia>
+      </Sezione>
+
+      {/* ---------------------------------------------------------- sport */}
+      <Sezione titolo={t("sezSport")} intro={t("sezSportIntro")}>
+        <Griglia>
+          <Caselle nome="sport" valoriAmmessi={SPORT} prefisso="sport" />
+          <Tri nome="tornei_organizzati" nota={t("torneiNota")} />
+        </Griglia>
+      </Sezione>
+
+      {/* ------------------------------------------ destagionalizzazione */}
+      <Sezione titolo={t("sezFuoriStagione")} intro={t("sezFuoriStagioneIntro")}>
+        <fieldset>
+          <legend className={etichetta}>{t("campo_mesi_attivita")}</legend>
+          <p className="text-[11px] text-sea-400">{t("mesiAttivitaNota")}</p>
+          <div className="mt-2 grid grid-cols-2 gap-x-5 gap-y-2 sm:grid-cols-4">
+            {MESI_ANNO.map((m) => (
+              <label key={m} className="flex items-center gap-2 text-sm text-sea-800">
+                <input
+                  type="checkbox"
+                  name="mesi_attivita"
+                  value={m}
+                  defaultChecked={valori?.mesi_attivita?.includes(m) ?? false}
+                  className="h-4 w-4 rounded border-sea-300"
+                />
+                {t(`mese_${m}`)}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <Testo
+          nome="destagionalizzazione"
+          max={1000}
+          righe={4}
+          segnaposto={t("destagionalizzazionePlaceholder")}
+        />
+      </Sezione>
+
       {/* -------------------------------------------------- sostenibilità */}
       <Sezione titolo={t("sezSostenibilita")}>
         <Griglia>
@@ -439,8 +532,37 @@ export function ProfiloStabilimentoForm({
       {state.error ? (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
       ) : null}
+
+      {/* Salvato: si dice che cos'è successo e dove si va adesso, nello
+          stesso punto in cui il gestore ha appena premuto. Prima restava
+          fermo qui e doveva risalire in cima a cercare da solo l'uscita. */}
       {state.ok ? (
-        <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{t("salvato")}</p>
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+          <p className="text-sm font-medium text-emerald-900">{t("salvato")}</p>
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            {state.prossimo === "eventi" ? (
+              <Link
+                href={`/area-gestore/${beachId}/eventi`}
+                className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+              >
+                {t("prossimoEventi")}
+              </Link>
+            ) : (
+              <Link
+                href={`/area-gestore/${beachId}`}
+                className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+              >
+                {t("prossimoPannello")}
+              </Link>
+            )}
+            <Link
+              href={`/lido/${beachId}`}
+              className="text-sm text-emerald-800 underline underline-offset-2"
+            >
+              {t("openSheet")}
+            </Link>
+          </div>
+        </div>
       ) : null}
 
       {/* Un salvataggio solo per tutto il modulo: se ogni sezione avesse il
