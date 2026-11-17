@@ -7,6 +7,7 @@ export type EventoPubblico = {
   descrizione: string | null;
   data_inizio: string;
   data_fine: string | null;
+  tipo: string | null;
 };
 
 /**
@@ -57,7 +58,11 @@ export async function EventiBagno({
   };
 
   return (
-    <section className="rounded-2xl border border-sea-100 bg-white p-6 shadow-sm">
+    // L'ancora serve al riquadro della specializzazione, che ci rimanda sopra.
+    <section
+      id="eventi"
+      className="scroll-mt-24 rounded-2xl border border-sea-100 bg-white p-6 shadow-sm"
+    >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-lg font-semibold text-sea-900">{t("evInProgramma")}</h2>
         <Link href="/eventi" className="text-sm text-sea-600 hover:underline">

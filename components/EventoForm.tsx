@@ -3,6 +3,7 @@
 import { useFormState, useFormStatus } from "react-dom";
 import { useTranslations } from "next-intl";
 import { salvaEvento, type SubmitState } from "@/app/actions";
+import { TIPI_EVENTO } from "@/lib/profilo";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -73,6 +74,24 @@ export function EventoForm({ beachId }: { beachId: string }) {
           </label>
           <input id="data_fine" name="data_fine" type="date" min={oggi} className={campo} />
         </div>
+      </div>
+
+      {/* Il tipo non è decorativo: è quello che permette alla scheda di dire
+          «Music-friendly» sulla base di un fatto invece che di una casella
+          spuntata dal gestore. Resta facoltativo. */}
+      <div>
+        <label htmlFor="tipo" className={etichetta}>
+          {t("evTipo")}
+        </label>
+        <select id="tipo" name="tipo" defaultValue="" className={campo}>
+          <option value="">{t("nonIndicato")}</option>
+          {TIPI_EVENTO.map((v) => (
+            <option key={v} value={v}>
+              {t(`evento_${v}`)}
+            </option>
+          ))}
+        </select>
+        <p className="mt-1 text-[11px] text-sea-400">{t("evTipoNota")}</p>
       </div>
 
       <div>

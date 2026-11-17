@@ -784,7 +784,26 @@ export async function salvaEvento(
   } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "Accedi per pubblicare un evento." };
 
-  const riga = { beach_id, titolo, descrizione, data_inizio, data_fine, creato_da: user.id };
+  // Il tipo serve all'etichetta verificata delle specializzazioni: senza, un
+  // DJ set e un mercatino sono indistinguibili e «Music-friendly» non si può
+  // calcolare, si può solo dichiarare. Resta facoltativo.
+  const TIPI_EVENTO_AMMESSI = [
+    "dj_set", "musica_dal_vivo", "degustazioni", "cene_a_tema",
+    "matrimoni", "eventi_aziendali", "cinema", "tornei_sportivi",
+    "corsi_sport", "feste_private", "mercatini", "convegni",
+  ];
+  const tipoGrezzo = String(formData.get("tipo") ?? "").trim();
+  const tipo = TIPI_EVENTO_AMMESSI.includes(tipoGrezzo) ? tipoGrezzo : null;
+
+  const riga = {
+    beach_id,
+    titolo,
+    descrizione,
+    data_inizio,
+    data_fine,
+    tipo,
+    creato_da: user.id,
+  };
   const { error } = id
     ? await supabase.from("eventi_gestore").update(riga).eq("id", id)
     : await supabase.from("eventi_gestore").insert(riga);
@@ -887,4 +906,76 @@ export async function eliminaEventoAdmin(formData: FormData): Promise<void> {
   revalidatePath("/eventi");
   revalidatePath("/en/eventi");
   revalidatePath(`/area-gestore/${beach_id}/eventi`);
+}
+
+// ---------------------------------------------------------------------------
+// Specializzazioni scelte dal gestore
+// ---------------------------------------------------------------------------
+
+/**
+ * Salva (o aggiorna) la specializzazione di un ambito.
+ *
+ * Non c'è niente da "attivare": lo stato dichiarato dal gestore dice soltanto
+ * se gli interessa. L'etichetta verificata sulla scheda pubblica la decide il
+ * calendario, non questo modulo.
+ */
+export async function salvaSpecializzazione(
+  _prev: SubmitState,
+  formData: FormData
+): Promise<SubmitState> {
+  const beach_id = String(formData.get("beach_id") ?? "");
+  const ambito = String(formData.get("ambito") ?? "");
+  if (!beach_id) return { ok: false, error: "Stabilimento non valido." };
+  if (!["musica", "sport", "cucina", "cultura"].includes(ambito)) {
+    return { ok: false, error: "Ambito non valido." };
+  }
+
+  const stato = String(formData.get("stato") ?? "");
+  if (!["attiva", "interessato", "non_ora"].includes(stato)) {
+    return { ok: false, error: "Scegli una delle tre risposte." };
+  }
+
+  const frequenzaGrezza = String(formData.get("frequenza") ?? "").trim();
+  const frequenza = ["occasionale", "mensile", "settimanale", "piu_volte_settimana"].includes(
+    frequenzaGrezza
+  )
+    ? frequenzaGrezza
+    : null;
+
+  const racconto = String(formData.get("racconto") ?? "").trim().slice(0, 600) || null;
+
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "Accedi per modificare la scheda." };
+
+  const [{ data: gestore }, { data: admin }] = await Promise.all([
+    supabase.rpc("e_gestore_di", { _beach: beach_id }),
+    supabase.rpc("e_admin"),
+  ]);
+  if (!gestore && !admin) {
+    return { ok: false, error: "Non risulti gestore approvato di questo stabilimento." };
+  }
+
+  // Chi risponde «per ora no» non si porta dietro racconto e frequenza: la
+  // riga resta per sapere che la domanda è già stata fatta, ma non conserva
+  // una descrizione di qualcosa che il gestore ha appena detto di non fare.
+  const { error } = await supabase.from("specializzazioni").upsert(
+    {
+      beach_id,
+      ambito,
+      stato,
+      racconto: stato === "non_ora" ? null : racconto,
+      frequenza: stato === "non_ora" ? null : frequenza,
+    },
+    { onConflict: "beach_id,ambito" }
+  );
+
+  if (error) return { ok: false, error: error.message || "Salvataggio non riuscito." };
+
+  revalidaScheda(beach_id, true);
+  revalidatePath(`/area-gestore/${beach_id}/eventi`);
+  revalidatePath(`/area-gestore/${beach_id}`);
+  return { ok: true };
 }

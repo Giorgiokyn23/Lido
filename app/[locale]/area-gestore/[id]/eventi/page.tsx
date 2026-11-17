@@ -1,3 +1,5 @@
+import { COLONNE_SPECIALIZZAZIONE, type Specializzazione } from "@/lib/specializzazioni";
+import { SpecializzazioneForm } from "@/components/SpecializzazioneForm";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
@@ -61,6 +63,20 @@ export default async function EventiGestorePage({
     .order("data_inizio", { ascending: true });
   const eventi = (evData ?? []) as Evento[];
 
+  // La specializzazione sta accanto al calendario di proposito: l'etichetta
+  // pubblica forte dipende dagli eventi pubblicati, quindi la domanda va
+  // fatta dove il gestore vede quanti eventi ha davvero.
+  const { data: specData } = await supabase
+    .from("specializzazioni")
+    .select(COLONNE_SPECIALIZZAZIONE)
+    .eq("beach_id", id)
+    .eq("ambito", "musica")
+    .maybeSingle();
+  const { data: specConfermata } = await supabase.rpc("specializzazione_confermata", {
+    _beach: id,
+    _ambito: "musica",
+  });
+
   const oggi = new Date().toISOString().slice(0, 10);
   const futuri = eventi.filter((e) => (e.data_fine ?? e.data_inizio) >= oggi);
   const passati = eventi.filter((e) => (e.data_fine ?? e.data_inizio) < oggi);
@@ -106,6 +122,13 @@ export default async function EventiGestorePage({
       </div>
 
       <EventoForm beachId={id} />
+
+      <SpecializzazioneForm
+        beachId={id}
+        ambito="musica"
+        valori={(specData as Specializzazione | null) ?? null}
+        confermata={specConfermata === true}
+      />
 
       <section className="rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
         <h2 className="text-sm font-semibold text-sea-800">{t("evInProgramma")}</h2>

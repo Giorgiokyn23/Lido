@@ -1,6 +1,8 @@
 // Link di next-intl: mantiene la lingua corrente nell'URL. Con il Link
 // normale di Next il prefisso si perde e il middleware ricalcola la lingua
 // dal browser, facendo saltare la pagina in inglese.
+import { COLONNE_SPECIALIZZAZIONE, type Specializzazione } from "@/lib/specializzazioni";
+import { SpecializzazioneBagno } from "@/components/SpecializzazioneBagno";
 import { COLONNE_PROFILO } from "@/lib/profilo";
 import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
@@ -95,10 +97,25 @@ export default async function BeachPage({ params }: { params: { id: string; loca
   // di schede verificate, quindi qui non serve filtrare di nuovo.
   const { data: eventiData } = await supabase
     .from("eventi_gestore")
-    .select("id,titolo,descrizione,data_inizio,data_fine")
+    .select("id,titolo,descrizione,data_inizio,data_fine,tipo")
     .eq("beach_id", params.id)
     .order("data_inizio", { ascending: true })
     .limit(5);
+
+  // Specializzazione musicale. Si legge comunque, anche a calendario vuoto:
+  // un bagno che dichiara di voler fare musica va mostrato a chi cerca dove
+  // suonare proprio quando non ha ancora niente in programma.
+  const { data: specData } = await supabase
+    .from("specializzazioni")
+    .select(COLONNE_SPECIALIZZAZIONE)
+    .eq("beach_id", params.id)
+    .eq("ambito", "musica")
+    .maybeSingle();
+
+  const [{ data: specConfermata }, { data: specInProgramma }] = await Promise.all([
+    supabase.rpc("specializzazione_confermata", { _beach: params.id, _ambito: "musica" }),
+    supabase.rpc("eventi_ambito_in_programma", { _beach: params.id, _ambito: "musica" }),
+  ]);
 
   const { data: profiloData } = await supabase
     .from("profilo_stabilimento")
@@ -406,6 +423,17 @@ export default async function BeachPage({ params }: { params: { id: string; loca
       <ProfiloGestore profilo={(profiloData as ProfiloPubblico | null) ?? null} />
 
       {/* Ingresso gratuito per il gestore, solo sulle schede non ancora rivendicate */}
+      <SpecializzazioneBagno
+        spec={(specData as Specializzazione | null) ?? null}
+        confermata={specConfermata === true}
+        eventiInProgramma={Number(specInProgramma ?? 0)}
+        contatto={{
+          email: (profiloData as { email_pubblica?: string | null } | null)?.email_pubblica ?? null,
+          whatsapp: (profiloData as { whatsapp?: string | null } | null)?.whatsapp ?? null,
+        }}
+        nomeBagno={b.nome}
+      />
+
       <EventiBagno eventi={(eventiData ?? []) as EventoPubblico[]} locale={params.locale} />
 
       <RivendicaCta beachId={b.id} stato={statoProfilo} />
