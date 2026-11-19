@@ -7,7 +7,8 @@
     "tagline": "Il Trustpilot dei bagni",
     "events": "Eventi",
     "myArea": "Area gestore",
-    "operators": "Per i gestori"
+    "operators": "Per i gestori",
+    "myProfile": "Il mio profilo"
   },
   "home": {
     "badge": "30.000+ lidi e porti · 10 criteri · nel mondo",
@@ -213,7 +214,15 @@
     "errConfirmVisit": "Per pubblicare, conferma di aver visitato lo stabilimento.",
     "subtitle": "Una recensione seria e utile, alla portata di tutti: valuti gli aspetti concreti della tua esperienza.",
     "civicTitle": "Uso del demanio e valore civico",
-    "civicHint": "Domande facoltative: se questa concessione di spiaggia serve la collettività (accesso non escludente, trasparenza, agevolazioni). Sono informazioni, non voti: non influiscono sul punteggio."
+    "civicHint": "Domande facoltative: se questa concessione di spiaggia serve la collettività (accesso non escludente, trasparenza, agevolazioni). Sono informazioni, non voti: non influiscono sul punteggio.",
+    "groupDay": "La giornata al mare",
+    "groupServices": "Servizi, accesso e prezzi",
+    "groupPeople": "Le persone e la vita del bagno",
+    "tellTitle": "Racconta la tua esperienza",
+    "tellQuestion": "Che cosa ti ha colpito di questo bagno?",
+    "visitDateAdd": "Aggiungi la data della visita",
+    "abbonatoLabel": "Ho un abbonamento stagionale in questo bagno",
+    "declaration": "Pubblicando dichiari di essere stato in questo stabilimento."
   },
   "metricHints": {
     "space_privacy": "Distanza tra ombrelloni e privacy",
@@ -922,5 +931,64 @@
     "spec_inProgramma": "{n} in calendario",
     "spec_notaAperta": "Disponibilità dichiarata dal gestore. Non è un giudizio e non influisce su recensioni, punteggio o posizione in classifica.",
     "spec_notaAttiva": "Etichetta assegnata dagli eventi pubblicati sul calendario, non acquistabile. Non influisce su recensioni, punteggio o posizione in classifica."
+  },
+  "accesso": {
+    "titolo": "Entra in LidoRank",
+    "sottotitolo": "Con un profilo tieni traccia dei bagni dove sei stato e di quelli che vuoi provare.",
+    "chiudi": "Chiudi",
+    "creaProfilo": "Crea un profilo",
+    "accedi": "Ho già un profilo",
+    "senzaProfilo": "Continua senza profilo",
+    "notaAnonimato": "Le recensioni restano anonime anche con un profilo: il tuo nome non compare mai accanto a quello che scrivi.",
+    "nome": "Come ti chiamiamo",
+    "nomeNota": "Serve solo a te, per riconoscere la tua area. Non compare accanto alle recensioni.",
+    "email": "Email",
+    "invio": "Invio…",
+    "mandaCodice": "Mandami il codice",
+    "indietro": "← Indietro",
+    "codiceIntro": "Abbiamo mandato un codice a {email}. Scrivilo qui sotto.",
+    "codiceLabel": "Codice ricevuto via email",
+    "entra": "Entra",
+    "errRate": "Troppe richieste in poco tempo. Riprova fra qualche minuto.",
+    "errGeneric": "Non è stato possibile mandare il codice. Controlla l'indirizzo e riprova.",
+    "errCodice": "Codice sbagliato o scaduto. Richiedine uno nuovo.",
+    "titoloRecensione": "Prima di scrivere",
+    "sottotitoloRecensione": "Con un profilo la tua recensione pesa di più in classifica. Puoi anche continuare senza: resta visibile, pesa meno."
+  },
+  "liste": {
+    "daProvare": "Da provare",
+    "daProvareFatto": "Nei da provare",
+    "visitato": "Ci sono stato",
+    "visitatoFatto": "Ci sei stato",
+    "portaTitolo": "Serve un profilo",
+    "portaSottotitolo": "Le tue liste sono tue: per tenerle serve un posto dove metterle."
+  },
+  "profilo": {
+    "titolo": "Il mio profilo",
+    "ciao": "Ciao {nome}",
+    "intro": "I bagni dove sei stato, quelli che vuoi provare e quello che hai scritto.",
+    "accessoRichiesto": "Entra per vedere le tue liste e le tue recensioni.",
+    "accedi": "Entra",
+    "contVisitati": "visitati",
+    "contDaProvare": "da provare",
+    "contRecensioni": "recensioni",
+    "visitatiTitolo": "Stabilimenti visitati",
+    "visitatiIntro": "Un diario dei bagni in cui sei stato, anche senza recensione.",
+    "visitatiVuoto": "Ancora nessuno. Sulla scheda di un bagno trovi «Ci sono stato».",
+    "daProvareTitolo": "Da provare",
+    "daProvareIntro": "I bagni che vorresti scoprire.",
+    "daProvareVuoto": "Ancora nessuno. Sulla scheda di un bagno trovi «Da provare».",
+    "recensioniTitolo": "Le mie recensioni",
+    "recensioniIntro": "Questa sezione è visibile solo a te: sulla pagina del bagno la recensione resta anonima.",
+    "recensioniVuoto": "Non hai ancora scritto niente.",
+    "senzaCommento": "Hai dato i voti senza scrivere un commento.",
+    "inVerifica": "In verifica",
+    "notaAnonimato": "Il tuo nome non compare mai accanto alle recensioni, su nessuna pagina.",
+    "nomeTitolo": "Come ti chiamiamo",
+    "nomeNota": "Serve solo qui dentro. Non compare accanto alle recensioni.",
+    "nomePlaceholder": "Il tuo nome",
+    "nomeSalvato": "Fatto.",
+    "salvaNome": "Salva",
+    "salvataggio": "Salvataggio…"
   }
 }

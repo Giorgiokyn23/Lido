@@ -1,6 +1,8 @@
 // Link di next-intl: mantiene la lingua corrente nell'URL. Con il Link
 // normale di Next il prefisso si perde e il middleware ricalcola la lingua
 // dal browser, facendo saltare la pagina in inglese.
+import { RichiamoRecensione } from "@/components/RichiamoRecensione";
+import { BottoniLista } from "@/components/BottoniLista";
 import { COLONNE_SPECIALIZZAZIONE, type Specializzazione } from "@/lib/specializzazioni";
 import { SpecializzazioneBagno } from "@/components/SpecializzazioneBagno";
 import { COLONNE_PROFILO } from "@/lib/profilo";
@@ -76,8 +78,11 @@ export default async function BeachPage({ params }: { params: { id: string; loca
   const [{ data: beach }, { data: reviewsData }, { data: rankData }, { data: beachRow }] =
     await Promise.all([
       supabase.from("beach_scores").select("*").eq("id", params.id).maybeSingle(),
+      // Dalla vista, non dalla tabella: dopo la 0085 anon non ha più il
+      // permesso su user_id e ip_hash, quindi un «select *» su reviews
+      // fallirebbe. La vista espone le stesse righe senza quelle due colonne.
       supabase
-        .from("reviews")
+        .from("recensioni_pubbliche")
         .select("*")
         .eq("beach_id", params.id)
         .order("created_at", { ascending: false })
@@ -325,12 +330,13 @@ export default async function BeachPage({ params }: { params: { id: string; loca
               </div>
               <div className="text-[11px] uppercase tracking-wide opacity-80">{td("scoreOutOf")}</div>
             </div>
-            <a
-              href="#scrivi-recensione"
-              className="rounded-xl bg-amber-400 px-4 py-2 text-center text-sm font-semibold text-sea-900 transition hover:bg-amber-300"
-            >
-              {td("writeReview")}
-            </a>
+            <RichiamoRecensione
+              classe="rounded-xl bg-amber-400 px-4 py-2 text-center text-sm font-semibold text-sea-900 transition hover:bg-amber-300"
+              etichetta={td("writeReview")}
+            />
+            {/* Stato personale, quindi chiesto dal browser: la pagina è in
+                cache condivisa e non può contenere le liste di nessuno. */}
+            <BottoniLista beachId={b.id} />
           </div>
         </div>
 

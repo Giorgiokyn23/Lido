@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { PortaAccesso } from "@/components/PortaAccesso";
 
 // Stato login/logout della barra, lato CLIENT: così il layout (e quindi tutte
 // le pagine) non deve più leggere i cookie sul server a ogni richiesta e può
@@ -11,6 +12,7 @@ import { createClient } from "@/lib/supabase/client";
 export function NavAuth() {
   const t = useTranslations("nav");
   const [email, setEmail] = useState<string | null | undefined>(undefined);
+  const [porta, setPorta] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
@@ -33,6 +35,12 @@ export function NavAuth() {
       <div className="flex items-center gap-2">
         {/* Chi è loggato deve poter tornare al proprio pannello da ogni pagina. */}
         <Link
+          href="/profilo"
+          className="rounded-full bg-sea-50 px-3 py-1 font-medium text-sea-700 hover:bg-sea-100"
+        >
+          {t("myProfile")}
+        </Link>
+        <Link
           href="/area-gestore"
           className="rounded-full bg-sea-50 px-3 py-1 font-medium text-sea-700 hover:bg-sea-100"
         >
@@ -49,11 +57,18 @@ export function NavAuth() {
     );
   }
   return (
-    <Link
-      href="/login"
-      className="rounded-full bg-sea-500 px-4 py-1.5 font-medium text-white hover:bg-sea-600"
-    >
-      {t("login")}
-    </Link>
+    <>
+      {/* Il clic su «Accedi» apre la sovraimpressione invece di portare via
+          dalla pagina: qui l'intenzione è già quella, quindi non si sta
+          mettendo un ostacolo davanti a niente. Chi preferisce la pagina
+          intera ce l'ha ancora, da /login. */}
+      <button
+        onClick={() => setPorta(true)}
+        className="rounded-full bg-sea-500 px-4 py-1.5 font-medium text-white hover:bg-sea-600"
+      >
+        {t("login")}
+      </button>
+      <PortaAccesso aperto={porta} onChiudi={() => setPorta(false)} />
+    </>
   );
 }

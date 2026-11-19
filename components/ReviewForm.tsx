@@ -143,6 +143,64 @@ export function ReviewForm({
     return <SuccessPanel isLoggedIn={isLoggedIn} />;
   }
 
+  // Le tre famiglie chieste da Francesco. Sono SOLO un raggruppamento visivo:
+  // i criteri, i loro pesi e il calcolo del punteggio non cambiano di una
+  // virgola. I porti hanno criteri diversi e non compaiono qui: finiscono nel
+  // blocco senza intestazione, invece di sparire perché nessuno li ha mappati.
+  const GRUPPI_CRITERI = [
+    {
+      titolo: "groupDay",
+      chiavi: ["seabed_quality", "pulizia_igiene", "space_privacy", "sicurezza"],
+    },
+    {
+      titolo: "groupServices",
+      chiavi: ["family_services", "accessibility", "price_transparency", "impianti_sportivi"],
+    },
+    { titolo: "groupPeople", chiavi: ["atmosfera", "eventi_comunita"] },
+  ];
+  const raggruppate = new Set(GRUPPI_CRITERI.flatMap((g) => g.chiavi));
+  const restanti = coreKeys.filter((k) => !raggruppate.has(k));
+
+  // Un criterio con i suoi sottopunti. Estratto in un componente perché ora
+  // viene reso da due punti diversi: se restasse scritto due volte, la
+  // prossima modifica ne aggiornerebbe uno solo.
+  const CriterioConSottopunti = ({ chiave }: { chiave: string }) => {
+    const subs = (SUBPOINTS as Record<string, string[]>)[chiave];
+    return (
+      <div>
+        <StarRating name={chiave} label={tm(chiave)} hint={th(chiave)} />
+        {subs?.length ? (
+          <details className="mt-1 rounded-lg bg-sea-50/60 px-3 py-2">
+            <summary className="cursor-pointer text-[11px] font-medium text-sea-600">
+              {tr("subpointsToggle")}
+            </summary>
+            <p className="mt-1 text-[10px] italic text-sea-400">{tr("subpointsHint")}</p>
+            <div className="mt-2 space-y-2">
+              {subs.map((sk) => (
+                <div key={sk} className="flex items-center justify-between gap-2">
+                  <label htmlFor={sk} className="text-[11px] text-sea-700">
+                    {ts(sk)}
+                  </label>
+                  <select
+                    id={sk}
+                    name={sk}
+                    defaultValue=""
+                    className="shrink-0 rounded-md border border-sea-200 bg-white px-2 py-1 text-[11px] text-sea-900"
+                  >
+                    <option value="">{tr("unknown")}</option>
+                    <option value="si">{tr("yes")}</option>
+                    <option value="no">{tr("no")}</option>
+                    <option value="na">{tr("na")}</option>
+                  </select>
+                </div>
+              ))}
+            </div>
+          </details>
+        ) : null}
+      </div>
+    );
+  };
+
   return (
     <form
       action={formAction}
@@ -176,47 +234,34 @@ export function ReviewForm({
       </div>
 
       <div className="space-y-6 p-6">
-        {/* Criteri principali (obbligatori, scelta cosciente — nessun default) */}
-        <fieldset>
+        {/* Criteri principali (obbligatori, scelta cosciente — nessun default).
+            Restano tutti e dieci sulla stessa pagina: le tre intestazioni
+            servono a far capire a colpo d'occhio di che cosa si sta parlando,
+            non a spezzare il modulo in passaggi. Un criterio che non rientra
+            in nessun gruppo — i porti ne hanno altri — finisce nell'ultimo
+            blocco senza intestazione, invece di sparire. */}
+        {GRUPPI_CRITERI.map(({ titolo, chiavi }) => {
+          const presenti = coreKeys.filter((k) => chiavi.includes(k));
+          if (presenti.length === 0) return null;
+          return (
+            <fieldset key={titolo}>
+              <legend className="text-sm font-semibold text-sea-800">{tr(titolo)}</legend>
+              <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-3 md:grid-cols-2">
+                {presenti.map((key) => (
+                  <CriterioConSottopunti key={key} chiave={key} />
+                ))}
+              </div>
+            </fieldset>
+          );
+        })}
+
+        <fieldset className={restanti.length === 0 ? "hidden" : undefined}>
           <legend className="text-sm font-semibold text-sea-800">{tr("coreTitle")}</legend>
           <p className="mb-2 text-xs text-sea-400">{tr("coreHint")}</p>
           <div className="grid grid-cols-1 gap-x-6 gap-y-3 md:grid-cols-2">
-            {coreKeys.map((key) => {
-              const subs = (SUBPOINTS as Record<string, string[]>)[key];
-              return (
-              <div key={key}>
-                <StarRating name={key} label={tm(key)} hint={th(key)} />
-                {subs?.length ? (
-                  <details className="mt-1 rounded-lg bg-sea-50/60 px-3 py-2">
-                    <summary className="cursor-pointer text-[11px] font-medium text-sea-600">
-                      {tr("subpointsToggle")}
-                    </summary>
-                    <p className="mt-1 text-[10px] italic text-sea-400">{tr("subpointsHint")}</p>
-                    <div className="mt-2 space-y-2">
-                      {subs.map((sk) => (
-                        <div key={sk} className="flex items-center justify-between gap-2">
-                          <label htmlFor={sk} className="text-[11px] text-sea-700">
-                            {ts(sk)}
-                          </label>
-                          <select
-                            id={sk}
-                            name={sk}
-                            defaultValue=""
-                            className="shrink-0 rounded-md border border-sea-200 bg-white px-2 py-1 text-[11px] text-sea-900"
-                          >
-                            <option value="">{tr("unknown")}</option>
-                            <option value="si">{tr("yes")}</option>
-                            <option value="no">{tr("no")}</option>
-                            <option value="na">{tr("na")}</option>
-                          </select>
-                        </div>
-                      ))}
-                    </div>
-                  </details>
-                ) : null}
-              </div>
-              );
-            })}
+            {restanti.map((key) => (
+              <CriterioConSottopunti key={key} chiave={key} />
+            ))}
           </div>
         </fieldset>
 
@@ -296,35 +341,19 @@ export function ReviewForm({
         </fieldset>
         )}
 
-        {/* La tua visita: conferma + quando (anti-recensioni fantasma) */}
-        <div className="grid grid-cols-1 gap-4 rounded-xl border border-sea-100 p-4 sm:grid-cols-2 sm:items-center">
-          <label className="flex items-start gap-2 text-sm text-sea-700">
-            <input
-              type="checkbox"
-              name="visitato"
-              value="1"
-              required
-              className="mt-0.5 h-4 w-4 rounded border-sea-300 text-sea-600"
-            />
-            <span>{tr("visitConfirm")}</span>
-          </label>
-          <div className="sm:justify-self-end">
-            <label htmlFor="visita_periodo" className="text-xs font-medium text-sea-500">
-              {tr("visitWhen")}
-            </label>
-            <input
-              id="visita_periodo"
-              name="visita_periodo"
-              type="date"
-              className="mt-1 block rounded-lg border border-sea-200 bg-white px-3 py-2 text-sm text-sea-900"
-            />
-          </div>
-        </div>
+        {/* Racconta la tua esperienza.
+            Via la casella «confermo di aver visitato»: era obbligatoria e
+            bloccava l'invio, cioè era attrito messo davanti alla cosa più
+            scarsa che abbiamo, le recensioni. La dichiarazione però non
+            sparisce: resta nella riga sotto il pulsante. Una delle due si
+            poteva togliere, tutte e due no — quando un gestore contesta una
+            recensione, «chi ha scritto ha dichiarato di esserci stato» è
+            un'altra cosa rispetto a «un anonimo ha scritto questo». */}
+        <fieldset className="rounded-xl border border-sea-100 p-4">
+          <legend className="px-1 text-sm font-semibold text-sea-800">{tr("tellTitle")}</legend>
 
-        {/* Commento */}
-        <div>
-          <label htmlFor="commento" className="text-sm font-medium text-sea-800">
-            {tr("commentLabel")}
+          <label htmlFor="commento" className="mt-1 block text-sm text-sea-700">
+            {tr("tellQuestion")}
           </label>
           <textarea
             id="commento"
@@ -334,7 +363,39 @@ export function ReviewForm({
             placeholder={tr("commentPlaceholder")}
             className="mt-2 w-full rounded-xl border border-sea-200 px-4 py-2.5 text-sea-900 placeholder:text-sea-300 focus:border-sea-400 focus:outline-none focus:ring-2 focus:ring-sea-200"
           />
-        </div>
+
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-start">
+            <div>
+              <label
+                htmlFor="visita_periodo"
+                className="flex items-center gap-2 text-sm text-sea-700"
+              >
+                <span aria-hidden="true">🗓</span>
+                {tr("visitDateAdd")}
+              </label>
+              <input
+                id="visita_periodo"
+                name="visita_periodo"
+                type="date"
+                max={new Date().toISOString().slice(0, 10)}
+                className="mt-1 block rounded-lg border border-sea-200 bg-white px-3 py-2 text-sm text-sea-900"
+              />
+            </div>
+
+            {/* Dichiarazione di chi scrive, non una verifica: per questo non
+                tocca il peso della recensione. Vale come contesto per chi
+                legge — un abbonato conosce il posto in un altro modo. */}
+            <label className="flex items-start gap-2 text-sm text-sea-700">
+              <input
+                type="checkbox"
+                name="abbonato"
+                value="1"
+                className="mt-0.5 h-4 w-4 rounded border-sea-300 text-sea-600"
+              />
+              <span>{tr("abbonatoLabel")}</span>
+            </label>
+          </div>
+        </fieldset>
 
         {state.error ? (
           <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{state.error}</p>
@@ -342,6 +403,7 @@ export function ReviewForm({
 
         <Turnstile />
         <SubmitButton />
+        <p className="text-center text-[11px] text-sea-400">{tr("declaration")}</p>
       </div>
     </form>
   );

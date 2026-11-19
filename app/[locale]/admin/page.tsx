@@ -34,7 +34,10 @@ export default async function AdminPage({ params: { locale } }: { params: { loca
   // --- dati (storici) ---
   const supa = createPublicClient();
   const [{ data: revData }, { count: schedeTotali }, { count: notices }] = await Promise.all([
-    supa.from("reviews").select("id,beach_id,user_id,ip_hash,stato,peso,commento,created_at").limit(50000),
+    // Non più con la chiave anonima: dopo la 0085 user_id e ip_hash non sono
+    // leggibili da nessun ruolo pubblico. Qui si passa da una funzione che
+    // controlla il ruolo admin nel database.
+    supaAuth.rpc("recensioni_admin", { _limite: 50000 }),
     supa.from("beaches").select("*", { count: "exact", head: true }),
     supa.from("review_notices").select("*", { count: "exact", head: true }),
   ]);

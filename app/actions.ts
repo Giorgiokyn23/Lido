@@ -137,11 +137,15 @@ export async function submitReview(
     scores[m.key] = n;
   }
 
-  // Conferma di visita: obbligatoria (anti-recensioni fantasma)
-  const visitato = String(formData.get("visitato") ?? "");
-  if (visitato !== "1" && visitato !== "on" && visitato !== "true") {
-    return { ok: false, error: "Per pubblicare, conferma di aver visitato lo stabilimento." };
-  }
+  // La casella «confermo di aver visitato» non c'è più e non è più
+  // obbligatoria: era attrito davanti alla cosa più scarsa che abbiamo, le
+  // recensioni. La dichiarazione resta, in una riga sotto il pulsante di
+  // invio — serve quando un gestore contesta una recensione, e lì la
+  // differenza fra «un anonimo ha scritto questo» e «chi ha scritto ha
+  // dichiarato di esserci stato» è la differenza fra una grana e una
+  // procedura. Gli argini veri restano a valle: limiti per IP, limite per
+  // bagno, soglia di impennata e quarantena, tutti dentro submit_review.
+
   // Data di visita (facoltativo): "YYYY-MM-DD"
   const visita_periodo = /^\d{4}-\d{2}-\d{2}$/.test(String(formData.get("visita_periodo") ?? ""))
     ? String(formData.get("visita_periodo"))
@@ -197,6 +201,10 @@ export async function submitReview(
     _p: {
       ...scores,
       ...facts,
+      // Dichiarazione, non verifica: nel database non tocca né il peso né lo
+      // stato della recensione. Una spunta che chiunque può mettere non può
+      // muovere un punteggio.
+      abbonato: String(formData.get("abbonato") ?? "") === "1" ? "true" : null,
       commento,
       visita_periodo,
       hold,
@@ -214,6 +222,19 @@ export async function submitReview(
     if (error.code === "23505")
       return { ok: false, error: "Hai già recensito questo bagno con il tuo account." };
     return { ok: false, error: msg || "Errore nell'invio." };
+  }
+
+  // Chi ha un profilo e recensisce un bagno, quel bagno l'ha visitato: finisce
+  // automaticamente fra i «visitati», e se era fra i «da provare» ne esce,
+  // perché la riga è una sola per utente e bagno. Un errore qui non deve far
+  // fallire la recensione, che è già salvata: si ignora in silenzio.
+  if (user?.id) {
+    try {
+      await supabase.rpc("segna_bagno", { _beach: beach_id, _tipo: "visitato" });
+      revalidatePath("/profilo");
+    } catch {
+      // la lista è un comodo, la recensione è il prodotto
+    }
   }
 
   revalidaScheda(beach_id);
@@ -977,5 +998,50 @@ export async function salvaSpecializzazione(
   revalidaScheda(beach_id, true);
   revalidatePath(`/area-gestore/${beach_id}/eventi`);
   revalidatePath(`/area-gestore/${beach_id}`);
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------------------
+// Profilo utente
+// ---------------------------------------------------------------------------
+
+/**
+ * Il nome del profilo. Serve alla persona per riconoscere la propria area:
+ * NON compare mai accanto a una recensione, e dopo la migrazione 0085 non è
+ * questione di cosa l'interfaccia sceglie di mostrare — il collegamento fra
+ * chi scrive e che cosa ha scritto non è leggibile da nessun ruolo pubblico.
+ */
+export async function salvaNomeProfilo(
+  _prev: SubmitState,
+  formData: FormData
+): Promise<SubmitState> {
+  const nome = String(formData.get("nome") ?? "").trim().slice(0, 60) || null;
+
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: "Accedi per modificare il profilo." };
+
+  // La riga del profilo può non esistere ancora: chi entra per la prima volta
+  // ha un utente ma nessun profilo, perché la 0071 lo crea solo quando una
+  // rivendicazione viene approvata. Il ruolo resta 'cittadino' — la policy
+  // della 0087 non ne ammette altri in inserimento, e un trigger impedisce di
+  // cambiarlo con un aggiornamento.
+  const { error } = await supabase
+    .from("profili")
+    .upsert({ user_id: user.id, ruolo: "cittadino", nome }, { onConflict: "user_id" });
+
+  if (error) {
+    // Se il profilo esiste già con un ruolo diverso, l'upsert prova a
+    // riscriverlo: in quel caso si aggiorna il solo nome.
+    const { error: err2 } = await supabase
+      .from("profili")
+      .update({ nome })
+      .eq("user_id", user.id);
+    if (err2) return { ok: false, error: err2.message || "Salvataggio non riuscito." };
+  }
+
+  revalidatePath("/profilo");
   return { ok: true };
 }

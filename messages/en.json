@@ -7,7 +7,8 @@
     "tagline": "The Trustpilot of beach clubs",
     "events": "Events",
     "myArea": "My area",
-    "operators": "For operators"
+    "operators": "For operators",
+    "myProfile": "My profile"
   },
   "home": {
     "badge": "30,000+ beach clubs & marinas · 10 criteria · worldwide",
@@ -213,7 +214,15 @@
     "errConfirmVisit": "To publish, please confirm you visited the establishment.",
     "subtitle": "A serious, useful review that anyone can write: you rate the concrete aspects of your experience.",
     "civicTitle": "Public-domain use & civic value",
-    "civicHint": "Optional questions: whether this beach concession serves the community (non-excluding access, transparency, reduced fees). These are information, not ratings: they don't affect the score."
+    "civicHint": "Optional questions: whether this beach concession serves the community (non-excluding access, transparency, reduced fees). These are information, not ratings: they don't affect the score.",
+    "groupDay": "The day at the beach",
+    "groupServices": "Facilities, access and prices",
+    "groupPeople": "The people and the life of the place",
+    "tellTitle": "Tell us about your visit",
+    "tellQuestion": "What struck you about this place?",
+    "visitDateAdd": "Add the date of your visit",
+    "abbonatoLabel": "I have a season pass here",
+    "declaration": "By publishing you declare that you have been to this establishment."
   },
   "metricHints": {
     "space_privacy": "Distance between umbrellas and privacy",
@@ -922,5 +931,64 @@
     "spec_inProgramma": "{n} in the calendar",
     "spec_notaAperta": "Availability stated by the operator. It is not a judgement and has no effect on reviews, scores or ranking position.",
     "spec_notaAttiva": "Label earned from events published on the calendar, not for sale. It has no effect on reviews, scores or ranking position."
+  },
+  "accesso": {
+    "titolo": "Join LidoRank",
+    "sottotitolo": "With a profile you keep track of the places you've been and the ones you want to try.",
+    "chiudi": "Close",
+    "creaProfilo": "Create a profile",
+    "accedi": "I already have one",
+    "senzaProfilo": "Continue without a profile",
+    "notaAnonimato": "Reviews stay anonymous even with a profile: your name never appears next to what you write.",
+    "nome": "What should we call you",
+    "nomeNota": "It's just for you, to recognise your own area. It never appears next to reviews.",
+    "email": "Email",
+    "invio": "Sending…",
+    "mandaCodice": "Send me the code",
+    "indietro": "← Back",
+    "codiceIntro": "We sent a code to {email}. Type it below.",
+    "codiceLabel": "Code received by email",
+    "entra": "Enter",
+    "errRate": "Too many requests in a short time. Try again in a few minutes.",
+    "errGeneric": "We couldn't send the code. Check the address and try again.",
+    "errCodice": "Wrong or expired code. Ask for a new one.",
+    "titoloRecensione": "Before you write",
+    "sottotitoloRecensione": "With a profile your review counts for more in the rankings. You can also continue without: it stays visible, it just weighs less."
+  },
+  "liste": {
+    "daProvare": "To try",
+    "daProvareFatto": "On your list",
+    "visitato": "I've been here",
+    "visitatoFatto": "You've been here",
+    "portaTitolo": "You need a profile",
+    "portaSottotitolo": "Your lists are yours: to keep them you need somewhere to put them."
+  },
+  "profilo": {
+    "titolo": "My profile",
+    "ciao": "Hello {nome}",
+    "intro": "The places you've been, the ones you want to try, and what you've written.",
+    "accessoRichiesto": "Sign in to see your lists and your reviews.",
+    "accedi": "Sign in",
+    "contVisitati": "visited",
+    "contDaProvare": "to try",
+    "contRecensioni": "reviews",
+    "visitatiTitolo": "Places visited",
+    "visitatiIntro": "A diary of the places you've been, review or no review.",
+    "visitatiVuoto": "None yet. You'll find «I've been here» on any beach page.",
+    "daProvareTitolo": "To try",
+    "daProvareIntro": "The places you'd like to discover.",
+    "daProvareVuoto": "None yet. You'll find «To try» on any beach page.",
+    "recensioniTitolo": "My reviews",
+    "recensioniIntro": "This section is visible only to you: on the beach page the review stays anonymous.",
+    "recensioniVuoto": "You haven't written anything yet.",
+    "senzaCommento": "You rated it without writing a comment.",
+    "inVerifica": "Under review",
+    "notaAnonimato": "Your name never appears next to reviews, on any page.",
+    "nomeTitolo": "What should we call you",
+    "nomeNota": "It's only used here. It never appears next to reviews.",
+    "nomePlaceholder": "Your name",
+    "nomeSalvato": "Done.",
+    "salvaNome": "Save",
+    "salvataggio": "Saving…"
   }
 }

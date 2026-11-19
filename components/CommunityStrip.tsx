@@ -35,7 +35,7 @@ export function CommunityStrip({ beachIds }: { beachIds?: string[] } = {}) {
       }
 
       let countQ = supabase
-        .from("reviews")
+        .from("recensioni_pubbliche")
         .select("*", { count: "exact", head: true })
         .in("stato", ["pubblicata", "ridotta"]);
       if (beachIds) countQ = countQ.in("beach_id", beachIds);
@@ -43,7 +43,7 @@ export function CommunityStrip({ beachIds }: { beachIds?: string[] } = {}) {
 
       const cols = "id,beach_id,commento,created_at," + METRICS.map((m) => m.key).join(",");
       let revQ = supabase
-        .from("reviews")
+        .from("recensioni_pubbliche")
         .select(cols)
         .in("stato", ["pubblicata", "ridotta"])
         .not("commento", "is", null)
