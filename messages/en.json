@@ -222,7 +222,11 @@
     "tellQuestion": "What struck you about this place?",
     "visitDateAdd": "Add the date of your visit",
     "abbonatoLabel": "I have a season pass here",
-    "declaration": "By publishing you declare that you have been to this establishment."
+    "declaration": "By publishing you declare that you have been to this establishment.",
+    "primaTitolo": "Before you write",
+    "primaSottotitolo": "With a profile your review counts for more in the rankings and you keep track of where you've been. You can also continue without.",
+    "dopoTitolo": "Review published",
+    "dopoSottotitolo": "Want to find it again, keep a list of the places you've been, and make the next ones count for more? Half a minute."
   },
   "metricHints": {
     "space_privacy": "Distance between umbrellas and privacy",
@@ -478,16 +482,19 @@
     "anonNote": "You can also review anonymously from a place's page: those reviews stay visible but weigh less in the rankings.",
     "errRate": "Too many sign-in requests in a short time. Try again in a few minutes — if you already requested the link, check your inbox (and spam).",
     "errGeneric": "We couldn't send the sign-in link. Check the email address and try again.",
-    "introCodice": "We will email you a six-digit code. No password to remember.",
+    "introCodice": "We'll email you a code. No password to remember.",
     "submitCodice": "Send me the code",
     "codiceIntro": "We sent a code to {email}. Type it below.",
-    "codiceLabel": "Six-digit code",
+    "codiceLabel": "Code received by email",
     "verifica": "Sign in",
     "cambiaEmail": "Change address",
     "reinvia": "Didn't arrive? Send again",
     "reinviaFra": "You can ask again in {secondi}s",
     "ancheLink": "The email also contains a link: you can click that instead if you prefer.",
-    "errCodice": "Wrong or expired code. Request a new one."
+    "errCodice": "Wrong or expired code. Request a new one.",
+    "giaCodice": "I already have a code",
+    "errLink": "That link didn't work: it may have expired, been used already, or been opened on a different device. Ask for a code and type it below — that always works.",
+    "errEmailPrima": "Enter your email address first, then the code."
   },
   "flag": {
     "tooltip": "Report this review as unlawful content",
@@ -933,8 +940,8 @@
     "spec_notaAttiva": "Label earned from events published on the calendar, not for sale. It has no effect on reviews, scores or ranking position."
   },
   "accesso": {
-    "titolo": "Join LidoRank",
-    "sottotitolo": "With a profile you keep track of the places you've been and the ones you want to try.",
+    "titolo": "How would you like to continue?",
+    "sottotitolo": "Create a profile to keep track of the places you've visited and the ones you want to try.",
     "chiudi": "Close",
     "creaProfilo": "Create a profile",
     "accedi": "I already have one",
@@ -953,7 +960,14 @@
     "errGeneric": "We couldn't send the code. Check the address and try again.",
     "errCodice": "Wrong or expired code. Ask for a new one.",
     "titoloRecensione": "Before you write",
-    "sottotitoloRecensione": "With a profile your review counts for more in the rankings. You can also continue without: it stays visible, it just weighs less."
+    "sottotitoloRecensione": "With a profile your review counts for more in the rankings. You can also continue without: it stays visible, it just weighs less.",
+    "occhiello": "YOUR PROFILE · LIDORANK",
+    "nomePlaceholder": "What should we call you",
+    "senzaPassword": "No password: we email you a code.",
+    "creaEContinua": "Create profile and continue",
+    "vantaggioVisitati": "Places visited",
+    "vantaggioDaProvare": "To try",
+    "vantaggioPeso": "Reviews that count for more"
   },
   "liste": {
     "daProvare": "To try",

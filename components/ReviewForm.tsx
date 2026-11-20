@@ -14,6 +14,7 @@ import {
 } from "@/lib/types";
 import { StarRating } from "@/components/StarRating";
 import { Turnstile } from "@/components/Turnstile";
+import { PortaAccesso } from "@/components/PortaAccesso";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -33,75 +34,24 @@ function SubmitButton() {
 // coinvolgimento: proponiamo l'accesso senza password (magic-link) così le
 // PROSSIME recensioni saranno verificate e legate al profilo — è questo che
 // rende misurabile il tasso di ritorno.
+/**
+ * Pannello mostrato dopo l'invio.
+ *
+ * Qui c'era anche un modulo per lasciare l'email e ricevere un collegamento
+ * di accesso. L'ho tolto: adesso, per chi è anonimo, subito dopo la
+ * pubblicazione si apre la finestra di creazione profilo, e due richieste
+ * della stessa email nello stesso istante — una nella finestra, una sotto —
+ * non sono il doppio di convincenti: sono confuse.
+ */
 function SuccessPanel({ isLoggedIn }: { isLoggedIn: boolean }) {
   const tr = useTranslations("review");
-  const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [dismissed, setDismissed] = useState(false);
-
-  async function sendLink(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
-    });
-    setLoading(false);
-    if (error) {
-      const rate = (error as { status?: number }).status === 429 || /rate/i.test(error.message);
-      setError(rate ? tr("ctaErrRate") : tr("ctaErrGeneric"));
-    } else setSent(true);
-  }
-
   return (
-    <div className="rounded-2xl border border-sea-100 bg-gradient-to-br from-sea-50 to-white p-8 text-center">
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-2xl">
-        ✓
-      </div>
-      <p className="mt-3 text-lg font-semibold text-sea-800">{tr("successTitle")}</p>
-      <p className="mt-1 text-sm text-sea-500">{tr("successBody")}</p>
-
-      {!isLoggedIn && !dismissed && (
-        <div className="mx-auto mt-6 max-w-sm rounded-xl border border-sea-200 bg-white p-5 text-left shadow-sm">
-          {sent ? (
-            <p className="rounded-lg bg-sea-50 px-3 py-2 text-sm text-sea-700">{tr("ctaSent")}</p>
-          ) : (
-            <>
-              <p className="text-sm font-semibold text-sea-800">{tr("ctaTitle")}</p>
-              <p className="mt-1 text-xs text-sea-500">{tr("ctaBody")}</p>
-              <form onSubmit={sendLink} className="mt-3 space-y-2">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={tr("ctaPlaceholder")}
-                  className="w-full rounded-lg border border-sea-200 px-3 py-2 text-sm text-sea-900 focus:border-sea-400 focus:outline-none focus:ring-2 focus:ring-sea-200"
-                />
-                {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">{error}</p>}
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full rounded-lg bg-sea-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sea-600 disabled:opacity-60"
-                >
-                  {loading ? tr("ctaSending") : tr("ctaSubmit")}
-                </button>
-              </form>
-              <button
-                type="button"
-                onClick={() => setDismissed(true)}
-                className="mt-2 w-full text-center text-xs text-sea-400 hover:text-sea-600 hover:underline"
-              >
-                {tr("ctaDismiss")}
-              </button>
-            </>
-          )}
-        </div>
-      )}
+    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center">
+      <p className="text-lg font-semibold text-emerald-900">{tr("successTitle")}</p>
+      <p className="mt-1 text-sm text-emerald-800">{tr("successBody")}</p>
+      {!isLoggedIn ? (
+        <p className="mt-3 text-xs text-emerald-700">{tr("ctaBody")}</p>
+      ) : null}
     </div>
   );
 }
@@ -120,6 +70,8 @@ export function ReviewForm({
   const [state, formAction] = useFormState(submitReview, initial);
   // login rilevato lato client, così la scheda resta cache-abile (ISR)
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [porta, setPorta] = useState(false);
+  const [portaDopo, setPortaDopo] = useState(false);
   // Da dove arriva chi sta scrivendo: il link del gestore porta ?via=qr|wa|mail.
   // Leggo da window invece che con useSearchParams per non forzare il rendering
   // dinamico della scheda, che è servita da cache.
@@ -139,8 +91,29 @@ export function ReviewForm({
   const tb = useTranslations("boolFacts");
   const ts = useTranslations("subpoints");
 
+  // Si apre da sola a recensione pubblicata, e solo per chi è anonimo.
+  useEffect(() => {
+    if (state.ok && !isLoggedIn) setPortaDopo(true);
+  }, [state.ok, isLoggedIn]);
+
   if (state.ok) {
-    return <SuccessPanel isLoggedIn={isLoggedIn} />;
+    // Il momento migliore per proporre un profilo non è prima di scrivere: è
+    // adesso, quando la persona ha appena dato qualcosa e vuole che non si
+    // perda. Chi ha già un account non vede niente.
+    return (
+      <>
+        <SuccessPanel isLoggedIn={isLoggedIn} />
+        {!isLoggedIn ? (
+          <PortaAccesso
+            aperto={portaDopo}
+            onChiudi={() => setPortaDopo(false)}
+            onContinuaSenza={() => setPortaDopo(false)}
+            titolo={tr("dopoTitolo")}
+            sottotitolo={tr("dopoSottotitolo")}
+          />
+        ) : null}
+      </>
+    );
   }
 
   // Le tre famiglie chieste da Francesco. Sono SOLO un raggruppamento visivo:
@@ -227,7 +200,15 @@ export function ReviewForm({
         ) : (
           <span className="rounded-full bg-white/15 px-3 py-1 text-xs text-white/90">
             {tr("anonPre")}
-            <a href="/login" className="font-semibold underline">{tr("anonLink")}</a>
+            {/* Apriva /login con il vecchio modulo, lasciando a metà chi stava
+                già scrivendo. Ora apre la stessa finestra di tutto il resto. */}
+            <button
+              type="button"
+              onClick={() => setPorta(true)}
+              className="font-semibold underline underline-offset-2"
+            >
+              {tr("anonLink")}
+            </button>
             {tr("anonPost")}
           </span>
         )}
@@ -245,7 +226,10 @@ export function ReviewForm({
           if (presenti.length === 0) return null;
           return (
             <fieldset key={titolo}>
-              <legend className="text-sm font-semibold text-sea-800">{tr(titolo)}</legend>
+              {/* Più grandi delle singole voci: se l'intestazione di una
+                  sezione è più piccola di ciò che contiene, smette di essere
+                  un'intestazione e diventa rumore. */}
+              <legend className="text-lg font-bold text-sea-900">{tr(titolo)}</legend>
               <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-3 md:grid-cols-2">
                 {presenti.map((key) => (
                   <CriterioConSottopunti key={key} chiave={key} />
@@ -404,6 +388,14 @@ export function ReviewForm({
         <Turnstile />
         <SubmitButton />
         <p className="text-center text-[11px] text-sea-400">{tr("declaration")}</p>
+
+        <PortaAccesso
+          aperto={porta}
+          onChiudi={() => setPorta(false)}
+          onContinuaSenza={() => setPorta(false)}
+          titolo={tr("primaTitolo")}
+          sottotitolo={tr("primaSottotitolo")}
+        />
       </div>
     </form>
   );

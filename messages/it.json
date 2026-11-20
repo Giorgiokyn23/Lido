@@ -222,7 +222,11 @@
     "tellQuestion": "Che cosa ti ha colpito di questo bagno?",
     "visitDateAdd": "Aggiungi la data della visita",
     "abbonatoLabel": "Ho un abbonamento stagionale in questo bagno",
-    "declaration": "Pubblicando dichiari di essere stato in questo stabilimento."
+    "declaration": "Pubblicando dichiari di essere stato in questo stabilimento.",
+    "primaTitolo": "Prima di scrivere",
+    "primaSottotitolo": "Con un profilo la tua recensione pesa di più in classifica e tieni traccia dei bagni dove sei stato. Puoi anche continuare senza.",
+    "dopoTitolo": "Recensione pubblicata",
+    "dopoSottotitolo": "Vuoi ritrovarla, tenere l'elenco dei bagni dove sei stato e far pesare di più le prossime? Serve mezzo minuto."
   },
   "metricHints": {
     "space_privacy": "Distanza tra ombrelloni e privacy",
@@ -478,16 +482,19 @@
     "anonNote": "Puoi anche recensire in forma anonima dalla scheda di un lido: quelle recensioni restano visibili ma pesano meno in classifica.",
     "errRate": "Troppe richieste di accesso in poco tempo. Riprova tra qualche minuto — se avevi già chiesto il link, controlla la posta (anche lo spam).",
     "errGeneric": "Non è stato possibile inviare il link di accesso. Controlla l'indirizzo email e riprova.",
-    "introCodice": "Ti mandiamo un codice di sei cifre via email. Niente password da ricordare.",
+    "introCodice": "Ti mandiamo un codice via email. Niente password da ricordare.",
     "submitCodice": "Mandami il codice",
     "codiceIntro": "Abbiamo mandato un codice a {email}. Scrivilo qui sotto.",
-    "codiceLabel": "Codice a sei cifre",
+    "codiceLabel": "Codice ricevuto via email",
     "verifica": "Entra",
     "cambiaEmail": "Cambia indirizzo",
     "reinvia": "Non è arrivato? Rimandalo",
     "reinviaFra": "Puoi richiederlo fra {secondi}s",
     "ancheLink": "Nell'email trovi anche un collegamento: se preferisci, puoi cliccare quello.",
-    "errCodice": "Codice sbagliato o scaduto. Richiedine uno nuovo."
+    "errCodice": "Codice sbagliato o scaduto. Richiedine uno nuovo.",
+    "giaCodice": "Ho già un codice da inserire",
+    "errLink": "Il collegamento non ha funzionato: può essere scaduto, già usato, oppure aperto da un dispositivo diverso. Chiedi un codice e scrivilo qui sotto: funziona sempre.",
+    "errEmailPrima": "Scrivi prima il tuo indirizzo email, poi inserisci il codice."
   },
   "flag": {
     "tooltip": "Segnala questa recensione come contenuto illecito",
@@ -933,8 +940,8 @@
     "spec_notaAttiva": "Etichetta assegnata dagli eventi pubblicati sul calendario, non acquistabile. Non influisce su recensioni, punteggio o posizione in classifica."
   },
   "accesso": {
-    "titolo": "Entra in LidoRank",
-    "sottotitolo": "Con un profilo tieni traccia dei bagni dove sei stato e di quelli che vuoi provare.",
+    "titolo": "Come vuoi continuare?",
+    "sottotitolo": "Crea un profilo per tenere traccia degli stabilimenti visitati e di quelli da provare.",
     "chiudi": "Chiudi",
     "creaProfilo": "Crea un profilo",
     "accedi": "Ho già un profilo",
@@ -953,7 +960,14 @@
     "errGeneric": "Non è stato possibile mandare il codice. Controlla l'indirizzo e riprova.",
     "errCodice": "Codice sbagliato o scaduto. Richiedine uno nuovo.",
     "titoloRecensione": "Prima di scrivere",
-    "sottotitoloRecensione": "Con un profilo la tua recensione pesa di più in classifica. Puoi anche continuare senza: resta visibile, pesa meno."
+    "sottotitoloRecensione": "Con un profilo la tua recensione pesa di più in classifica. Puoi anche continuare senza: resta visibile, pesa meno.",
+    "occhiello": "IL TUO PROFILO · LIDORANK",
+    "nomePlaceholder": "Come vuoi chiamarti",
+    "senzaPassword": "Niente password: ti mandiamo un codice via email.",
+    "creaEContinua": "Crea profilo e continua",
+    "vantaggioVisitati": "Bagni visitati",
+    "vantaggioDaProvare": "Da provare",
+    "vantaggioPeso": "Recensioni che pesano di più"
   },
   "liste": {
     "daProvare": "Da provare",

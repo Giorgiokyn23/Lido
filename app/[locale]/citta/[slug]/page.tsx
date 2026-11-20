@@ -1,3 +1,4 @@
+import { RichiamoRecensione } from "@/components/RichiamoRecensione";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -68,12 +69,13 @@ export default async function CittaPage({
         <h1 className="mt-1 text-2xl font-bold sm:text-3xl">{t("heroTitle", { city: cfg.nome })}</h1>
         <p className="mt-2 max-w-2xl text-sm text-sea-50/90">{t("lead", { city: cfg.nome })}</p>
         <div className="mt-4 flex flex-wrap gap-2">
-          <a
-            href="#bagni"
-            className="rounded-xl bg-amber-400 px-4 py-2 text-sm font-semibold text-sea-900 transition hover:bg-amber-300"
-          >
-            {t("reviewCta", { city: cfg.nome })}
-          </a>
+          {/* Come in home: qui un bagno non è ancora scelto, quindi chi
+              continua senza profilo scende all'elenco della città. */}
+          <RichiamoRecensione
+            classe="inline-block rounded-xl bg-amber-400 px-4 py-2 text-sm font-semibold text-sea-900 transition hover:bg-amber-300"
+            etichetta={t("reviewCta", { city: cfg.nome })}
+            ancora="bagni"
+          />
           <Link
             href={`/classifiche?scope=comune&comune=${encodeURIComponent(cfg.nome)}`}
             className="rounded-xl bg-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/25"

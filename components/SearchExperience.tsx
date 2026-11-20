@@ -1,5 +1,6 @@
 "use client";
 
+import { tokenizza, filtroToken } from "@/lib/ricerca";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
@@ -59,10 +60,13 @@ export function SearchExperience({ locale }: { locale: string }) {
         .order("avg_overall", { ascending: false, nullsFirst: false })
         .order("reviews_count", { ascending: false })
         .range(from, from + PAGE_SIZE - 1);
-      if (committedQ) {
-        query = query.or(
-          `nome.ilike.%${committedQ}%,localita.ilike.%${committedQ}%,regione.ilike.%${committedQ}%`
-        );
+      // Una condizione per parola. Chiamate `.or()` successive si sommano in
+      // AND: ogni parola deve comparire da qualche parte, ma può comparire in
+      // un campo diverso dalle altre. È questo che fa funzionare «Bagni Lido
+      // Livorno», dove due parole stanno nel nome e una nella località.
+      const parole = tokenizza(committedQ);
+      for (const parola of parole) {
+        query = query.or(filtroToken(parola));
       }
       if (paese) query = query.eq("paese", paese);
       for (const m of METRICS) {
@@ -89,13 +93,27 @@ export function SearchExperience({ locale }: { locale: string }) {
       return;
     }
     const h = setTimeout(async () => {
-      const { data } = await supabase
+      let sq = supabase
         .from("beach_scores")
         .select("id,nome,localita,regione,paese")
-        .or(`nome.ilike.%${term}%,localita.ilike.%${term}%`)
         .order("reviews_count", { ascending: false })
         .limit(6);
-      setSuggestions((data ?? []) as Suggestion[]);
+      for (const parola of tokenizza(term)) sq = sq.or(filtroToken(parola));
+      const { data } = await sq;
+
+      // Se l'ortografia non torna — «bagnio», «rec», un accento mancante —
+      // l'elenco esatto resta vuoto e si passa alla somiglianza. Costa una
+      // seconda query, ma solo quando la prima non ha trovato niente: è il
+      // caso in cui la persona sta per concludere che il bagno non c'è.
+      if ((data ?? []).length === 0 && term.length >= 3) {
+        const { data: simili } = await supabase.rpc("bagni_simili", {
+          _q: term,
+          _limite: 6,
+        });
+        setSuggestions((simili ?? []) as Suggestion[]);
+      } else {
+        setSuggestions((data ?? []) as Suggestion[]);
+      }
       setOpenSug(true);
     }, 180);
     return () => clearTimeout(h);

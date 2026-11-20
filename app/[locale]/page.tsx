@@ -1,3 +1,4 @@
+import { RichiamoRecensione } from "@/components/RichiamoRecensione";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SearchExperience } from "@/components/SearchExperience";
 import { PortaGestori } from "@/components/PortaGestori";
@@ -24,12 +25,13 @@ export default async function HomePage({ params: { locale } }: { params: { local
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-sea-50/90">{t("subtitle")}</p>
           <div className="mt-5 flex justify-center">
-            <a
-              href="#cerca"
-              className="rounded-xl bg-amber-400 px-5 py-2.5 text-sm font-semibold text-sea-900 shadow transition hover:bg-amber-300"
-            >
-              {t("reviewCta")}
-            </a>
+            {/* In home non c'è ancora un bagno scelto: chi continua senza
+                profilo finisce sulla ricerca, che è il passo successivo vero. */}
+            <RichiamoRecensione
+              classe="inline-block rounded-xl bg-amber-400 px-5 py-2.5 text-sm font-semibold text-sea-900 shadow transition hover:bg-amber-300"
+              etichetta={t("reviewCta")}
+              ancora="cerca"
+            />
           </div>
         </div>
 
