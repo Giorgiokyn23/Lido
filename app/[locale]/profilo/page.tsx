@@ -4,6 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createPublicClient } from "@/lib/supabase/public";
 import { NomeProfiloForm } from "@/components/NomeProfiloForm";
+import { MieFoto, type MiaFoto } from "@/components/MieFoto";
 
 export const metadata: Metadata = {
   title: "LidoRank — Il mio profilo",
@@ -60,14 +61,26 @@ export default async function ProfiloPage({
     );
   }
 
-  const [{ data: listeData }, { data: recData }, { data: profiloData }] = await Promise.all([
-    supabase.rpc("mie_liste"),
-    supabase.rpc("mie_recensioni"),
-    supabase.from("profili").select("nome").eq("user_id", user.id).maybeSingle(),
-  ]);
+  const [{ data: listeData }, { data: recData }, { data: profiloData }, { data: fotoData }] =
+    await Promise.all([
+      supabase.rpc("mie_liste"),
+      supabase.rpc("mie_recensioni"),
+      supabase.from("profili").select("nome").eq("user_id", user.id).maybeSingle(),
+      // Le nascoste si vedono anche: la policy della 0089 le mostra al
+      // proprietario. Tacerle sarebbe peggio — chi non trova più la sua foto
+      // sulla scheda deve poter capire che è stata nascosta, e perché.
+      supabase
+        .from("foto")
+        .select("id,beach_id,percorso,didascalia,stato,creato_il")
+        .eq("user_id", user.id)
+        .neq("stato", "rimossa")
+        .order("creato_il", { ascending: false })
+        .limit(60),
+    ]);
 
   const righe = (listeData ?? []) as Riga[];
   const recensioni = (recData ?? []) as MiaRecensione[];
+  const mieFoto = (fotoData ?? []) as MiaFoto[];
   const visitati = righe.filter((r) => r.tipo === "visitato");
   const daProvare = righe.filter((r) => r.tipo === "da_provare");
 
@@ -81,12 +94,15 @@ export default async function ProfiloPage({
   // I nomi dei bagni recensiti: mie_recensioni() restituisce solo gli id,
   // perché la funzione vive nel perimetro ristretto aperto dalla 0085.
   const nomi = new Map<string, string>();
-  if (recensioni.length) {
+  const idDaNominare = Array.from(
+    new Set([...recensioni.map((r) => r.beach_id), ...mieFoto.map((f) => f.beach_id)])
+  );
+  if (idDaNominare.length) {
     const pub = createPublicClient();
     const { data: bs } = await pub
       .from("beaches")
       .select("id,nome,localita")
-      .in("id", Array.from(new Set(recensioni.map((r) => r.beach_id))));
+      .in("id", idDaNominare);
     for (const b of (bs ?? []) as { id: string; nome: string; localita: string }[]) {
       nomi.set(b.id, `${b.nome} — ${b.localita}`);
     }
@@ -213,6 +229,8 @@ export default async function ProfiloPage({
           </ul>
         )}
       </section>
+
+      <MieFoto foto={mieFoto} nomi={Object.fromEntries(nomi)} />
 
       <NomeProfiloForm nome={nome} />
 

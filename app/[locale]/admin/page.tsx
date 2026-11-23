@@ -124,6 +124,25 @@ export default async function AdminPage({ params: { locale } }: { params: { loca
         <p className="text-sm text-sea-500">Dati storici dal {first} a oggi · uso interno</p>
       </div>
 
+      {/* Le code di moderazione non avevano un ingresso: si arrivava solo
+          scrivendo l'indirizzo a mano, e una coda che non si apre non si
+          guarda. */}
+      <nav className="flex flex-wrap gap-2 text-sm">
+        {[
+          { href: "/admin/foto", testo: "Foto" },
+          { href: "/admin/eventi", testo: "Eventi" },
+          { href: "/admin/rivendicazioni", testo: "Rivendicazioni" },
+        ].map((v) => (
+          <a
+            key={v.href}
+            href={v.href}
+            className="rounded-xl border border-sea-200 bg-white px-4 py-2 font-medium text-sea-700 shadow-sm transition hover:bg-sea-50"
+          >
+            {v.testo}
+          </a>
+        ))}
+      </nav>
+
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Tile label="Recensioni valide" value={valid.length.toLocaleString("it-IT")} sub={`${rows.length.toLocaleString("it-IT")} totali (incl. moderate)`} />
         <Tile label="Bagni recensiti" value={bagniRecensiti.toLocaleString("it-IT")} sub={`su ${(schedeTotali ?? 0).toLocaleString("it-IT")} schede`} />

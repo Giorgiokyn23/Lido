@@ -17,6 +17,8 @@ import { FlagButton } from "@/components/FlagButton";
 import { ProfiloGestore, type ProfiloPubblico } from "@/components/ProfiloGestore";
 import { SigilloProfilo, RivendicaCta } from "@/components/StatoProfilo";
 import { EventiBagno, type EventoPubblico } from "@/components/EventiBagno";
+import { SezioneFoto } from "@/components/SezioneFoto";
+import type { FotoPubblica } from "@/lib/foto";
 import {
   FACTS,
   BOOL_FACTS,
@@ -130,6 +132,17 @@ export default async function BeachPage({ params }: { params: { id: string; loca
     .select(COLONNE_PROFILO)
     .eq("beach_id", params.id)
     .maybeSingle();
+
+  // Foto dei bagnanti. La policy di lettura pubblica della 0089 passa solo le
+  // pubblicate, quindi qui non serve filtrare sullo stato: una nascosta non
+  // arriva nemmeno. Dodici è il tetto della griglia — oltre, la pagina diventa
+  // pesante da scaricare e nessuno scorre fino in fondo.
+  const { data: fotoData } = await supabase
+    .from("foto")
+    .select("id,percorso,didascalia,larghezza,altezza")
+    .eq("beach_id", params.id)
+    .order("creato_il", { ascending: false })
+    .limit(12);
 
   const tcy = await getTranslations("countries");
   const td = await getTranslations("detail");
@@ -441,6 +454,14 @@ export default async function BeachPage({ params }: { params: { id: string; loca
           whatsapp: (profiloData as { whatsapp?: string | null } | null)?.whatsapp ?? null,
         }}
         nomeBagno={b.nome}
+      />
+
+      {/* Le foto prima delle recensioni: chi non conosce il bagno guarda com'è,
+          poi legge cosa ne dicono. */}
+      <SezioneFoto
+        beachId={b.id}
+        nomeBagno={b.nome}
+        foto={(fotoData ?? []) as FotoPubblica[]}
       />
 
       <EventiBagno eventi={(eventiData ?? []) as EventoPubblico[]} locale={params.locale} />
