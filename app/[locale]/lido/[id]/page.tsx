@@ -34,7 +34,10 @@ import {
 // ISR: la scheda viene generata alla prima visita e servita da cache; si
 // aggiorna da sola ogni ora e subito quando arriva una recensione
 // (revalidatePath in submitReview). Niente rendering server a ogni crawl.
-export const revalidate = 3600;
+// Le schede si invalidano da sole a ogni recensione o modifica del gestore
+// (revalidaScheda). La finestra a tempo serve solo da rete di sicurezza:
+// un'ora significava rigenerare migliaia di pagine al giorno per niente.
+export const revalidate = 86400;
 
 export async function generateMetadata({ params }: { params: { id: string; locale: string } }) {
   setRequestLocale(params.locale);

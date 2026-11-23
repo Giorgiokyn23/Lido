@@ -1,3 +1,4 @@
+import { CambioLingua } from "@/components/CambioLingua";
 import type { Metadata, Viewport } from "next";
 import "../globals.css";
 import { notFound } from "next/navigation";
@@ -98,9 +99,7 @@ export default async function LocaleLayout({
                   {t("about")}
                 </Link>
                 {/* switch lingua */}
-                <Link href="/" locale={locale === "en" ? "it" : "en"} className="rounded-full border border-sea-200 px-2.5 py-1 text-xs font-semibold text-sea-600 hover:bg-sea-50">
-                  {locale === "en" ? "IT" : "EN"}
-                </Link>
+                <CambioLingua locale={locale} />
                 <NavAuth />
               </nav>
             </div>

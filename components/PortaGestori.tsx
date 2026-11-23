@@ -1,34 +1,48 @@
-import { getTranslations } from "next-intl/server";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 
 /**
  * La porta d'ingresso dei gestori, in fondo alla home.
  *
- * Serve a poter dire a un balneare una frase sola: «vai su lidorank.com e
- * scorri in fondo». Senza questo, l'unico modo per arrivare all'area gestore
- * era digitare un indirizzo a memoria.
+ * PERCHÉ ORA GIRA NEL BROWSER. La prima versione leggeva la sessione sul
+ * server per scegliere l'etichetta del pulsante. Per farlo funzionare avevo
+ * messo `force-dynamic` sulla home: cioè la pagina più visitata del sito
+ * veniva ricostruita da zero, su Vercel, a ogni singola visita. È il motivo
+ * principale per cui il tetto di CPU è saltato.
  *
- * Cambia a seconda di chi guarda: a chi è già dentro propone il pannello,
- * a tutti gli altri spiega di cosa si tratta.
+ * E non era nemmeno corretto: una pagina in cache condivisa non può
+ * contenere lo stato di un utente, altrimenti il primo che passa decide che
+ * cosa vedono gli altri. Lo stesso ragionamento già fatto per i pulsanti
+ * delle liste. La pagina ora è statica, parte dalla versione pubblica, e chi
+ * ha un account vede cambiare il pulsante dopo il caricamento.
  */
-export async function PortaGestori() {
-  const t = await getTranslations("gestore");
+export function PortaGestori() {
+  const t = useTranslations("gestore");
+  const [haStabilimenti, setHaStabilimenti] = useState(false);
 
-  // Lettura leggera: serve solo a scegliere il testo del pulsante.
-  let haStabilimenti = false;
-  try {
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user) {
-      const { data } = await supabase.rpc("miei_stabilimenti");
-      haStabilimenti = Array.isArray(data) && data.length > 0;
-    }
-  } catch {
-    // Se la sessione non è leggibile mostriamo la versione pubblica.
-  }
+  useEffect(() => {
+    let vivo = true;
+    (async () => {
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user || !vivo) return;
+        const { data } = await supabase.rpc("miei_stabilimenti");
+        if (vivo) setHaStabilimenti(Array.isArray(data) && data.length > 0);
+      } catch {
+        // Senza sessione leggibile resta la versione pubblica.
+      }
+    })();
+    return () => {
+      vivo = false;
+    };
+  }, []);
 
   return (
     <section className="rounded-3xl border border-sea-100 bg-white p-6 shadow-sm sm:p-8">
@@ -40,25 +54,13 @@ export async function PortaGestori() {
         </div>
 
         <div className="flex shrink-0 flex-col gap-2 sm:items-end">
-          {haStabilimenti ? (
-            <Link
-              href="/area-gestore"
-              className="rounded-xl bg-sea-500 px-5 py-3 text-center text-sm font-semibold text-white shadow transition hover:bg-sea-600"
-            >
-              {t("portaEntra")}
-            </Link>
-          ) : (
-            <Link
-              href="/area-gestore/rivendica"
-              className="rounded-xl bg-sea-500 px-5 py-3 text-center text-sm font-semibold text-white shadow transition hover:bg-sea-600"
-            >
-              {t("portaRivendica")}
-            </Link>
-          )}
           <Link
-            href="/per-i-gestori"
-            className="text-center text-sm text-sea-600 hover:underline"
+            href={haStabilimenti ? "/area-gestore" : "/area-gestore/rivendica"}
+            className="rounded-xl bg-sea-500 px-5 py-3 text-center text-sm font-semibold text-white shadow transition hover:bg-sea-600"
           >
+            {haStabilimenti ? t("portaEntra") : t("portaRivendica")}
+          </Link>
+          <Link href="/per-i-gestori" className="text-center text-sm text-sea-600 hover:underline">
             {t("portaScopri")}
           </Link>
         </div>

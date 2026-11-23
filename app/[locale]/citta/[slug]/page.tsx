@@ -12,7 +12,8 @@ import type { BeachScore } from "@/lib/types";
 
 // Landing locale per gli sprint di raccolta recensioni. Template riutilizzabile:
 // nuova città = una riga in lib/citta.ts. ISR (cache) come il resto del sito.
-export const revalidate = 3600;
+// Le pagine città cambiano quando cambiano i punteggi, che si invalidano da soli.
+export const revalidate = 86400;
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) => cittaSlugs().map((slug) => ({ locale, slug })));

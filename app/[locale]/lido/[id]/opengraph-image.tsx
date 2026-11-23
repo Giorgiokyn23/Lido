@@ -5,7 +5,18 @@ import { metricsForTipo, type BeachScore } from "@/lib/types";
 // Anteprima OG (WhatsApp/social) generata dinamicamente per ogni profilo.
 // Si aggiorna da sola quando cambiano voto/recensioni (rigenerata lato server).
 export const runtime = "nodejs";
-export const revalidate = 3600;
+
+// UNA SETTIMANA, non un'ora.
+//
+// Ogni rigenerazione disegna un PNG da 1200x630 con satori: è fra le cose
+// più costose che una funzione serverless possa fare. Con migliaia di schede
+// e i robot di Google, WhatsApp e Facebook che le visitano in continuazione,
+// una finestra di un'ora significa ridisegnare immagini tutto il giorno per
+// un'anteprima che quasi nessuno guarda due volte.
+//
+// Il punteggio nell'anteprima può essere vecchio di qualche giorno senza che
+// cambi niente per nessuno: è una miniatura in una chat, non la scheda.
+export const revalidate = 604800;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "LidoRank";

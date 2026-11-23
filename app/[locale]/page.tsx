@@ -3,8 +3,11 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SearchExperience } from "@/components/SearchExperience";
 import { PortaGestori } from "@/components/PortaGestori";
 
-// Dinamica: la porta gestori in fondo cambia a seconda di chi guarda.
-export const dynamic = "force-dynamic";
+// La home torna STATICA, rigenerata una volta al giorno. Prima era
+// force-dynamic — ricostruita a ogni visita — solo perché la porta gestori in
+// fondo leggeva la sessione sul server. Ora quel pezzo gira nel browser, e la
+// pagina più visitata del sito smette di costare CPU a ogni apertura.
+export const revalidate = 86400;
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale);
   const t = await getTranslations("home");

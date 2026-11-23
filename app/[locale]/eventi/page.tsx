@@ -8,7 +8,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/eventi" },
 };
 
-export const revalidate = 1800;
+// Il calendario si invalida quando un gestore pubblica o si modera un evento.
+export const revalidate = 7200;
 
 type Riga = {
   id: string;

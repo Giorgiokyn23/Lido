@@ -2,6 +2,8 @@ import { ImageResponse } from "next/og";
 
 // OG di default per la home e le pagine senza un'immagine propria.
 export const runtime = "nodejs";
+// Non legge dati: si disegna una volta e basta.
+export const revalidate = 2592000;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "LidoRank";
