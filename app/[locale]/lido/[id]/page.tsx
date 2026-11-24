@@ -458,11 +458,7 @@ export default async function BeachPage({ params }: { params: { id: string; loca
 
       {/* Le foto prima delle recensioni: chi non conosce il bagno guarda com'è,
           poi legge cosa ne dicono. */}
-      <SezioneFoto
-        beachId={b.id}
-        nomeBagno={b.nome}
-        foto={(fotoData ?? []) as FotoPubblica[]}
-      />
+      <SezioneFoto nomeBagno={b.nome} foto={(fotoData ?? []) as FotoPubblica[]} />
 
       <EventiBagno eventi={(eventiData ?? []) as EventoPubblico[]} locale={params.locale} />
 

@@ -34,8 +34,13 @@ export const LATO_MASSIMO = 1600;
 /** Qualità del webp. 0.82 è il punto dove l'occhio non distingue più. */
 export const QUALITA = 0.82;
 
-/** Quante foto per persona su uno stesso stabilimento. Lo impone anche il database. */
-export const MASSIMO_PER_BAGNO = 6;
+/**
+ * Quante foto per scheda. Il database impone lo stesso numero (0091), e i due
+ * contatori sono separati per origine: le foto dei visitatori, quando si
+ * apriranno, non dovranno rubare il posto a quelle dello stabilimento.
+ */
+export const MASSIMO_GESTORE = 12;
+export const MASSIMO_VISITATORI = 30;
 
 /** Tetto di sicurezza sul file in ingresso, prima di toccarlo: 25 MB. */
 export const PESO_MASSIMO_INGRESSO = 25 * 1024 * 1024;
@@ -141,7 +146,10 @@ export function spiegaErroreFoto(codice: string): string {
     return "Il browser non riesce ad aprire questo file. Se arriva da un iPhone, prova a condividerla con te stesso: la condivisione la converte in un formato leggibile.";
   }
   if (codice.includes("troppe_foto")) {
-    return `Hai già caricato ${MASSIMO_PER_BAGNO} foto su questo stabilimento.`;
+    return `Hai già caricato ${MASSIMO_GESTORE} foto su questo stabilimento.`;
+  }
+  if (codice.includes("row-level security") || codice.includes("violates row-level")) {
+    return "Non risulti il gestore di questo stabilimento: le foto può caricarle solo chi ha la rivendicazione approvata.";
   }
   if (codice.includes("conversione_non_riuscita") || codice.includes("tela_non_disponibile")) {
     return "Non è stato possibile preparare l'immagine su questo dispositivo.";

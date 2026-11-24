@@ -251,7 +251,7 @@ export function FiltriEventi({
         <div className="space-y-8">
           {perMese.map(([chiave, voci]) => (
             <section key={chiave}>
-              <h2 className="mb-3 text-sm font-semibold capitalize text-sea-500">
+              <h2 className="mb-3 text-sm font-semibold text-sea-500 first-letter:uppercase">
                 {nomeMese(chiave)}
               </h2>
 
@@ -275,8 +275,8 @@ export function FiltriEventi({
                         // Senza foto, una fascia di colore invece di un buco:
                         // una scheda vuota in mezzo ad altre illustrate sembra
                         // rotta, non sobria.
-                        <div className="flex h-20 items-center justify-center bg-gradient-to-br from-sea-100 to-sea-50">
-                          <span className="text-2xl font-bold text-sea-300">
+                        <div className="flex h-40 items-center justify-center bg-gradient-to-br from-sea-100 to-sea-50">
+                          <span className="text-4xl font-bold text-sea-300">
                             {e.stabilimento
                               .replace(/[^\p{L}\s]/gu, "")
                               .split(/\s+/)
@@ -289,23 +289,25 @@ export function FiltriEventi({
                       )}
 
                       <div className="p-4">
-                        <div className="flex flex-wrap items-center gap-2">
-                          {e.tipo ? (
-                            <span className="rounded-full border border-sea-200 bg-sea-50 px-2 py-0.5 text-[11px] font-medium text-sea-700">
-                              {etichette[e.tipo] ?? e.tipo}
-                            </span>
-                          ) : null}
-                          {manca ? (
-                            <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-800">
-                              {manca}
-                            </span>
-                          ) : null}
-                        </div>
+                        {e.tipo || manca ? (
+                          <div className="mb-2 flex flex-wrap items-center gap-2">
+                            {e.tipo ? (
+                              <span className="rounded-full border border-sea-200 bg-sea-50 px-2 py-0.5 text-[11px] font-medium text-sea-700">
+                                {etichette[e.tipo] ?? e.tipo}
+                              </span>
+                            ) : null}
+                            {manca ? (
+                              <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-800">
+                                {manca}
+                              </span>
+                            ) : null}
+                          </div>
+                        ) : null}
 
-                        <h3 className="mt-2 font-semibold leading-snug text-sea-900">
+                        <h3 className="font-semibold leading-snug text-sea-900">
                           {e.titolo}
                         </h3>
-                        <p className="mt-0.5 text-xs capitalize text-sea-500">{data(e)}</p>
+                        <p className="mt-0.5 text-xs text-sea-500 first-letter:uppercase">{data(e)}</p>
 
                         <Link
                           href={`/lido/${e.beach_id}`}

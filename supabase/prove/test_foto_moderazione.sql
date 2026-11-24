@@ -71,27 +71,33 @@ begin
     case when v_ok then 'PASSA' else 'FALLISCE' end);
 
   -- ---------------------------------------------------------------
-  -- 3. Il limite di sei foto per persona e per bagno tiene.
+  -- 3. Esiste un tetto al numero di foto, qualunque esso sia.
+  --
+  --    QUI NON SI SCRIVE IL NUMERO, di proposito. La 0089 lo fissava a sei
+  --    per persona, la 0091 l'ha portato a dodici per scheda: una prova che
+  --    conta fino a sei comincerebbe a fallire dopo la 0091 accusando codice
+  --    corretto, ed è il modo migliore per far smettere di guardare le prove.
+  --    Il numero esatto lo verifica test_foto_gestore.sql, che è della stessa
+  --    migrazione che lo decide. Qui basta sapere che un tetto c'è.
   -- ---------------------------------------------------------------
-  -- Ne ha già 1. Ne aggiungiamo 5: arriva a 6. La settima deve saltare.
-  for v_n in 1..5 loop
-    insert into public.foto (beach_id, user_id, percorso)
-    values (v_bagno, v_anna, gen_random_uuid() || '/' || gen_random_uuid() || '.webp');
+  v_n := 0;
+  v_ok := false;
+  while v_n < 60 loop
+    begin
+      insert into public.foto (beach_id, user_id, percorso)
+      values (v_bagno, v_anna, gen_random_uuid() || '/' || gen_random_uuid() || '.webp');
+    exception when others then
+      v_ok := (sqlerrm like '%troppe_foto%');
+      exit;
+    end;
+    v_n := v_n + 1;
   end loop;
-
-  begin
-    insert into public.foto (beach_id, user_id, percorso)
-    values (v_bagno, v_anna, gen_random_uuid() || '/' || gen_random_uuid() || '.webp');
-    v_ok := false;
-  exception when others then
-    v_ok := (sqlerrm like '%troppe_foto%');
-  end;
-  v_esiti := v_esiti || format(E'\n 3. settima foto sullo stesso bagno bloccata .. %s',
-    case when v_ok then 'PASSA' else 'FALLISCE' end);
+  v_esiti := v_esiti || format(E'\n 3. c''è un tetto al numero di foto ........... %s',
+    case when v_ok then 'PASSA (al numero ' || (v_n + 1) || ')' else 'FALLISCE' end);
 
   -- ---------------------------------------------------------------
-  -- 4. Il limite è PER BAGNO, non complessivo: su un altro bagno si riparte.
-  --    (Se fosse complessivo, chi gira la costa non potrebbe più caricare.)
+  -- 4. Il tetto è PER SCHEDA, non complessivo: su un altro bagno si riparte.
+  --    Se fosse complessivo, chi gira la costa smetterebbe di poter caricare.
   -- ---------------------------------------------------------------
   begin
     insert into public.foto (beach_id, user_id, percorso)

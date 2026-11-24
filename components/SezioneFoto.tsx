@@ -1,52 +1,52 @@
 import { getTranslations } from "next-intl/server";
 import { GalleriaFoto } from "@/components/GalleriaFoto";
-import { CaricaFoto } from "@/components/CaricaFoto";
 import type { FotoPubblica } from "@/lib/foto";
 
 /**
- * Il blocco «Foto» della scheda: la griglia e il pulsante per aggiungerne.
+ * Il blocco «Foto» della scheda pubblica: solo la galleria.
  *
- * Resta un componente server perché la griglia la rende il server e finisce
- * nella pagina in cache — le foto pubblicate sono uguali per tutti. Solo il
- * pulsante è un componente client, perché deve sapere chi sta guardando.
+ * QUI NON SI CARICA NIENTE, e la ragione non è di spazio. Le foto di uno
+ * stabilimento le pubblica il gestore dalla sua area, che è l'unico posto in
+ * cui sappiamo con certezza chi sta caricando: una rivendicazione approvata,
+ * cioè un'impresa con un nome. Se una fotografia finisce dove non doveva, dall
+ * altra parte c'è qualcuno a cui rispondere.
  *
- * DOVE STA NELLA PAGINA. Sopra le recensioni e sotto il punteggio: chi apre la
- * scheda di un bagno che non conosce guarda prima com'è, poi legge cosa ne
- * dicono. Metterle in fondo significherebbe che quasi nessuno le vede, e
- * quindi che quasi nessuno ne carica.
+ * Resta un componente server: queste foto sono uguali per tutti e viaggiano
+ * nella pagina in cache. L'unica parte client è la galleria, perché
+ * ingrandire e segnalare richiedono il browser.
+ *
+ * DOVE STA NELLA PAGINA. Sopra le recensioni e sotto il punteggio: chi apre
+ * la scheda di un bagno che non conosce guarda prima com'è, poi legge cosa ne
+ * dicono.
  */
 export async function SezioneFoto({
-  beachId,
   nomeBagno,
   foto,
 }: {
-  beachId: string;
   nomeBagno: string;
   foto: FotoPubblica[];
 }) {
   const t = await getTranslations("foto");
 
+  // Senza foto non si mostra un riquadro vuoto: un blocco «Foto» con dentro
+  // «non ce ne sono» occupa spazio per dire niente, e su una scheda non
+  // rivendicata — cioè quasi tutte, oggi — sarebbe la norma e non l'eccezione.
+  if (foto.length === 0) return null;
+
   return (
-    <section id="foto" className="scroll-mt-24 rounded-2xl border border-sea-100 bg-white p-6 shadow-sm">
+    <section
+      id="foto"
+      className="scroll-mt-24 rounded-2xl border border-sea-100 bg-white p-6 shadow-sm"
+    >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="text-lg font-semibold text-sea-900">
-          {foto.length > 0 ? t("titoloConN", { n: foto.length }) : t("titolo")}
+          {t("titoloConN", { n: foto.length })}
         </h2>
-        {foto.length > 0 ? (
-          <p className="text-xs text-sea-400">{t("daiBagnanti")}</p>
-        ) : null}
+        <p className="text-xs text-sea-400">{t("dalGestore")}</p>
       </div>
 
-      {foto.length === 0 ? (
-        <p className="mt-2 text-sm text-sea-500">{t("ancoraNessuna", { bagno: nomeBagno })}</p>
-      ) : (
-        <div className="mt-4">
-          <GalleriaFoto foto={foto} nomeBagno={nomeBagno} />
-        </div>
-      )}
-
-      <div className="mt-4 border-t border-sea-100 pt-4">
-        <CaricaFoto beachId={beachId} />
+      <div className="mt-4">
+        <GalleriaFoto foto={foto} nomeBagno={nomeBagno} />
       </div>
     </section>
   );

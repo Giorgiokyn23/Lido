@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createPublicClient } from "@/lib/supabase/public";
 import { ProgressoProfilo, type CampiProfilo } from "@/components/ProgressoProfilo";
 import { CentroInviti } from "@/components/CentroInviti";
+import { FotoGestore } from "@/components/FotoGestore";
 import { RANK_MIN } from "@/lib/types";
 import { COLONNE_PROFILO } from "@/lib/profilo";
 
@@ -157,6 +158,10 @@ export default async function HubGestorePage({
           </ul>
         )}
       </section>
+
+      {/* Le foto stanno qui e non sulla scheda pubblica: è l'unico posto in
+          cui sappiamo chi sta caricando. */}
+      <FotoGestore beachId={id} />
 
       <CentroInviti beachId={id} nomeBagno={mio.nome} />
 
