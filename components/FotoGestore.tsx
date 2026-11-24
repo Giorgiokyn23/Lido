@@ -88,7 +88,7 @@ export function FotoGestore({ beachId }: { beachId: string }) {
       if (pronta) URL.revokeObjectURL(pronta.anteprima);
       setPronta(p);
     } catch (err) {
-      setErrore(spiegaErroreFoto(err instanceof Error ? err.message : ""));
+      setErrore(spiegaErroreFoto(err instanceof Error ? err.message : "", "preparazione"));
     } finally {
       setAttesa(false);
       // Azzerare il campo permette di riscegliere lo stesso file dopo un errore.
@@ -109,7 +109,7 @@ export function FotoGestore({ beachId }: { beachId: string }) {
       .upload(percorso, pronta.file, { contentType: "image/webp", upsert: false });
     if (errUpload) {
       setAttesa(false);
-      setErrore(spiegaErroreFoto(errUpload.message || ""));
+      setErrore(spiegaErroreFoto(errUpload.message || "", "archivio"));
       return;
     }
 

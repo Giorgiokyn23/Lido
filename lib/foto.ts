@@ -138,7 +138,11 @@ export async function preparaFoto(file: File): Promise<FotoPreparata> {
 }
 
 /** Messaggi d'errore in italiano, dalle chiavi tecniche. */
-export function spiegaErroreFoto(codice: string): string {
+export function spiegaErroreFoto(
+  codice: string,
+  /** In quale dei due passaggi è fallito: cambia che cosa ha senso dire. */
+  passo: "archivio" | "scheda" | "preparazione" = "scheda"
+): string {
   if (codice.includes("troppo_pesante")) {
     return "Questa immagine supera i 25 MB. Scegline una più leggera.";
   }
@@ -147,6 +151,15 @@ export function spiegaErroreFoto(codice: string): string {
   }
   if (codice.includes("troppe_foto")) {
     return `Hai già caricato ${MASSIMO_GESTORE} foto su questo stabilimento.`;
+  }
+  // DUE RIFIUTI DIVERSI, DUE MESSAGGI DIVERSI. Il permesso viene controllato
+  // in due punti — l'archivio quando parte il file, la scheda quando si
+  // scrive la riga — e finché il messaggio era uno solo, un rifiuto
+  // dell'archivio veniva raccontato come «non sei il gestore». È costato una
+  // caccia all'errore nel posto sbagliato: chi legge un messaggio preciso ma
+  // falso non va a cercare altrove.
+  if (passo === "archivio" && (codice.includes("row-level security") || codice.includes("violates row-level"))) {
+    return "Il caricamento è stato rifiutato dall'archivio. Non dipende da te: segnalalo, è un problema di configurazione del sito.";
   }
   if (codice.includes("row-level security") || codice.includes("violates row-level")) {
     return "Non risulti il gestore di questo stabilimento: le foto può caricarle solo chi ha la rivendicazione approvata.";

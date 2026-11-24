@@ -222,5 +222,53 @@ begin
   v_esiti := v_esiti || format(E'\n12. le foto fuori dal ranking ................ %s',
     case when v_n = 0 then 'PASSA' else 'FALLISCE (' || v_n || ')' end);
 
+  -- ---------------------------------------------------------------
+  -- 13. L'ARCHIVIO ACCETTA UN PERCORSO COME QUELLI VERI.
+  --
+  --     Questa prova nasce da un errore già fatto: la regola della 0089
+  --     usava `array_length(storage.foldername(name),1) = 2`, ma quella
+  --     funzione di Supabase toglie il nome del file e restituisce solo le
+  --     cartelle — quindi dava 1, la condizione era sempre falsa, e OGNI
+  --     caricamento veniva rifiutato. Verificare la regola a mente non è
+  --     bastato: bisogna provare a caricare davvero.
+  -- ---------------------------------------------------------------
+  perform set_config('request.jwt.claims',
+    json_build_object('sub', v_gestore, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  begin
+    insert into storage.objects (bucket_id, name)
+    values ('foto', replace(gen_random_uuid()::text, '-', '') || '/' ||
+                    replace(gen_random_uuid()::text, '-', '') || '.webp');
+    v_ok := true;
+  exception when others then
+    v_ok := false;
+  end;
+  reset role;
+  perform set_config('request.jwt.claims', null, true);
+  v_esiti := v_esiti || format(E'\n13. l''archivio accetta un percorso vero ...... %s',
+    case when v_ok then 'PASSA' else 'FALLISCE (la regola rifiuta tutto)' end);
+
+  -- ---------------------------------------------------------------
+  -- 14. E rifiuta un percorso senza cartella, o con cartella corta.
+  -- ---------------------------------------------------------------
+  perform set_config('request.jwt.claims',
+    json_build_object('sub', v_gestore, 'role', 'authenticated')::text, true);
+  set local role authenticated;
+  v_ok := true;
+  begin
+    insert into storage.objects (bucket_id, name) values ('foto', 'senza-cartella.webp');
+    v_ok := false;
+  exception when others then null;
+  end;
+  begin
+    insert into storage.objects (bucket_id, name) values ('foto', 'corta/x.webp');
+    v_ok := false;
+  exception when others then null;
+  end;
+  reset role;
+  perform set_config('request.jwt.claims', null, true);
+  v_esiti := v_esiti || format(E'\n14. e rifiuta i percorsi indovinabili ......... %s',
+    case when v_ok then 'PASSA' else 'FALLISCE' end);
+
   raise exception E'\n\n=== PROVA 0091 — foto solo del gestore ===%\n\n(Questo errore è voluto: annulla tutto quello che la prova ha scritto.)\n', v_esiti;
 end $$;
