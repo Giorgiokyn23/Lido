@@ -146,11 +146,40 @@ export function FotoGestore({ beachId }: { beachId: string }) {
 
   async function cancella(r: Riga) {
     setAttesa(true);
+    setErrore(null);
     const supabase = createClient();
-    // Prima la riga, poi il file: al contrario resterebbe un'immagine rotta
-    // sulla scheda.
+
+    // PRIMA IL FILE, POI LA RIGA — ed è l'opposto di quello che avevo scritto.
+    //
+    // Il ragionamento sbagliato era: cancello la riga per prima, così se poi
+    // qualcosa va storto resta al massimo un file che nessuno nomina, invece
+    // di un'immagine rotta sulla scheda. Il guaio è che il permesso di
+    // cancellare un file dall'archivio si basa proprio sull'esistenza di
+    // quella riga: è lì che è scritto di chi è la foto, visto che il percorso
+    // è casuale apposta per non dirlo. Tolta la riga, nessuno risulta più il
+    // proprietario e l'archivio rifiuta la cancellazione in silenzio.
+    //
+    // Il risultato era che «cancella» faceva sparire la foto dalla pagina
+    // lasciandola scaricabile da chiunque avesse l'indirizzo. Cioè una
+    // cancellazione che non cancellava: il tipo di bugia peggiore da avere
+    // in un prodotto che promette «le foto restano tue».
+    const { error: errFile } = await supabase.storage.from("foto").remove([r.percorso]);
+    if (errFile) {
+      setAttesa(false);
+      setErrore(t("erroreCancella"));
+      return;
+    }
+
     const { error } = await supabase.from("foto").delete().eq("id", r.id);
-    if (!error) await supabase.storage.from("foto").remove([r.percorso]);
+    if (error) {
+      // Il file non c'è più ma la riga sì: sulla scheda resta un riquadro
+      // vuoto. È il caso meno grave dei due, e si risolve riprovando.
+      setAttesa(false);
+      setErrore(t("erroreCancella"));
+      carica();
+      return;
+    }
+
     setAttesa(false);
     setChiedo(null);
     carica();

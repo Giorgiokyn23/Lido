@@ -2,6 +2,7 @@ import { RichiamoRecensione } from "@/components/RichiamoRecensione";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { SearchExperience } from "@/components/SearchExperience";
 import { PortaGestori } from "@/components/PortaGestori";
+import { VetrinaHome } from "@/components/VetrinaHome";
 
 // La home torna STATICA, rigenerata una volta al giorno. Prima era
 // force-dynamic — ricostruita a ogni visita — solo perché la porta gestori in
@@ -44,6 +45,12 @@ export default async function HomePage({ params: { locale } }: { params: { local
           <path fill="#f7f3ea" d="M0,104 C240,80 480,120 720,104 C960,88 1200,112 1440,100 L1440,120 L0,120 Z" />
         </svg>
       </section>
+
+      {/* Prima della ricerca: i numeri veri e una classifica vera. Chi arriva
+          deve capire in dieci secondi che cos'è questo sito e perché i voti
+          qui vogliono dire qualcosa — prima di trovarsi davanti una griglia
+          di trentamila schede. */}
+      <VetrinaHome locale={locale} />
 
       <SearchExperience locale={locale} />
 

@@ -270,5 +270,49 @@ begin
   v_esiti := v_esiti || format(E'\n14. e rifiuta i percorsi indovinabili ......... %s',
     case when v_ok then 'PASSA' else 'FALLISCE' end);
 
+  -- ---------------------------------------------------------------
+  -- 15. CANCELLARE UNA FOTO TOGLIE ANCHE IL FILE.
+  --
+  --     Nell'ordine giusto: prima il file, poi la riga. Al contrario non
+  --     funziona, e non per un dettaglio: il permesso di cancellare il file
+  --     si basa sull'esistenza della riga, perché è lì che è scritto di chi
+  --     è la foto (il percorso è casuale apposta per non dirlo). Tolta la
+  --     riga per prima, l'archivio rifiuta in silenzio e il file resta
+  --     scaricabile da chiunque abbia l'indirizzo: una cancellazione che
+  --     non cancella.
+  -- ---------------------------------------------------------------
+  declare
+    v_perc  text;
+    v_idf   uuid;
+    v_file  int;
+    v_riga  int;
+  begin
+    v_perc := replace(gen_random_uuid()::text, '-', '') || '/' ||
+              replace(gen_random_uuid()::text, '-', '') || '.webp';
+
+    -- Di proposito su v_altro, cioè un bagno che NON gestisce: è il caso
+    -- delle foto dei visitatori, e quello che la 0091 rendeva incancellabile.
+    insert into public.foto (beach_id, user_id, percorso, fonte)
+    values (v_altro, v_gestore, v_perc, 'visitatore')
+    returning id into v_idf;
+    insert into storage.objects (bucket_id, name) values ('foto', v_perc);
+
+    perform set_config('request.jwt.claims',
+      json_build_object('sub', v_gestore, 'role', 'authenticated')::text, true);
+    set local role authenticated;
+
+    delete from storage.objects where bucket_id = 'foto' and name = v_perc;
+    get diagnostics v_file = row_count;
+    delete from public.foto where id = v_idf;
+    get diagnostics v_riga = row_count;
+
+    reset role;
+    perform set_config('request.jwt.claims', null, true);
+
+    v_esiti := v_esiti || format(E'\n15. cancellare toglie anche il file .......... %s',
+      case when v_file = 1 and v_riga = 1 then 'PASSA'
+           else 'FALLISCE (file ' || v_file || ', riga ' || v_riga || ')' end);
+  end;
+
   raise exception E'\n\n=== PROVA 0091 — foto solo del gestore ===%\n\n(Questo errore è voluto: annulla tutto quello che la prova ha scritto.)\n', v_esiti;
 end $$;

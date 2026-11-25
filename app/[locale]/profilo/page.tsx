@@ -4,6 +4,9 @@ import { Link } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createPublicClient } from "@/lib/supabase/public";
 import { NomeProfiloForm } from "@/components/NomeProfiloForm";
+import { SoprannomeForm } from "@/components/SoprannomeForm";
+import { Amici } from "@/components/Amici";
+import { DiarioAmici } from "@/components/DiarioAmici";
 
 export const metadata: Metadata = {
   title: "LidoRank — Il mio profilo",
@@ -63,7 +66,7 @@ export default async function ProfiloPage({
   const [{ data: listeData }, { data: recData }, { data: profiloData }] = await Promise.all([
     supabase.rpc("mie_liste"),
     supabase.rpc("mie_recensioni"),
-    supabase.from("profili").select("nome").eq("user_id", user.id).maybeSingle(),
+    supabase.from("profili").select("nome,handle").eq("user_id", user.id).maybeSingle(),
   ]);
 
   const righe = (listeData ?? []) as Riga[];
@@ -73,6 +76,8 @@ export default async function ProfiloPage({
 
   // Il nome arriva dalla tabella profili; al primo accesso può essere ancora
   // nei metadati dell'utente, dove l'ha messo la sovraimpressione di accesso.
+  const handle = (profiloData as { handle?: string | null } | null)?.handle ?? null;
+
   const nome =
     ((profiloData as { nome?: string | null } | null)?.nome ??
       (user.user_metadata?.nome as string | undefined) ??
@@ -214,6 +219,15 @@ export default async function ProfiloPage({
           </ul>
         )}
       </section>
+
+      {/* Il diario sta in alto quando c'è qualcosa da vedere: è l'unica parte
+          della pagina che cambia da sola, e in fondo non la guarderebbe
+          nessuno. Non compare finché non si hanno amici. */}
+      <DiarioAmici />
+
+      <SoprannomeForm handle={handle} />
+
+      <Amici haSoprannome={handle != null} />
 
       <NomeProfiloForm nome={nome} />
 
