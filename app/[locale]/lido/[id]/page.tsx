@@ -46,13 +46,36 @@ export async function generateMetadata({ params }: { params: { id: string; local
   setRequestLocale(params.locale);
   const supabase = createPublicClient();
   const tmeta = await getTranslations("detailMeta");
-  const { data } = await supabase
-    .from("beach_scores")
-    .select("nome, localita, regione, avg_overall, reviews_count")
-    .eq("id", params.id)
-    .maybeSingle();
+  const [{ data }, { data: riga }] = await Promise.all([
+    supabase
+      .from("beach_scores")
+      .select("nome, localita, regione, avg_overall, reviews_count")
+      .eq("id", params.id)
+      .maybeSingle(),
+    supabase.from("beaches").select("profile_status").eq("id", params.id).maybeSingle(),
+  ]);
   if (!data) return { title: tmeta("fallbackTitle") };
   const voto = data.avg_overall != null ? `${data.avg_overall}/5 · ` : "";
+
+  /**
+   * UNA SCHEDA VUOTA CHIEDE DI NON ESSERE INDICIZZATA.
+   *
+   * Non è pudore: Google ci ha già detto cosa ne pensa — 27.105 pagine
+   * «rilevate ma non indicizzate» e quattro indicizzate in tutto. Una pagina
+   * con un nome, una località e nient'altro non merita un posto nell'indice,
+   * e insistere a proporne trentamila così non lascia il resto com'era:
+   * insegna che questo dominio produce pagine vuote, e quel giudizio ricade
+   * anche sulle classifiche, che invece sarebbero ottimo materiale.
+   *
+   * `follow` resta acceso: la pagina continua a essere navigabile e i suoi
+   * collegamenti continuano a contare. Non la nascondiamo, chiediamo solo di
+   * non metterla in vetrina finché è vuota. Alla prima recensione — o appena
+   * un gestore la rivendica e la compila — torna indicizzabile da sola.
+   */
+  const haContenuto =
+    (data.reviews_count ?? 0) > 0 ||
+    (riga as { profile_status?: string } | null)?.profile_status === "verificato";
+
   return {
     title: tmeta("title", { nome: data.nome, localita: data.localita }),
     description: tmeta("description", {
@@ -63,6 +86,7 @@ export async function generateMetadata({ params }: { params: { id: string; local
       regione: data.regione,
     }),
     alternates: { canonical: `/lido/${params.id}` },
+    robots: haContenuto ? undefined : { index: false, follow: true },
   };
 }
 

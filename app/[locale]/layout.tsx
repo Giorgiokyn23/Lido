@@ -92,7 +92,16 @@ export default async function LocaleLayout({
                 <Link href="/eventi" className="font-medium text-sea-700 hover:underline">
                   {t("events")}
                 </Link>
-                <Link href="/per-i-gestori" className="font-medium text-sea-700 hover:underline">
+                {/* I percorsi erano raggiungibili solo scrivendo l'indirizzo a
+                    mano: una pagina senza un collegamento nel menù, per chi
+                    usa il sito, semplicemente non esiste. */}
+                <Link href="/percorsi" className="font-medium text-sea-700 hover:underline">
+                  {t("routes")}
+                </Link>
+                <Link
+                  href="/per-i-gestori"
+                  className="hidden font-medium text-sea-700 hover:underline sm:inline"
+                >
                   {t("operators")}
                 </Link>
                 <Link href="/chi-siamo" className="hidden font-medium text-sea-700 hover:underline sm:inline">
@@ -137,6 +146,7 @@ export default async function LocaleLayout({
               <Link href="/moderazione" className="hover:text-sea-700 hover:underline">{tl("moderation")}</Link>
               <Link href="/metodologia" className="hover:text-sea-700 hover:underline">{tl("methodology")}</Link>
               <Link href="/eventi" className="hover:text-sea-700 hover:underline">{t("events")}</Link>
+              <Link href="/percorsi" className="hover:text-sea-700 hover:underline">{t("routes")}</Link>
               <Link href="/per-i-gestori" className="hover:text-sea-700 hover:underline">{tl("operators")}</Link>
               <Link href="/contatti" className="hover:text-sea-700 hover:underline">{tl("contact")}</Link>
             </nav>

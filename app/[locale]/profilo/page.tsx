@@ -172,6 +172,16 @@ export default async function ProfiloPage({
         </div>
       ) : null}
 
+      {/* Soprannome, amici e diario stanno QUI, in cima, e non in fondo alla
+          pagina dove li avevo messi la prima volta. Una funzione nuova sotto
+          liste e recensioni non la trova nessuno — e infatti non l'ha trovata
+          nemmeno chi sapeva di averla chiesta. */}
+      <DiarioAmici />
+
+      <SoprannomeForm handle={handle} />
+
+      <Amici haSoprannome={handle != null} />
+
       <Elenco
         titolo={t("visitatiTitolo")}
         descrizione={t("visitatiIntro")}
@@ -219,15 +229,6 @@ export default async function ProfiloPage({
           </ul>
         )}
       </section>
-
-      {/* Il diario sta in alto quando c'è qualcosa da vedere: è l'unica parte
-          della pagina che cambia da sola, e in fondo non la guarderebbe
-          nessuno. Non compare finché non si hanno amici. */}
-      <DiarioAmici />
-
-      <SoprannomeForm handle={handle} />
-
-      <Amici haSoprannome={handle != null} />
 
       <NomeProfiloForm nome={nome} />
 
