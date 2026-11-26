@@ -18,6 +18,7 @@ import { ProfiloGestore, type ProfiloPubblico } from "@/components/ProfiloGestor
 import { SigilloProfilo, RivendicaCta } from "@/components/StatoProfilo";
 import { EventiBagno, type EventoPubblico } from "@/components/EventiBagno";
 import { SezioneFoto } from "@/components/SezioneFoto";
+import { PercorsiBagno } from "@/components/PercorsiBagno";
 import type { FotoPubblica } from "@/lib/foto";
 import {
   FACTS,
@@ -137,6 +138,10 @@ export default async function BeachPage({ params }: { params: { id: string; loca
   // pubblicate, quindi qui non serve filtrare sullo stato: una nascosta non
   // arriva nemmeno. Dodici è il tetto della griglia — oltre, la pagina diventa
   // pesante da scaricare e nessuno scorre fino in fondo.
+  // I percorsi che passano da qui: è la riga che dice a un gestore che gli
+  // stiamo già portando gente sulla pagina che non cura lui.
+  const { data: percorsiData } = await supabase.rpc("percorsi_del_bagno", { _beach: params.id });
+
   const { data: fotoData } = await supabase
     .from("foto")
     .select("id,percorso,didascalia,larghezza,altezza")
@@ -459,6 +464,14 @@ export default async function BeachPage({ params }: { params: { id: string; loca
       {/* Le foto prima delle recensioni: chi non conosce il bagno guarda com'è,
           poi legge cosa ne dicono. */}
       <SezioneFoto nomeBagno={b.nome} foto={(fotoData ?? []) as FotoPubblica[]} />
+
+      <PercorsiBagno
+        percorsi={
+          (percorsiData ?? []) as {
+            slug: string; titolo: string; tema: string | null; ordine: number; tappe: number;
+          }[]
+        }
+      />
 
       <EventiBagno eventi={(eventiData ?? []) as EventoPubblico[]} locale={params.locale} />
 

@@ -259,17 +259,70 @@ begin
     case when v_n = 0 then 'PASSA' else 'FALLISCE (' || v_n || ')' end);
 
   -- ---------------------------------------------------------------
-  -- 17. Si cerca solo dall'inizio del soprannome, e da almeno 3 lettere:
-  --     niente rubrica sfogliabile di persone.
+  -- 17. Si cerca per soprannome, ma da almeno tre caratteri: due lettere
+  --     restituirebbero mezza rubrica, ed è la rubrica il pericolo, non la
+  --     ricerca.
   -- ---------------------------------------------------------------
-  perform set_config('request.jwt.claims', json_build_object('sub', v_carla)::text, true);
-  select count(*) into v_n from public.cerca_profilo('an');           -- troppo corto
-  select count(*) into v_ok from (select 1 from public.cerca_profilo('livorno')) z; -- non dall'inizio
+  perform set_config('request.jwt.claims',
+    json_build_object('sub', v_carla)::text, true);
+  select count(*) into v_n from public.cerca_profilo('an');
   v_b := (v_n = 0);
-  select count(*) into v_n from public.cerca_profilo('anna');         -- giusto
+  select count(*) into v_n from public.cerca_profilo('anna_livorno');
   perform set_config('request.jwt.claims', null, true);
-  v_esiti := v_esiti || format(E'\n17. si cerca solo per soprannome intero ...... %s',
+  v_esiti := v_esiti || format(E'\n17. si cerca per soprannome, da 3 caratteri .. %s',
     case when v_b and v_n = 1 then 'PASSA' else 'FALLISCE' end);
+
+  -- ---------------------------------------------------------------
+  -- 17b. E ANCHE PER NOME, che è il punto della 0095: senza, per trovare
+  --      qualcuno dovevi già sapere il suo soprannome, cioè te l'aveva
+  --      dovuto dire a voce.
+  -- ---------------------------------------------------------------
+  perform set_config('request.jwt.claims',
+    json_build_object('sub', v_carla)::text, true);
+  select count(*) into v_n from public.cerca_profilo('Anna');
+  perform set_config('request.jwt.claims', null, true);
+  v_esiti := v_esiti || format(E'\n17b. e anche per nome ........................ %s',
+    case when v_n = 1 then 'PASSA' else 'FALLISCE (' || v_n || ')' end);
+
+  -- ---------------------------------------------------------------
+  -- 17c. La ricerca dice già che rapporto hai con chi trovi: proporre
+  --      «chiedi l'amicizia» a chi è già tuo amico è sciatto.
+  -- ---------------------------------------------------------------
+  perform set_config('request.jwt.claims',
+    json_build_object('sub', v_carla)::text, true);
+  select rapporto into v_t from public.cerca_profilo('anna_livorno');
+  perform set_config('request.jwt.claims', null, true);
+  v_esiti := v_esiti || format(E'\n17c. e dice che rapporto hai già ............. %s',
+    case when v_t = 'amici' then 'PASSA' else 'FALLISCE (' || coalesce(v_t,'nullo') || ')' end);
+
+  -- ---------------------------------------------------------------
+  -- 17d. Chi spegne l'interruttore sparisce dalla ricerca.
+  -- ---------------------------------------------------------------
+  perform set_config('request.jwt.claims',
+    json_build_object('sub', v_anna)::text, true);
+  perform public.imposta_trovabile(false);
+  perform set_config('request.jwt.claims', null, true);
+
+  perform set_config('request.jwt.claims',
+    json_build_object('sub', v_carla)::text, true);
+  select count(*) into v_n from public.cerca_profilo('anna');
+  perform set_config('request.jwt.claims', null, true);
+
+  perform set_config('request.jwt.claims',
+    json_build_object('sub', v_anna)::text, true);
+  perform public.imposta_trovabile(true);
+  perform set_config('request.jwt.claims', null, true);
+
+  v_esiti := v_esiti || format(E'\n17d. chi non vuole essere trovato sparisce ... %s',
+    case when v_n = 0 then 'PASSA' else 'FALLISCE (' || v_n || ')' end);
+
+  -- ---------------------------------------------------------------
+  -- 17e. Un anonimo non può cercare NESSUNO: senza questo, la ricerca
+  --      diventerebbe un modo per enumerare gli iscritti dall'esterno.
+  -- ---------------------------------------------------------------
+  select count(*) into v_n from public.cerca_profilo('anna');
+  v_esiti := v_esiti || format(E'\n17e. un anonimo non cerca nessuno ............ %s',
+    case when v_n = 0 then 'PASSA' else 'FALLISCE (' || v_n || ')' end);
 
   -- ---------------------------------------------------------------
   -- 18. Il profilo di un altro NON dice quante recensioni ha scritto:

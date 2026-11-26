@@ -1067,7 +1067,7 @@
     "soprannomeIntro": "Serve solo per farti trovare dai tuoi amici. Non è il tuo nome vero e non è obbligatorio: senza, il sito funziona come prima.",
     "soprannomeEsempio": "annalivorno",
     "soprannomeRegole": "Da 3 a 20 caratteri: lettere minuscole, numeri e trattino basso.",
-    "comeTiTrovano": "I tuoi amici ti trovano cercando @{handle}. Diglielo tu: non si cerca per nome.",
+    "comeTiTrovano": "Manda questo link a chi vuoi aggiungere: non esiste un elenco di persone da cercare, quindi è così che ci si trova.",
     "cambia": "cambia",
     "salva": "Salva",
     "salvo": "Salvo…",
@@ -1109,7 +1109,11 @@
     "vaiAlTuoProfilo": "Il tuo profilo",
     "accediPerAggiungere": "Accedi per aggiungere",
     "sieteAmici": "✓ Siete amici",
-    "richiestaInAttesa": "Richiesta inviata"
+    "richiestaInAttesa": "Richiesta inviata",
+    "copiaLink": "Copia",
+    "copiato": "Copiato ✓",
+    "invia": "WhatsApp",
+    "invito": "Ciao! Questo è il mio profilo su LidoRank, aggiungimi: {link}"
   },
   "vetrina": {
     "schede": "stabilimenti e porti censiti",
@@ -1123,5 +1127,28 @@
     "sogliaNota": "In classifica entrano solo gli stabilimenti con almeno {soglia} recensioni. Gli altri restano fuori finché non ne hanno abbastanza.",
     "suRecensioni": "{n, plural, one {# recensione} other {# recensioni}}",
     "pesatoNota": "Il numero è il punteggio pesato: tiene conto di quanto ogni recensione è verificabile, e per questo può differire dalla media semplice che vedi sulla scheda."
+  },
+  "percorsi": {
+    "occhiello": "Percorsi lungo la costa",
+    "titolo": "Un bagno può essere la porta del territorio.",
+    "intro": "Itinerari che uniscono stabilimenti, luoghi e sapori della costa. Pochi, costruiti con chi quei posti li conosce — non un catalogo.",
+    "vuoto": "I primi percorsi sono in preparazione.",
+    "numero": "Percorso {n}",
+    "composizione": "{tappe, plural, one {# tappa} other {# tappe}}, di cui {bagni, plural, =0 {nessuno stabilimento} one {# stabilimento} other {# stabilimenti}}",
+    "nota": "I percorsi sono redazionali: non si comprano, e non influiscono in alcun modo sul punteggio o sulla posizione in classifica degli stabilimenti che vi compaiono.",
+    "tuttiIPercorsi": "Tutti i percorsi",
+    "tappeLabel": "tappe",
+    "bagniLabel": "stabilimenti",
+    "minuti": "{n} min",
+    "apriScheda": "Vedi la scheda",
+    "notaDettaglio": "Le tappe sono indicative: orari, disponibilità e prezzi vanno verificati con i singoli esercizi. Essere tappa di un percorso non influisce sul punteggio dello stabilimento.",
+    "tappaDi": "{n, plural, one {Tappa di un percorso} other {Tappa di # percorsi}}",
+    "tappaSu": "Tappa {ordine} di {tappe}",
+    "tema_mare": "Mare",
+    "tema_cultura": "Cultura",
+    "tema_sapori": "Sapori",
+    "tema_sport": "Sport",
+    "tema_natura": "Natura",
+    "tema_famiglie": "Famiglie"
   }
 }

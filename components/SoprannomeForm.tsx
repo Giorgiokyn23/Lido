@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
@@ -22,11 +22,17 @@ import { createClient } from "@/lib/supabase/client";
 export function SoprannomeForm({ handle }: { handle: string | null }) {
   const t = useTranslations("social");
   const router = useRouter();
+  const [copiato, setCopiato] = useState(false);
   const [valore, setValore] = useState(handle ?? "");
   const [attesa, setAttesa] = useState(false);
   const [errore, setErrore] = useState<string | null>(null);
   const [fatto, setFatto] = useState(false);
   const [apri, setApri] = useState(handle == null);
+
+  const [indirizzo, setIndirizzo] = useState("");
+  useEffect(() => {
+    if (handle) setIndirizzo(`${window.location.origin}/u/${handle}`);
+  }, [handle]);
 
   function spiega(messaggio: string): string {
     if (messaggio.includes("handle_occupato")) return t("errOccupato");
@@ -67,7 +73,42 @@ export function SoprannomeForm({ handle }: { handle: string | null }) {
             {t("cambia")}
           </button>
         </div>
-        <p className="mt-2 text-xs text-sea-500">{t("comeTiTrovano", { handle })}</p>
+        {/* IL LINK È IL MODO VERO DI FARSI AGGIUNGERE, e senza questo pezzo
+            la funzione non si usava: cercare per soprannome presuppone che
+            qualcuno te l'abbia già detto a voce, e nessuno lo fa. Si manda
+            il link su WhatsApp, l'altro apre e clicca. Non costa niente in
+            riservatezza — chi riceve il link lo riceve da te, che è
+            esattamente la regola che volevamo. */}
+        <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl bg-sea-50 p-3">
+          <code className="min-w-0 flex-1 truncate text-xs text-sea-700">
+            {indirizzo || `lidorank.com/u/${handle}`}
+          </code>
+          <button
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(indirizzo);
+                setCopiato(true);
+                setTimeout(() => setCopiato(false), 2500);
+              } catch {
+                // Senza permesso per gli appunti resta il testo da copiare
+                // a mano: è lì, visibile, e non serve dire niente.
+              }
+            }}
+            className="shrink-0 rounded-lg bg-sea-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-sea-600"
+          >
+            {copiato ? t("copiato") : t("copiaLink")}
+          </button>
+          <a
+            href={`https://wa.me/?text=${encodeURIComponent(t("invito", { link: indirizzo }))}`}
+            target="_blank"
+            rel="noreferrer"
+            className="shrink-0 rounded-lg border border-sea-300 px-3 py-1.5 text-xs font-medium text-sea-700 transition hover:bg-white"
+          >
+            {t("invia")}
+          </a>
+        </div>
+
+        <p className="mt-2 text-xs text-sea-500">{t("comeTiTrovano")}</p>
       </section>
     );
   }

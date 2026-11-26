@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 
 type Persona = { handle: string; nome: string | null; visitati: number };
+/** Nei risultati di ricerca la 0095 dice anche che rapporto hai già. */
+type Trovato = Persona & { rapporto: string };
 type Richiesta = Persona & { creato_il: string };
 
 /**
@@ -28,7 +30,7 @@ export function Amici({ haSoprannome }: { haSoprannome: boolean }) {
   const [amici, setAmici] = useState<Persona[] | null>(null);
   const [richieste, setRichieste] = useState<Richiesta[]>([]);
   const [cerca, setCerca] = useState("");
-  const [trovati, setTrovati] = useState<Persona[] | null>(null);
+  const [trovati, setTrovati] = useState<Trovato[] | null>(null);
   const [attesa, setAttesa] = useState(false);
   const [messaggio, setMessaggio] = useState<string | null>(null);
 
@@ -53,7 +55,7 @@ export function Amici({ haSoprannome }: { haSoprannome: boolean }) {
     setAttesa(true);
     const supabase = createClient();
     const { data } = await supabase.rpc("cerca_profilo", { _q: q });
-    setTrovati((data ?? []) as Persona[]);
+    setTrovati((data ?? []) as Trovato[]);
     setAttesa(false);
   }
 
@@ -216,13 +218,32 @@ export function Amici({ haSoprannome }: { haSoprannome: boolean }) {
             {trovati.map((p) =>
               riga(
                 p,
-                <button
-                  onClick={() => chiedi(p.handle)}
-                  disabled={attesa}
-                  className={`${bottone} bg-sea-500 text-white hover:bg-sea-600`}
-                >
-                  {t("chiediAmicizia")}
-                </button>
+                // Il pulsante dipende da che rapporto c'è già. Proporre
+                // «chiedi l'amicizia» a una persona che è GIÀ tua amica, o a
+                // cui hai già mandato una richiesta, è il genere di dettaglio
+                // che fa sembrare sbadata tutta l'applicazione — e manda la
+                // gente a cliccare per scoprire che non succede niente.
+                p.rapporto === "amici" ? (
+                  <span className="text-xs font-medium text-emerald-700">{t("sieteAmici")}</span>
+                ) : p.rapporto === "richiesta_inviata" ? (
+                  <span className="text-xs text-sea-400">{t("richiestaInAttesa")}</span>
+                ) : p.rapporto === "richiesta_ricevuta" ? (
+                  <button
+                    onClick={() => rispondi(p.handle, true)}
+                    disabled={attesa}
+                    className={`${bottone} bg-sea-500 text-white hover:bg-sea-600`}
+                  >
+                    {t("accetta")}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => chiedi(p.handle)}
+                    disabled={attesa}
+                    className={`${bottone} bg-sea-500 text-white hover:bg-sea-600`}
+                  >
+                    {t("chiediAmicizia")}
+                  </button>
+                )
               )
             )}
           </ul>

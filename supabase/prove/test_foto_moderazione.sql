@@ -222,7 +222,7 @@ begin
   -- 13. La coda mette in cima le segnalate, e la chiede solo un admin.
   -- ---------------------------------------------------------------
   insert into public.foto (beach_id, user_id, percorso)
-  values (v_bagno, v_bruno, gen_random_uuid() || '/' || gen_random_uuid() || '.webp')
+  values (v_bagno2, v_bruno, gen_random_uuid() || '/' || gen_random_uuid() || '.webp')
   returning id into v_altra;
 
   perform set_config('request.jwt.claims',

@@ -31,7 +31,22 @@ export function BeachCardClient({ beach }: { beach: BeachScore }) {
    * davvero utile lì: dice perché vale la pena scrivere una recensione.
    */
   const soglia = RANK_MIN.comune;
-  const inClassifica = beach.reviews_count >= soglia;
+
+  // DECISIONE DI PRODOTTO, NON TECNICA, quindi sta in una costante come il
+  // varco della recensione. Davide preferisce la scheda piena — dieci barre e
+  // il voto in grande — anche sotto soglia, e per una presentazione ha una
+  // sua logica: una griglia di schede ricche si guarda, una di riquadri con
+  // «mancano 6 recensioni» no.
+  //
+  // Il mio parere resta quello scritto sopra, e lo lascio qui perché la
+  // discussione non vada persa: 5,0 su una recensione sola si riconosce a
+  // vista, e porta a dubitare anche delle classifiche vere, che invece sono
+  // costruite bene. Se i numeri di recensioni dovessero salire e qualcuno
+  // facesse notare la cosa, si cambia questa riga e basta.
+  const MOSTRA_PUNTEGGIO_SOTTO_SOGLIA = true;
+
+  const inClassifica =
+    MOSTRA_PUNTEGGIO_SOTTO_SOGLIA || beach.reviews_count >= soglia;
 
   return (
     <Link
@@ -68,8 +83,8 @@ export function BeachCardClient({ beach }: { beach: BeachScore }) {
         )}
       </div>
 
-      {inClassifica ? (
-        // In classifica: la griglia completa dei criteri è il nostro tratto
+      {beach.reviews_count > 0 ? (
+        // Con recensioni: la griglia completa dei criteri è il nostro tratto
         // distintivo, e su questi numeri si regge perché ci sono abbastanza
         // recensioni dietro.
         <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5">
@@ -93,11 +108,7 @@ export function BeachCardClient({ beach }: { beach: BeachScore }) {
         // Sotto soglia: niente barre. Dieci medie calcolate su una recensione
         // sono dieci numeri che sembrano misure e non lo sono, e riempiono la
         // card di righe tutte uguali che non distinguono una scheda dall'altra.
-        <p className="mt-4 text-xs text-sea-500">
-          {beach.reviews_count === 0
-            ? tc("noReviews")
-            : tc("mancano", { n: soglia - beach.reviews_count })}
-        </p>
+        <p className="mt-4 text-xs italic text-sea-400">{tc("noReviews")}</p>
       )}
 
       <div className="mt-4 flex items-center justify-between gap-2 text-xs">

@@ -1067,7 +1067,7 @@
     "soprannomeIntro": "It's only so your friends can find you. It isn't your real name and it isn't required: without one, the site works just as before.",
     "soprannomeEsempio": "annalivorno",
     "soprannomeRegole": "3 to 20 characters: lowercase letters, numbers and underscore.",
-    "comeTiTrovano": "Your friends find you by searching @{handle}. Tell them yourself: you can't search by name.",
+    "comeTiTrovano": "Send this link to whoever you want to add: there's no directory of people to browse, so this is how you find each other.",
     "cambia": "change",
     "salva": "Save",
     "salvo": "Saving…",
@@ -1109,7 +1109,11 @@
     "vaiAlTuoProfilo": "Your profile",
     "accediPerAggiungere": "Sign in to add",
     "sieteAmici": "✓ Friends",
-    "richiestaInAttesa": "Request sent"
+    "richiestaInAttesa": "Request sent",
+    "copiaLink": "Copy",
+    "copiato": "Copied ✓",
+    "invia": "WhatsApp",
+    "invito": "Hi! This is my LidoRank profile, add me: {link}"
   },
   "vetrina": {
     "schede": "beach clubs and marinas listed",
@@ -1123,5 +1127,28 @@
     "sogliaNota": "Only beach clubs with at least {soglia} reviews enter the ranking. The others stay out until they have enough.",
     "suRecensioni": "{n, plural, one {# review} other {# reviews}}",
     "pesatoNota": "The figure is the weighted score: it accounts for how verifiable each review is, so it can differ from the simple average shown on the listing."
+  },
+  "percorsi": {
+    "occhiello": "Routes along the coast",
+    "titolo": "A beach club can be the gateway to a place.",
+    "intro": "Itineraries that join beach clubs, landmarks and local food. A handful, built with people who know these places — not a catalogue.",
+    "vuoto": "The first routes are being prepared.",
+    "numero": "Route {n}",
+    "composizione": "{tappe, plural, one {# stop} other {# stops}}, including {bagni, plural, =0 {no beach clubs} one {# beach club} other {# beach clubs}}",
+    "nota": "Routes are editorial: they cannot be bought, and they have no effect whatsoever on the score or ranking position of the beach clubs featured.",
+    "tuttiIPercorsi": "All routes",
+    "tappeLabel": "stops",
+    "bagniLabel": "beach clubs",
+    "minuti": "{n} min",
+    "apriScheda": "See the listing",
+    "notaDettaglio": "Stops are indicative: times, availability and prices should be checked with each business. Being a stop on a route has no effect on a beach club's score.",
+    "tappaDi": "{n, plural, one {Stop on one route} other {Stop on # routes}}",
+    "tappaSu": "Stop {ordine} of {tappe}",
+    "tema_mare": "Sea",
+    "tema_cultura": "Culture",
+    "tema_sapori": "Food",
+    "tema_sport": "Sport",
+    "tema_natura": "Nature",
+    "tema_famiglie": "Families"
   }
 }
