@@ -1046,6 +1046,53 @@ export async function salvaNomeProfilo(
   return { ok: true };
 }
 
+// ---------------------------------------------------------------------------
+// Foto: moderazione
+// ---------------------------------------------------------------------------
+
+/**
+ * Nasconde, rimuove o ripubblica una foto. Solo amministratore.
+ *
+ * «NASCOSTA» E «RIMOSSA» NON SONO LA STESSA COSA, e la differenza è tutta qui.
+ * Nascosta vuol dire che la foto esce dalla scheda ma il file resta
+ * nell'archivio: serve per i casi dubbi, quelli dove si vuole poter tornare
+ * indietro. Rimossa vuol dire che il file viene cancellato davvero. Finché un
+ * file sta in un archivio pubblico, chi ha l'indirizzo lo vede ancora: per una
+ * foto che non doveva starci — una persona riconoscibile, un minore, un
+ * contenuto di qualcun altro — «toglierla dall'elenco» non basta.
+ *
+ * L'ordine è: prima la riga nel database, poi il file. Se cade la connessione
+ * in mezzo, resta un file che nessuno nomina, invisibile. Al contrario
+ * resterebbe una scheda che punta al vuoto.
+ */
+export async function moderaFoto(formData: FormData): Promise<void> {
+  const id = String(formData.get("id") ?? "");
+  const stato = String(formData.get("stato") ?? "");
+  const beach_id = String(formData.get("beach_id") ?? "");
+  const percorso = String(formData.get("percorso") ?? "");
+  const motivo = String(formData.get("motivo") ?? "").trim().slice(0, 300) || null;
+  if (!id || !["pubblicata", "nascosta", "rimossa"].includes(stato)) return;
+
+  const supabase = createClient();
+  const { error } = await supabase.rpc("modera_foto", {
+    _id: id,
+    _stato: stato,
+    _motivo: motivo,
+  });
+  if (error) throw new Error(erroreModerazione(error.message || ""));
+
+  if (stato === "rimossa" && percorso) {
+    // La policy di cancellazione sullo storage ammette l'amministratore. Se
+    // fallisce non annulliamo la moderazione: la foto è comunque fuori dalla
+    // scheda, e un file orfano si pulisce dopo. Fosse il contrario — riga
+    // ripristinata e file cancellato — la scheda mostrerebbe un rettangolo rotto.
+    await supabase.storage.from("foto").remove([percorso]);
+  }
+
+  revalidaScheda(beach_id, true);
+  revalidatePath("/admin/foto");
+}
+
 /**
  * Rigenera la scheda pubblica dopo che una foto è stata caricata o tolta.
  *
