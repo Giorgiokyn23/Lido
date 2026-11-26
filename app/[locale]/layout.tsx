@@ -98,14 +98,8 @@ export default async function LocaleLayout({
                 <Link href="/percorsi" className="font-medium text-sea-700 hover:underline">
                   {t("routes")}
                 </Link>
-                <Link
-                  href="/per-i-gestori"
-                  className="hidden font-medium text-sea-700 hover:underline sm:inline"
-                >
+                <Link href="/per-i-gestori" className="font-medium text-sea-700 hover:underline">
                   {t("operators")}
-                </Link>
-                <Link href="/chi-siamo" className="hidden font-medium text-sea-700 hover:underline sm:inline">
-                  {t("about")}
                 </Link>
                 {/* switch lingua */}
                 <CambioLingua locale={locale} />
@@ -148,6 +142,7 @@ export default async function LocaleLayout({
               <Link href="/eventi" className="hover:text-sea-700 hover:underline">{t("events")}</Link>
               <Link href="/percorsi" className="hover:text-sea-700 hover:underline">{t("routes")}</Link>
               <Link href="/per-i-gestori" className="hover:text-sea-700 hover:underline">{tl("operators")}</Link>
+              <Link href="/chi-siamo" className="hover:text-sea-700 hover:underline">{t("about")}</Link>
               <Link href="/contatti" className="hover:text-sea-700 hover:underline">{tl("contact")}</Link>
             </nav>
             <div className="border-t border-sea-100 px-4 py-5 text-center text-xs text-sea-500">

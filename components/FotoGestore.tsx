@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
+import { revalidaFoto } from "@/app/actions";
 import {
   DIDASCALIA_MASSIMA,
   FORMATI_ACCETTATI,
@@ -142,6 +143,10 @@ export function FotoGestore({ beachId }: { beachId: string }) {
     setDidascalia("");
     setAttesa(false);
     carica();
+    // Senza questa riga la foto esiste ma la scheda pubblica continua a
+    // mostrare la versione in cache, senza — e sembra che non sia successo
+    // niente.
+    revalidaFoto(beachId);
   }
 
   async function cancella(r: Riga) {
@@ -183,6 +188,7 @@ export function FotoGestore({ beachId }: { beachId: string }) {
     setAttesa(false);
     setChiedo(null);
     carica();
+    revalidaFoto(beachId);
   }
 
   return (

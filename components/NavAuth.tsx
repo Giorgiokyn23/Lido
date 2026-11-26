@@ -40,6 +40,10 @@ export function NavAuth() {
         >
           {t("myProfile")}
         </Link>
+        {/* «Area gestore» accanto a «Per i gestori» nel menù sembravano la
+            stessa voce. Non lo sono — una spiega il progetto a chi non è
+            ancora dentro, l'altra è il pannello di chi ha già una scheda —
+            ma i nomi non lo dicevano. «Il mio stabilimento» lo dice. */}
         <Link
           href="/area-gestore"
           className="rounded-full bg-sea-50 px-3 py-1 font-medium text-sea-700 hover:bg-sea-100"

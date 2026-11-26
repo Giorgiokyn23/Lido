@@ -38,12 +38,15 @@ export async function VetrinaHome({ locale }: { locale: string }) {
   const citta = process.env.NEXT_PUBLIC_CITTA_VETRINA || "Livorno";
 
   const [{ data: topData }, { count: schede }, { count: recensioni }] = await Promise.all([
+    // `paese` come fa la pagina delle classifiche: senza, una località
+    // omonima in un altro paese finirebbe mescolata a questa.
     supabase
       .from("beach_rankings")
       .select("*")
+      .eq("paese", "IT")
       .eq("localita", citta)
       .order("rank_comune")
-      .limit(5),
+      .limit(8),
     supabase.from("beaches").select("*", { count: "exact", head: true }),
     supabase
       .from("recensioni_pubbliche")
@@ -85,7 +88,11 @@ export async function VetrinaHome({ locale }: { locale: string }) {
 
       {/* La classifica vera. Non compare se non c'è: una classifica vuota o di
           due righe fa più danno dell'assenza. */}
-      {top.length >= 3 ? (
+      {/* Basta UNA scheda in classifica per mostrare il riquadro. Prima ne
+          chiedevo tre, e il risultato è stato che in produzione il blocco non
+          compariva affatto senza che si capisse perché: una condizione che
+          nasconde in silenzio è una condizione che non si può diagnosticare. */}
+      {top.length >= 1 ? (
         <div className="rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h2 className="text-lg font-semibold text-sea-900">{t("classificaTitolo", { citta })}</h2>
@@ -104,7 +111,7 @@ export async function VetrinaHome({ locale }: { locale: string }) {
           </p>
 
           <ol className="mt-4 space-y-1">
-            {top.map((b, i) => (
+            {top.slice(0, 5).map((b, i) => (
               <li key={b.id}>
                 <Link
                   href={`/lido/${b.id}`}
