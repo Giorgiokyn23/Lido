@@ -60,6 +60,14 @@ export function Amici({ haSoprannome }: { haSoprannome: boolean }) {
   }
 
   async function chiedi(handle: string) {
+    if (!haSoprannome) {
+      // Chi riceve la richiesta deve poter vedere chi gliel'ha mandata, e
+      // senza soprannome vedrebbe un profilo senza nome. Lo chiediamo qui,
+      // dove si capisce perché serve, invece di sbarrare la porta prima.
+      setMessaggio(t("primaIlSoprannome"));
+      document.getElementById("soprannome")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
     setAttesa(true);
     setMessaggio(null);
     const supabase = createClient();
@@ -93,15 +101,6 @@ export function Amici({ haSoprannome }: { haSoprannome: boolean }) {
     router.refresh();
   }
 
-  if (!haSoprannome) {
-    return (
-      <section className="rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
-        <h2 className="text-sm font-semibold text-sea-800">{t("amiciTitolo")}</h2>
-        <p className="mt-2 text-sm text-sea-500">{t("serveSoprannome")}</p>
-      </section>
-    );
-  }
-
   const riga = (p: Persona, azione: React.ReactNode) => (
     <li
       key={p.handle}
@@ -126,65 +125,14 @@ export function Amici({ haSoprannome }: { haSoprannome: boolean }) {
       <h2 className="text-sm font-semibold text-sea-800">{t("amiciTitolo")}</h2>
       <p className="mt-0.5 text-xs text-sea-500">{t("amiciIntro")}</p>
 
-      {/* Le richieste ricevute vanno in cima: è l'unica cosa che chiede
-          una decisione, e in fondo non la vedrebbe nessuno. */}
-      {richieste.length > 0 ? (
-        <div className="mt-4">
-          <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-sea-400">
-            {t("richieste", { n: richieste.length })}
-          </div>
-          <ul className="space-y-2">
-            {richieste.map((p) =>
-              riga(
-                p,
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => rispondi(p.handle, true)}
-                    disabled={attesa}
-                    className={`${bottone} bg-sea-500 text-white hover:bg-sea-600`}
-                  >
-                    {t("accetta")}
-                  </button>
-                  <button
-                    onClick={() => rispondi(p.handle, false)}
-                    disabled={attesa}
-                    className={`${bottone} border border-sea-200 text-sea-600 hover:bg-sea-50`}
-                  >
-                    {t("rifiuta")}
-                  </button>
-                </div>
-              )
-            )}
-          </ul>
-        </div>
-      ) : null}
-
-      {/* Gli amici */}
-      <div className="mt-4">
-        {amici === null ? (
-          <div className="h-12 animate-pulse rounded-xl bg-sea-50" />
-        ) : amici.length === 0 ? (
-          <p className="text-sm text-sea-400">{t("ancoraNessunAmico")}</p>
-        ) : (
-          <ul className="space-y-2">
-            {amici.map((p) =>
-              riga(
-                p,
-                <button
-                  onClick={() => togli(p.handle)}
-                  disabled={attesa}
-                  className={`${bottone} text-sea-400 hover:text-red-700`}
-                >
-                  {t("togli")}
-                </button>
-              )
-            )}
-          </ul>
-        )}
-      </div>
-
-      {/* Aggiungere qualcuno */}
-      <form onSubmit={cercaOra} className="mt-4 flex flex-wrap gap-2 border-t border-sea-100 pt-4">
+      {/* LA RICERCA STA IN CIMA, e si vede anche senza soprannome.
+          Prima era in fondo al riquadro, e soprattutto spariva del tutto
+          finché non si sceglieva un soprannome: chi arrivava qui leggeva
+          «scegline prima uno» e non trovava più niente da fare. Cercare non
+          ha mai avuto bisogno del soprannome — serve solo per farsi
+          riconoscere da chi riceve la richiesta, e quindi è lì che va
+          chiesto, al momento giusto. */}
+      <form onSubmit={cercaOra} className="mt-4 flex flex-wrap gap-2">
         <div className="flex min-w-[12rem] flex-1 items-center rounded-xl border border-sea-200 px-3 focus-within:border-sea-400">
           <span className="text-sea-400">@</span>
           <input
@@ -249,6 +197,63 @@ export function Amici({ haSoprannome }: { haSoprannome: boolean }) {
           </ul>
         )
       ) : null}
+      {/* Le richieste ricevute vanno in cima: è l'unica cosa che chiede
+          una decisione, e in fondo non la vedrebbe nessuno. */}
+      {richieste.length > 0 ? (
+        <div className="mt-4">
+          <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-sea-400">
+            {t("richieste", { n: richieste.length })}
+          </div>
+          <ul className="space-y-2">
+            {richieste.map((p) =>
+              riga(
+                p,
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => rispondi(p.handle, true)}
+                    disabled={attesa}
+                    className={`${bottone} bg-sea-500 text-white hover:bg-sea-600`}
+                  >
+                    {t("accetta")}
+                  </button>
+                  <button
+                    onClick={() => rispondi(p.handle, false)}
+                    disabled={attesa}
+                    className={`${bottone} border border-sea-200 text-sea-600 hover:bg-sea-50`}
+                  >
+                    {t("rifiuta")}
+                  </button>
+                </div>
+              )
+            )}
+          </ul>
+        </div>
+      ) : null}
+
+      {/* Gli amici */}
+      <div className="mt-4">
+        {amici === null ? (
+          <div className="h-12 animate-pulse rounded-xl bg-sea-50" />
+        ) : amici.length === 0 ? (
+          <p className="text-sm text-sea-400">{t("ancoraNessunAmico")}</p>
+        ) : (
+          <ul className="space-y-2">
+            {amici.map((p) =>
+              riga(
+                p,
+                <button
+                  onClick={() => togli(p.handle)}
+                  disabled={attesa}
+                  className={`${bottone} text-sea-400 hover:text-red-700`}
+                >
+                  {t("togli")}
+                </button>
+              )
+            )}
+          </ul>
+        )}
+      </div>
+
     </section>
   );
 }

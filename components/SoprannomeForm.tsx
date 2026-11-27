@@ -60,7 +60,7 @@ export function SoprannomeForm({ handle }: { handle: string | null }) {
 
   if (handle && !apri) {
     return (
-      <section className="rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
+      <section id="soprannome" className="scroll-mt-24 rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
             <h2 className="text-sm font-semibold text-sea-800">{t("ilTuoSoprannome")}</h2>
@@ -114,7 +114,7 @@ export function SoprannomeForm({ handle }: { handle: string | null }) {
   }
 
   return (
-    <section className="rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
+    <section id="soprannome" className="scroll-mt-24 rounded-2xl border border-sea-100 bg-white p-5 shadow-sm">
       <h2 className="text-sm font-semibold text-sea-800">
         {handle ? t("cambiaSoprannome") : t("scegliSoprannome")}
       </h2>

@@ -1088,7 +1088,6 @@
     "errGenerico": "Non ha funzionato. Riprova fra poco.",
     "amiciTitolo": "Amici",
     "amiciIntro": "Le amicizie sono reciproche: chi accetti vede i bagni dove sei stato, gli altri no.",
-    "serveSoprannome": "Scegli prima un soprannome: è con quello che gli amici ti trovano.",
     "ancoraNessunAmico": "Non hai ancora amici qui. Cerca il soprannome di qualcuno che conosci.",
     "richieste": "{n, plural, one {# richiesta ricevuta} other {# richieste ricevute}}",
     "accetta": "Accetta",
@@ -1123,7 +1122,8 @@
     "copiaLink": "Copia",
     "copiato": "Copiato ✓",
     "invia": "WhatsApp",
-    "invito": "Ciao! Questo è il mio profilo su LidoRank, aggiungimi: {link}"
+    "invito": "Ciao! Questo è il mio profilo su LidoRank, aggiungimi: {link}",
+    "primaIlSoprannome": "Per aggiungere qualcuno ti serve un soprannome: sceglilo qui sopra, poi riprova."
   },
   "vetrina": {
     "schede": "stabilimenti e porti censiti",

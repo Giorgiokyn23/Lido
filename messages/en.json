@@ -1088,7 +1088,6 @@
     "errGenerico": "That didn't work. Please try again shortly.",
     "amiciTitolo": "Friends",
     "amiciIntro": "Friendships are mutual: whoever you accept can see the beach clubs you've been to, nobody else can.",
-    "serveSoprannome": "Choose a nickname first: that's how friends find you.",
     "ancoraNessunAmico": "No friends here yet. Search for the nickname of someone you know.",
     "richieste": "{n, plural, one {# request received} other {# requests received}}",
     "accetta": "Accept",
@@ -1123,7 +1122,8 @@
     "copiaLink": "Copy",
     "copiato": "Copied ✓",
     "invia": "WhatsApp",
-    "invito": "Hi! This is my LidoRank profile, add me: {link}"
+    "invito": "Hi! This is my LidoRank profile, add me: {link}",
+    "primaIlSoprannome": "To add someone you need a nickname: pick one just above, then try again."
   },
   "vetrina": {
     "schede": "beach clubs and marinas listed",
